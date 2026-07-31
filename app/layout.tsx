@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: "/logo.png.png",
-    apple: "/logo.png.png",
-    shortcut: "/logo.png.png",
+    icon: "/logo.png",
+    apple: "/logo.png",
+    shortcut: "/logo.png",
   },
   openGraph: {
     type: "website",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     siteName: "Prasid Gautam Portfolio",
     images: [
       {
-        url: "https://prasidgautam.com.np/logo.png.png",
+        url: "https://prasidgautam.com.np/logo.png",
         width: 400,
         height: 400,
         alt: "Prasid Gautam",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     title: "Prasid Gautam | Software & Frontend Developer",
     description:
       "Personal portfolio of Prasid Gautam, a BCA student, software and frontend developer from Pokhara, Nepal.",
-    images: ["https://prasidgautam.com.np/logo.png.png"],
+    images: ["https://prasidgautam.com.np/logo.png"],
   },
   robots: {
     index: true,

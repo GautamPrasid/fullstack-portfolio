@@ -1,25 +1,39 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowDown, Download, Eye } from "lucide-react";
 import { FaGithub, FaLinkedin, FaYoutube } from "react-icons/fa6";
 
-const ROLES = ["Full Stack Developer", "Video Editor", "Content Creator", "UI/UX Enthusiast"];
+const ROLES = [
+  "Software Developer",
+  "Frontend Developer",
+  "BCA Student",
+  "Content Creator",
+];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: (delay = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
 const SOCIAL_LINKS = [
-  { icon: FaGithub, href: "https://github.com/alexpoudel", label: "GitHub" },
-  { icon: FaLinkedin, href: "https://linkedin.com/in/alexpoudel", label: "LinkedIn" },
-  { icon: FaYoutube, href: "https://youtube.com/@alexpoudel", label: "YouTube" },
+  { icon: FaGithub, href: "https://github.com/GautamPrasid", label: "GitHub" },
+  {
+    icon: FaLinkedin,
+    href: "https://www.linkedin.com/in/prasid-gautam/",
+    label: "LinkedIn",
+  },
+  {
+    icon: FaYoutube,
+    href: "https://www.youtube.com/@deeeznotfound",
+    label: "YouTube",
+  },
 ];
 
 export default function Hero() {
@@ -33,7 +47,6 @@ export default function Hero() {
     const currentRole = ROLES[roleIndex];
 
     if (!isDeleting && displayedRole === currentRole) {
-      // Pause before deleting
       typingRef.current = setTimeout(() => setIsDeleting(true), 2000);
       return;
     }
@@ -88,6 +101,62 @@ export default function Hero() {
 
       {/* Content */}
       <div className="container-custom relative z-10 pt-24 pb-16 text-center">
+
+        {/* Profile Picture */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          custom={0.05}
+          className="flex justify-center mb-8"
+        >
+          <motion.div
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="relative w-28 h-28 sm:w-32 sm:h-32"
+            aria-label="Prasid Gautam profile photo"
+          >
+            {/* Animated glow ring */}
+            <div
+              className="absolute -inset-1 rounded-full opacity-75 blur-md"
+              style={{
+                background:
+                  "linear-gradient(135deg, #7c3aed, #a855f7, #06b6d4)",
+                animation: "orb-float 4s ease-in-out infinite",
+              }}
+              aria-hidden="true"
+            />
+            {/* Gradient border */}
+            <div
+              className="absolute inset-0 rounded-full p-[3px]"
+              style={{
+                background:
+                  "linear-gradient(135deg, #7c3aed, #a855f7, #06b6d4)",
+              }}
+              aria-hidden="true"
+            >
+              <div className="w-full h-full rounded-full bg-[#050508]" />
+            </div>
+            {/* Photo */}
+            <div className="absolute inset-[3px] rounded-full overflow-hidden">
+              <Image
+                src="/profile.JPG"
+                alt="Prasid Gautam"
+                fill
+                sizes="(max-width: 640px) 112px, 128px"
+                className="object-cover"
+                priority
+              />
+            </div>
+            {/* Online dot */}
+            <span
+              className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-[#050508] shadow-[0_0_10px_rgba(52,211,153,0.9)]"
+              aria-hidden="true"
+            />
+          </motion.div>
+        </motion.div>
+
         {/* Badge */}
         <motion.div
           variants={fadeUp}
@@ -97,7 +166,10 @@ export default function Hero() {
           className="flex justify-center mb-6"
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-violet-500/25 text-sm font-medium text-[#c4b5fd]">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse" aria-hidden="true" />
+            <span
+              className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse"
+              aria-hidden="true"
+            />
             Available for work
           </span>
         </motion.div>
@@ -111,7 +183,7 @@ export default function Hero() {
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-none tracking-tight mb-4"
         >
           <span className="text-[#f0f0ff]">Hi, I&apos;m </span>
-          <span className="gradient-text glow-text">Alex Poudel</span>
+          <span className="gradient-text glow-text">Prasid Gautam</span>
         </motion.h1>
 
         {/* Typewriter Role */}
@@ -125,9 +197,7 @@ export default function Hero() {
           aria-label={`Current role: ${displayedRole}`}
         >
           <span className="text-[#a0a0c0]">I am a </span>
-          <span className="gradient-text min-w-0">
-            {displayedRole}
-          </span>
+          <span className="gradient-text min-w-0">{displayedRole}</span>
           <span className="cursor-blink text-violet-400 font-light">|</span>
         </motion.div>
 
@@ -139,9 +209,10 @@ export default function Hero() {
           custom={0.5}
           className="max-w-2xl mx-auto text-[#a0a0c0] text-lg leading-relaxed mb-10"
         >
-          I craft fast, beautiful, and accessible web experiences — from scalable
-          backend APIs to pixel-perfect frontends. Beyond code, I create engaging
-          video content that connects with audiences.
+          🎓 BCA Student &amp; Software Developer from Pokhara, Nepal. I build
+          fast, beautiful, and accessible web experiences — from pixel-perfect
+          frontends to robust backend systems. Beyond code, I create content
+          that connects.
         </motion.p>
 
         {/* CTA Buttons */}
@@ -161,13 +232,15 @@ export default function Hero() {
             View My Work
           </button>
           <a
-            href="/cv.pdf"
-            download
+            href="/Prasid_Gautam_Resume.pdf"
+            download="Prasid_Gautam_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-secondary"
-            aria-label="Download CV"
+            aria-label="Download Resume"
           >
             <Download className="w-4 h-4" aria-hidden="true" />
-            Download CV
+            Download Resume
           </a>
         </motion.div>
 
@@ -204,12 +277,14 @@ export default function Hero() {
           className="flex items-center justify-center gap-8 sm:gap-16"
         >
           {[
-            { value: "3+", label: "Years Coding" },
-            { value: "20+", label: "Projects Built" },
-            { value: "10K+", label: "Content Views" },
+            { value: "2+", label: "Years Coding" },
+            { value: "10+", label: "Projects Built" },
+            { value: "5K+", label: "Content Views" },
           ].map(({ value, label }) => (
             <div key={label} className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold gradient-text">{value}</p>
+              <p className="text-2xl sm:text-3xl font-bold gradient-text">
+                {value}
+              </p>
               <p className="text-xs sm:text-sm text-[#5a5a8a] mt-1">{label}</p>
             </div>
           ))}
@@ -225,7 +300,9 @@ export default function Hero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#5a5a8a] hover:text-[#a0a0c0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded-lg p-2"
         aria-label="Scroll to about section"
       >
-        <span className="text-xs font-medium tracking-widest uppercase">Scroll</span>
+        <span className="text-xs font-medium tracking-widest uppercase">
+          Scroll
+        </span>
         <div className="scroll-indicator w-5 h-5 flex items-center justify-center">
           <ArrowDown className="w-4 h-4" aria-hidden="true" />
         </div>

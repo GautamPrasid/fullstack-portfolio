@@ -13,8 +13,8 @@
       "Node.js"
     ],
     "category": "Full Stack",
-    "github": "https://github.com/alexpoudel/shopnest",
-    "live": "https://shopnest.vercel.app",
+    "github": "https://github.com/GautamPrasid",
+    "live": "https://prasidgautam.com.np",
     "date": "2024-11-15",
     "featured": true
   },
@@ -32,8 +32,8 @@
       "Redis"
     ],
     "category": "Full Stack",
-    "github": "https://github.com/alexpoudel/devcollab",
-    "live": "https://devcollab.vercel.app",
+    "github": "https://github.com/GautamPrasid",
+    "live": "https://prasidgautam.com.np",
     "date": "2024-08-20",
     "featured": true
   },
@@ -51,8 +51,8 @@
       "JWT"
     ],
     "category": "Full Stack",
-    "github": "https://github.com/alexpoudel/taskflow",
-    "live": "https://taskflow-app.vercel.app",
+    "github": "https://github.com/GautamPrasid",
+    "live": "https://prasidgautam.com.np",
     "date": "2024-05-10",
     "featured": false
   },
@@ -69,8 +69,8 @@
       "OpenWeatherMap API"
     ],
     "category": "Frontend",
-    "github": "https://github.com/alexpoudel/nepal-weather",
-    "live": "https://nepal-weather.vercel.app",
+    "github": "https://github.com/GautamPrasid",
+    "live": "https://prasidgautam.com.np",
     "date": "2024-02-28",
     "featured": false
   },
@@ -88,8 +88,8 @@
       "Algolia"
     ],
     "category": "Frontend",
-    "github": "https://github.com/alexpoudel/codeblog",
-    "live": "https://codeblog-alex.vercel.app",
+    "github": "https://github.com/GautamPrasid",
+    "live": "https://prasidgautam.com.np",
     "date": "2023-12-05",
     "featured": false
   }

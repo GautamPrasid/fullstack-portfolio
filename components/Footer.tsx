@@ -1,14 +1,27 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowUp, Code2 } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { FaGithub, FaLinkedin, FaYoutube, FaInstagram } from "react-icons/fa6";
 
 const SOCIAL_LINKS = [
-  { icon: FaGithub, href: "https://github.com/alexpoudel", label: "GitHub" },
-  { icon: FaLinkedin, href: "https://linkedin.com/in/alexpoudel", label: "LinkedIn" },
-  { icon: FaYoutube, href: "https://youtube.com/@alexpoudel", label: "YouTube" },
-  { icon: FaInstagram, href: "https://instagram.com/alex.poudel", label: "Instagram" },
+  { icon: FaGithub, href: "https://github.com/GautamPrasid", label: "GitHub" },
+  {
+    icon: FaLinkedin,
+    href: "https://www.linkedin.com/in/prasid-gautam/",
+    label: "LinkedIn",
+  },
+  {
+    icon: FaYoutube,
+    href: "https://www.youtube.com/@deeeznotfound",
+    label: "YouTube",
+  },
+  {
+    icon: FaInstagram,
+    href: "https://www.instagram.com/user_on_break__/",
+    label: "Instagram",
+  },
 ];
 
 const NAV_LINKS = [
@@ -61,15 +74,21 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
-                <Code2 className="w-4 h-4 text-white" aria-hidden="true" />
+              <div className="relative w-8 h-8 rounded-lg overflow-hidden shadow-[0_0_12px_rgba(139,92,246,0.4)]">
+                <Image
+                  src="/logo.png"
+                  alt="Prasid Gautam Logo"
+                  fill
+                  sizes="32px"
+                  className="object-contain"
+                />
               </div>
               <span className="font-bold text-lg text-[#f0f0ff]">
-                Alex<span className="gradient-text">.</span>
+                Prasid<span className="gradient-text">.</span>
               </span>
             </div>
             <p className="text-sm text-[#5a5a8a] leading-relaxed max-w-xs">
-              Full Stack Developer &amp; Content Creator based in Kathmandu, Nepal.
+              Software &amp; Frontend Developer based in Pokhara, Nepal.
               Building great things one line of code at a time.
             </p>
           </div>
@@ -121,7 +140,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/5">
           <p className="text-xs text-[#5a5a8a] text-center sm:text-left">
             &copy; {new Date().getFullYear()}{" "}
-            <span className="text-[#a0a0c0]">Alex Poudel</span>. All rights
+            <span className="text-[#a0a0c0]">Prasid Gautam</span>. All rights
             reserved. Built with{" "}
             <span className="gradient-text font-semibold">Next.js</span> &amp;{" "}
             <span className="gradient-text font-semibold">Tailwind CSS</span>.

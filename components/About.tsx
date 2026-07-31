@@ -24,15 +24,15 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
 const STATS = [
-  { value: "3+", label: "Years of Experience", icon: Coffee },
-  { value: "20+", label: "Projects Delivered", icon: Rocket },
-  { value: "10+", label: "Technologies Mastered", icon: Layers },
-  { value: "10K+", label: "Content Views", icon: Globe },
+  { value: "2+", label: "Years of Experience", icon: Coffee },
+  { value: "10+", label: "Projects Delivered", icon: Rocket },
+  { value: "8+", label: "Technologies Mastered", icon: Layers },
+  { value: "5K+", label: "Content Views", icon: Globe },
 ];
 
 const TRAITS = [
@@ -104,8 +104,8 @@ export default function About() {
             <span className="gradient-text">Code</span>
           </motion.h2>
           <motion.p variants={itemVariants} className="section-subtitle mx-auto">
-            A passionate developer from Nepal who blends technical expertise with
-            creative storytelling.
+            A passionate developer from Pokhara, Nepal who blends technical
+            expertise with creative storytelling.
           </motion.p>
         </motion.div>
 
@@ -123,34 +123,36 @@ export default function About() {
               variants={itemVariants}
               className="text-[#a0a0c0] text-lg leading-relaxed"
             >
-              I&apos;m <strong className="text-[#f0f0ff] font-semibold">Alex Poudel</strong>, a full-stack
-              developer and content creator based in Kathmandu, Nepal. I specialize in building
-              production-grade web applications and creating digital content that resonates with audiences.
+              I&apos;m <strong className="text-[#f0f0ff] font-semibold">Prasid Gautam</strong>, a BCA
+              student and frontend &amp; software developer based in Pokhara, Nepal. I specialize
+              in building clean, modern web applications and creating digital content that
+              resonates with audiences.
             </motion.p>
             <motion.p
               variants={itemVariants}
               className="text-[#a0a0c0] text-lg leading-relaxed"
             >
-              My journey into tech started with curiosity — I wanted to know how websites worked.
-              That curiosity turned into a passion, and today I work across the full stack, from
-              designing APIs with Node.js and Express to building pixel-perfect UIs with React and Next.js.
+              My tech journey started with curiosity — I wanted to understand how the web works.
+              That curiosity evolved into a passion, and today I work across the full stack,
+              designing APIs, building pixel-perfect UIs with React and Next.js, and crafting
+              smooth user experiences.
             </motion.p>
             <motion.p
               variants={itemVariants}
               className="text-[#a0a0c0] text-lg leading-relaxed"
             >
-              When I&apos;m not writing code, I&apos;m editing videos, creating content on YouTube, or
-              exploring the intersection of technology and creativity. I believe the best products
-              are built where engineering meets artistry.
+              When I&apos;m not writing code, I&apos;m editing videos, creating content, or
+              exploring the intersection of technology and creativity. I believe the best
+              products are built where engineering meets artistry.
             </motion.p>
 
             {/* Timeline milestones */}
             <motion.div variants={itemVariants} className="space-y-4 pt-2">
               {[
-                { year: "2021", event: "Started learning web development — HTML, CSS, JavaScript" },
-                { year: "2022", event: "Dove deep into React, Node.js, and databases" },
-                { year: "2023", event: "Launched first SaaS product & started YouTube channel" },
-                { year: "2024", event: "Full-time freelancing — 20+ projects shipped" },
+                { year: "2022", event: "Started learning web development — HTML, CSS, JavaScript" },
+                { year: "2023", event: "Enrolled in BCA; deep-dived into React, Node.js, and databases" },
+                { year: "2024", event: "Built full-stack projects &amp; launched YouTube channel" },
+                { year: "2025", event: "Freelancing &amp; contributing to open source — 10+ projects shipped" },
               ].map(({ year, event }) => (
                 <div key={year} className="flex gap-4 items-start">
                   <span className="text-xs font-bold text-violet-400 bg-violet-500/10 border border-violet-500/20 rounded-md px-2 py-1 mt-0.5 shrink-0 font-mono">

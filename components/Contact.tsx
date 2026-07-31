@@ -7,8 +7,8 @@ import {
   User,
   MessageSquare,
   Send,
-  CheckCircle,
-  AlertCircle,
+  CircleCheck,
+  CircleAlert,
   MapPin,
 } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
@@ -25,7 +25,9 @@ const INITIAL_FORM: FormState = { name: "", email: "", message: "" };
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+  visible: {
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+  },
 };
 
 const itemVariants = {
@@ -33,7 +35,7 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -41,26 +43,26 @@ const CONTACT_INFO = [
   {
     icon: Mail,
     label: "Email",
-    value: "alex@example.com",
-    href: "mailto:alex@example.com",
+    value: "gprasid10@gmail.com",
+    href: "mailto:gprasid10@gmail.com",
   },
   {
     icon: MapPin,
     label: "Location",
-    value: "Kathmandu, Nepal",
+    value: "Pokhara, Nepal",
     href: null,
   },
   {
     icon: FaGithub,
     label: "GitHub",
-    value: "github.com/alexpoudel",
-    href: "https://github.com/alexpoudel",
+    value: "github.com/GautamPrasid",
+    href: "https://github.com/GautamPrasid",
   },
   {
     icon: FaLinkedin,
     label: "LinkedIn",
-    value: "linkedin.com/in/alexpoudel",
-    href: "https://linkedin.com/in/alexpoudel",
+    value: "linkedin.com/in/prasid-gautam",
+    href: "https://www.linkedin.com/in/prasid-gautam/",
   },
 ];
 
@@ -70,18 +72,18 @@ export default function Contact() {
   const [errors, setErrors] = useState<Partial<FormState>>({});
 
   const validate = (): boolean => {
-    const newErrors: Partial<FormState> = {};
-    if (!form.name.trim()) newErrors.name = "Name is required.";
+    const next: Partial<FormState> = {};
+    if (!form.name.trim()) next.name = "Name is required.";
     if (!form.email.trim()) {
-      newErrors.email = "Email is required.";
+      next.email = "Email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = "Please enter a valid email.";
+      next.email = "Enter a valid email address.";
     }
-    if (!form.message.trim() || form.message.trim().length < 10) {
-      newErrors.message = "Message must be at least 10 characters.";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!form.message.trim()) next.message = "Message is required.";
+    else if (form.message.trim().length < 10)
+      next.message = "Message must be at least 10 characters.";
+    setErrors(next);
+    return Object.keys(next).length === 0;
   };
 
   const handleChange = (
@@ -89,354 +91,344 @@ export default function Contact() {
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    // Clear error on change
     if (errors[name as keyof FormState]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
 
-  /**
-   * Form submission handler — prepared for Resend integration.
-   * To enable sending, replace the simulated delay with:
-   *   await fetch('/api/contact', { method: 'POST', body: JSON.stringify(form) })
-   * And create `app/api/contact/route.ts` using the Resend SDK.
-   */
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-
     setStatus("loading");
-
-    try {
-      // --- Resend integration placeholder ---
-      // const res = await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(form),
-      // });
-      // if (!res.ok) throw new Error('Failed to send');
-      // --- End placeholder ---
-
-      // Simulate network request for demonstration
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      setStatus("success");
-      setForm(INITIAL_FORM);
-    } catch {
-      setStatus("error");
-    }
+    // Simulate network request — replace with real API call
+    await new Promise((res) => setTimeout(res, 1400));
+    setStatus("success");
+    setForm(INITIAL_FORM);
   };
-
-  const resetStatus = () => setStatus("idle");
 
   return (
     <section
       id="contact"
-      className="section-padding relative overflow-hidden"
-      aria-label="Contact me"
+      className="relative py-24 sm:py-32 overflow-hidden"
+      aria-label="Contact section"
     >
-      {/* BG orb */}
+      {/* Background decoration */}
       <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] rounded-full opacity-[0.08] pointer-events-none"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] opacity-[0.07] pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(139,92,246,1) 0%, transparent 70%)",
+          background:
+            "radial-gradient(ellipse, rgba(139,92,246,1) 0%, transparent 70%)",
           filter: "blur(60px)",
         }}
         aria-hidden="true"
       />
 
       <div className="container-custom relative z-10">
-        {/* Section Header */}
+        {/* Section header */}
         <motion.div
+          variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={containerVariants}
+          viewport={{ once: true, amount: 0.2 }}
           className="text-center mb-16"
         >
           <motion.p variants={itemVariants} className="section-label">
-            <span aria-hidden="true">✦</span> Get In Touch
+            <span aria-hidden="true">✦</span> Contact
           </motion.p>
           <motion.h2 variants={itemVariants} className="section-title">
             Let&apos;s Work{" "}
             <span className="gradient-text">Together</span>
           </motion.h2>
-          <motion.p variants={itemVariants} className="section-subtitle mx-auto">
-            Have a project in mind? Want to collaborate? I&apos;d love to hear
-            from you — just drop a message.
+          <motion.p
+            variants={itemVariants}
+            className="section-subtitle mx-auto"
+          >
+            Have a project in mind or just want to say hello? Drop me a
+            message — I&apos;ll get back to you within 24 hours.
           </motion.p>
         </motion.div>
 
-        {/* Two Column Layout */}
-        <div className="grid lg:grid-cols-5 gap-10 lg:gap-16">
-          {/* Left: Contact Info */}
+        <div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+          {/* Contact Info — left column */}
           <motion.div
+            variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            variants={containerVariants}
-            className="lg:col-span-2 flex flex-col gap-6"
+            className="lg:col-span-2 space-y-5"
           >
-            <motion.div variants={itemVariants}>
-              <h3 className="text-xl font-bold text-[#f0f0ff] mb-3">
-                Ready to collaborate?
-              </h3>
-              <p className="text-[#a0a0c0] leading-relaxed">
-                Whether you&apos;re a startup, an agency, or an individual with
-                a great idea — I&apos;m open to freelance projects and full-time
-                opportunities.
-              </p>
-            </motion.div>
+            {CONTACT_INFO.map(({ icon: Icon, label, value, href }) => (
+              <motion.div
+                key={label}
+                variants={itemVariants}
+                className="glass rounded-xl p-4 border border-white/5 flex items-center gap-4 group hover:border-violet-500/25 transition-colors duration-300"
+              >
+                <div className="w-10 h-10 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
+                  <Icon className="w-4 h-4 text-violet-400" aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs text-[#5a5a8a] font-medium mb-0.5">
+                    {label}
+                  </p>
+                  {href ? (
+                    <a
+                      href={href}
+                      target={href.startsWith("mailto") ? "_self" : "_blank"}
+                      rel="noopener noreferrer"
+                      className="text-sm text-[#a0a0c0] hover:text-violet-400 transition-colors duration-200 truncate block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded"
+                    >
+                      {value}
+                    </a>
+                  ) : (
+                    <p className="text-sm text-[#a0a0c0] truncate">{value}</p>
+                  )}
+                </div>
+              </motion.div>
+            ))}
 
-            <motion.ul
-              variants={containerVariants}
-              className="space-y-4"
-              aria-label="Contact information"
-            >
-              {CONTACT_INFO.map(({ icon: Icon, label, value, href }) => (
-                <motion.li
-                  key={label}
-                  variants={itemVariants}
-                  className="flex items-center gap-4"
-                >
-                  <div
-                    className="w-10 h-10 rounded-xl glass border border-violet-500/20 flex items-center justify-center shrink-0"
-                    aria-hidden="true"
-                  >
-                    <Icon className="w-5 h-5 text-violet-400" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-[#5a5a8a] font-medium mb-0.5">
-                      {label}
-                    </p>
-                    {href ? (
-                      <a
-                        href={href}
-                        target={href.startsWith("mailto") ? undefined : "_blank"}
-                        rel="noopener noreferrer"
-                        className="text-sm text-[#a0a0c0] hover:text-violet-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded"
-                      >
-                        {value}
-                      </a>
-                    ) : (
-                      <p className="text-sm text-[#a0a0c0]">{value}</p>
-                    )}
-                  </div>
-                </motion.li>
-              ))}
-            </motion.ul>
-
-            {/* Availability */}
+            {/* Availability badge */}
             <motion.div
               variants={itemVariants}
-              className="glass-card p-4 flex items-center gap-3 border border-emerald-500/20 bg-emerald-500/5"
+              className="glass rounded-xl p-4 border border-emerald-500/20 flex items-center gap-3"
             >
               <span
                 className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse shrink-0"
                 aria-hidden="true"
               />
               <div>
-                <p className="text-sm font-semibold text-[#f0f0ff]">
+                <p className="text-sm font-semibold text-emerald-400">
                   Available for work
                 </p>
-                <p className="text-xs text-[#5a5a8a]">
-                  Open to freelance & full-time roles
+                <p className="text-xs text-[#5a5a8a] mt-0.5">
+                  Open to freelance &amp; full-time opportunities
                 </p>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Right: Contact Form */}
+          {/* Contact Form — right column */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-3"
           >
-            <div className="glass-card p-6 sm:p-8">
-              {status === "success" ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center gap-4 py-12 text-center"
+            {status === "success" ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="glass rounded-2xl p-10 border border-emerald-500/20 flex flex-col items-center justify-center text-center gap-4 min-h-[380px]"
+              >
+                <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                  <CircleCheck
+                    className="w-8 h-8 text-emerald-400"
+                    aria-hidden="true"
+                  />
+                </div>
+                <h3 className="text-xl font-bold text-[#f0f0ff]">
+                  Message Sent!
+                </h3>
+                <p className="text-[#a0a0c0] max-w-xs">
+                  Thanks for reaching out. I&apos;ll get back to you within
+                  24 hours.
+                </p>
+                <button
+                  onClick={() => setStatus("idle")}
+                  className="btn-secondary mt-2"
                 >
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                    <CheckCircle className="w-8 h-8 text-emerald-400" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#f0f0ff]">
-                    Message sent!
-                  </h3>
-                  <p className="text-[#a0a0c0] text-sm max-w-xs">
-                    Thanks for reaching out. I&apos;ll get back to you within 24
-                    hours.
-                  </p>
-                  <button
-                    onClick={resetStatus}
-                    className="btn-secondary text-sm mt-2"
+                  Send Another
+                </button>
+              </motion.div>
+            ) : (
+              <motion.form
+                variants={itemVariants}
+                onSubmit={handleSubmit}
+                noValidate
+                className="glass rounded-2xl p-6 sm:p-8 border border-white/5 space-y-5"
+                aria-label="Contact form"
+              >
+                {/* Name */}
+                <div>
+                  <label
+                    htmlFor="contact-name"
+                    className="block text-sm font-medium text-[#a0a0c0] mb-2"
                   >
-                    Send another message
-                  </button>
-                </motion.div>
-              ) : (
-                <form
-                  onSubmit={handleSubmit}
-                  noValidate
-                  aria-label="Contact form"
-                >
-                  {status === "error" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-3 p-4 rounded-xl border border-red-500/30 bg-red-500/10 mb-6"
-                      role="alert"
-                    >
-                      <AlertCircle className="w-5 h-5 text-red-400 shrink-0" aria-hidden="true" />
-                      <p className="text-sm text-red-300">
-                        Something went wrong. Please try again or email me directly.
-                      </p>
-                    </motion.div>
-                  )}
-
-                  <div className="space-y-5">
-                    {/* Name */}
-                    <div>
-                      <label
-                        htmlFor="contact-name"
-                        className="flex items-center gap-2 text-sm font-medium text-[#a0a0c0] mb-2"
-                      >
-                        <User className="w-3.5 h-3.5" aria-hidden="true" />
-                        Full Name
-                      </label>
-                      <input
-                        id="contact-name"
-                        type="text"
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        placeholder="John Doe"
-                        autoComplete="name"
-                        aria-describedby={errors.name ? "name-error" : undefined}
-                        aria-invalid={!!errors.name}
-                        className={`input-field ${errors.name ? "border-red-500/50 focus:border-red-500/70" : ""}`}
-                      />
-                      {errors.name && (
-                        <p
-                          id="name-error"
-                          className="text-xs text-red-400 mt-1.5"
-                          role="alert"
-                        >
-                          {errors.name}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Email */}
-                    <div>
-                      <label
-                        htmlFor="contact-email"
-                        className="flex items-center gap-2 text-sm font-medium text-[#a0a0c0] mb-2"
-                      >
-                        <Mail className="w-3.5 h-3.5" aria-hidden="true" />
-                        Email Address
-                      </label>
-                      <input
-                        id="contact-email"
-                        type="email"
-                        name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        placeholder="john@example.com"
-                        autoComplete="email"
-                        aria-describedby={errors.email ? "email-error" : undefined}
-                        aria-invalid={!!errors.email}
-                        className={`input-field ${errors.email ? "border-red-500/50 focus:border-red-500/70" : ""}`}
-                      />
-                      {errors.email && (
-                        <p
-                          id="email-error"
-                          className="text-xs text-red-400 mt-1.5"
-                          role="alert"
-                        >
-                          {errors.email}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Message */}
-                    <div>
-                      <label
-                        htmlFor="contact-message"
-                        className="flex items-center gap-2 text-sm font-medium text-[#a0a0c0] mb-2"
-                      >
-                        <MessageSquare className="w-3.5 h-3.5" aria-hidden="true" />
-                        Message
-                      </label>
-                      <textarea
-                        id="contact-message"
-                        name="message"
-                        rows={5}
-                        value={form.message}
-                        onChange={handleChange}
-                        placeholder="Tell me about your project or idea..."
-                        aria-describedby={errors.message ? "message-error" : undefined}
-                        aria-invalid={!!errors.message}
-                        className={`input-field resize-none ${errors.message ? "border-red-500/50 focus:border-red-500/70" : ""}`}
-                      />
-                      {errors.message && (
-                        <p
-                          id="message-error"
-                          className="text-xs text-red-400 mt-1.5"
-                          role="alert"
-                        >
-                          {errors.message}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Submit */}
-                    <button
-                      type="submit"
-                      disabled={status === "loading"}
-                      className="btn-primary w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed"
-                      aria-label="Send message"
-                    >
-                      {status === "loading" ? (
-                        <>
-                          <svg
-                            className="w-4 h-4 animate-spin"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            />
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                            />
-                          </svg>
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4" aria-hidden="true" />
-                          Send Message
-                        </>
-                      )}
-                    </button>
+                    Your Name
+                  </label>
+                  <div className="relative">
+                    <User
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5a5a8a]"
+                      aria-hidden="true"
+                    />
+                    <input
+                      id="contact-name"
+                      name="name"
+                      type="text"
+                      value={form.name}
+                      onChange={handleChange}
+                      placeholder="Prasid Gautam"
+                      autoComplete="name"
+                      className={`w-full bg-white/[0.03] border rounded-xl pl-10 pr-4 py-3 text-sm text-[#f0f0ff] placeholder-[#3a3a5a] focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-colors duration-200 ${
+                        errors.name
+                          ? "border-rose-500/50"
+                          : "border-white/8 hover:border-white/15"
+                      }`}
+                      aria-invalid={!!errors.name}
+                      aria-describedby={
+                        errors.name ? "contact-name-error" : undefined
+                      }
+                    />
                   </div>
-                </form>
-              )}
-            </div>
+                  {errors.name && (
+                    <p
+                      id="contact-name-error"
+                      role="alert"
+                      className="flex items-center gap-1.5 text-xs text-rose-400 mt-1.5"
+                    >
+                      <CircleAlert className="w-3 h-3" aria-hidden="true" />
+                      {errors.name}
+                    </p>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label
+                    htmlFor="contact-email"
+                    className="block text-sm font-medium text-[#a0a0c0] mb-2"
+                  >
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <Mail
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5a5a8a]"
+                      aria-hidden="true"
+                    />
+                    <input
+                      id="contact-email"
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      placeholder="you@example.com"
+                      autoComplete="email"
+                      className={`w-full bg-white/[0.03] border rounded-xl pl-10 pr-4 py-3 text-sm text-[#f0f0ff] placeholder-[#3a3a5a] focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-colors duration-200 ${
+                        errors.email
+                          ? "border-rose-500/50"
+                          : "border-white/8 hover:border-white/15"
+                      }`}
+                      aria-invalid={!!errors.email}
+                      aria-describedby={
+                        errors.email ? "contact-email-error" : undefined
+                      }
+                    />
+                  </div>
+                  {errors.email && (
+                    <p
+                      id="contact-email-error"
+                      role="alert"
+                      className="flex items-center gap-1.5 text-xs text-rose-400 mt-1.5"
+                    >
+                      <CircleAlert className="w-3 h-3" aria-hidden="true" />
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+
+                {/* Message */}
+                <div>
+                  <label
+                    htmlFor="contact-message"
+                    className="block text-sm font-medium text-[#a0a0c0] mb-2"
+                  >
+                    Message
+                  </label>
+                  <div className="relative">
+                    <MessageSquare
+                      className="absolute left-3.5 top-3.5 w-4 h-4 text-[#5a5a8a]"
+                      aria-hidden="true"
+                    />
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      rows={5}
+                      value={form.message}
+                      onChange={handleChange}
+                      placeholder="Tell me about your project or just say hi..."
+                      className={`w-full bg-white/[0.03] border rounded-xl pl-10 pr-4 py-3 text-sm text-[#f0f0ff] placeholder-[#3a3a5a] focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-colors duration-200 resize-none ${
+                        errors.message
+                          ? "border-rose-500/50"
+                          : "border-white/8 hover:border-white/15"
+                      }`}
+                      aria-invalid={!!errors.message}
+                      aria-describedby={
+                        errors.message ? "contact-message-error" : undefined
+                      }
+                    />
+                  </div>
+                  {errors.message && (
+                    <p
+                      id="contact-message-error"
+                      role="alert"
+                      className="flex items-center gap-1.5 text-xs text-rose-400 mt-1.5"
+                    >
+                      <CircleAlert className="w-3 h-3" aria-hidden="true" />
+                      {errors.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="btn-primary w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed"
+                  aria-label="Send message"
+                >
+                  {status === "loading" ? (
+                    <>
+                      <svg
+                        className="w-4 h-4 animate-spin"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v8H4z"
+                        />
+                      </svg>
+                      Sending…
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" aria-hidden="true" />
+                      Send Message
+                    </>
+                  )}
+                </button>
+
+                {status === "error" && (
+                  <p
+                    role="alert"
+                    className="flex items-center gap-2 text-sm text-rose-400 text-center justify-center"
+                  >
+                    <CircleAlert className="w-4 h-4" aria-hidden="true" />
+                    Something went wrong. Please try again.
+                  </p>
+                )}
+              </motion.form>
+            )}
           </motion.div>
         </div>
       </div>

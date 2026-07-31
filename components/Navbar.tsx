@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Code2 } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
@@ -72,7 +73,7 @@ export default function Navbar() {
       <motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
             ? "glass-strong shadow-[0_1px_0_rgba(139,92,246,0.15)]"
@@ -90,11 +91,18 @@ export default function Navbar() {
             className="flex items-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded-lg p-1"
             aria-label="Go to top"
           >
-            <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center shadow-[0_0_16px_rgba(139,92,246,0.5)] group-hover:shadow-[0_0_24px_rgba(139,92,246,0.7)] transition-shadow duration-300">
-              <Code2 className="w-4 h-4 text-white" aria-hidden="true" />
+            <div className="relative w-8 h-8 rounded-lg overflow-hidden shadow-[0_0_16px_rgba(139,92,246,0.5)] group-hover:shadow-[0_0_24px_rgba(139,92,246,0.7)] transition-shadow duration-300">
+              <Image
+                src="/logo.png"
+                alt="Prasid Gautam Logo"
+                fill
+                sizes="32px"
+                className="object-contain"
+                priority
+              />
             </div>
             <span className="font-bold text-lg text-[#f0f0ff] group-hover:text-violet-400 transition-colors duration-300">
-              Alex<span className="gradient-text">.</span>
+              Prasid<span className="gradient-text">.</span>
             </span>
           </button>
 
@@ -188,7 +196,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -16, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.98 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] as const }}
             className="fixed top-16 left-4 right-4 z-40 glass-strong rounded-2xl p-4 shadow-[0_8px_64px_rgba(0,0,0,0.6)] border border-violet-500/20"
             role="dialog"
             aria-label="Mobile navigation"

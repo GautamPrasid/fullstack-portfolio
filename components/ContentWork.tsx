@@ -14,18 +14,18 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
 const PLATFORMS = [
   {
     name: "YouTube",
-    handle: "@AlexPoudel",
+    handle: "@deeeznotfound",
     description: "Tutorials on web development, productivity, and tech career advice.",
-    stat: "10K+ Views",
+    stat: "5K+ Views",
     statIcon: Play,
-    href: "https://youtube.com/@alexpoudel",
+    href: "https://www.youtube.com/@deeeznotfound",
     icon: FaYoutube,
     color: "from-red-500/20 to-orange-500/5",
     border: "border-red-500/20",
@@ -35,11 +35,11 @@ const PLATFORMS = [
   },
   {
     name: "Facebook",
-    handle: "Alex Poudel",
+    handle: "Prasid Gautam",
     description: "Sharing tech insights, project updates, and coding tips with the community.",
-    stat: "2K+ Followers",
+    stat: "500+ Followers",
     statIcon: Users,
-    href: "https://facebook.com/alexpoudel",
+    href: "https://www.facebook.com/prashidgautam/",
     icon: FaFacebook,
     color: "from-blue-500/20 to-indigo-500/5",
     border: "border-blue-500/20",
@@ -49,11 +49,11 @@ const PLATFORMS = [
   },
   {
     name: "Instagram",
-    handle: "@alex.poudel",
+    handle: "@user_on_break__",
     description: "Behind-the-scenes of my dev journey — setups, travels, and creative process.",
-    stat: "1.5K+ Followers",
+    stat: "500+ Followers",
     statIcon: Users,
-    href: "https://instagram.com/alex.poudel",
+    href: "https://www.instagram.com/user_on_break__/",
     icon: FaInstagram,
     color: "from-pink-500/20 to-rose-500/5",
     border: "border-pink-500/20",
@@ -64,7 +64,8 @@ const PLATFORMS = [
 ];
 
 // YouTube Video Embed ID — replace with actual video ID
-const YOUTUBE_VIDEO_ID = "dQw4w9WgXcQ";
+// Replace with an actual video ID from https://www.youtube.com/@deeeznotfound
+const YOUTUBE_VIDEO_ID = "dQw4w9WgXcQ"; // TODO: update with your real video ID
 
 export default function ContentWork() {
   return (
@@ -112,7 +113,7 @@ export default function ContentWork() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
           >
             <div
               className="relative rounded-2xl overflow-hidden border border-violet-500/15 shadow-[0_8px_64px_rgba(0,0,0,0.5)]"
@@ -121,7 +122,7 @@ export default function ContentWork() {
               <iframe
                 className="absolute inset-0 w-full h-full"
                 src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_VIDEO_ID}?rel=0&modestbranding=1`}
-                title="Featured YouTube video by Alex Poudel"
+                title="Featured YouTube video by Prasid Gautam"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 loading="lazy"
@@ -159,10 +160,9 @@ export default function ContentWork() {
               variants={itemVariants}
               className="text-[#a0a0c0] leading-relaxed"
             >
-              My content covers web development tutorials, career advice, tech
+              My content covers web development tutorials, BCA study tips, tech
               gear reviews, and day-in-the-life vlogs from a developer&apos;s
-              perspective. I&apos;ve accumulated over 10,000 views across
-              platforms and I&apos;m just getting started.
+              perspective. I&apos;m just getting started and growing every day.
             </motion.p>
             <motion.div
               variants={itemVariants}
