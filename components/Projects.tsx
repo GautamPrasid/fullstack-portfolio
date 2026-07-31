@@ -1,291 +1,191 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
-import { ExternalLink, Calendar, Tag } from "lucide-react";
-import { FaGithub } from "react-icons/fa6";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import projectsData from "@/data/projects.json";
+import Section from "./ui/Section";
+import Container from "./ui/Container";
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  technologies: string[];
-  category: string;
-  github: string;
-  live: string;
-  date: string;
-  featured: boolean;
-}
-
-const ALL_LABEL = "All";
-
-const containerVariants: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 32 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
-  },
-  exit: {
-    opacity: 0,
-    y: -20,
-    scale: 0.95,
-    transition: { duration: 0.25, ease: "easeIn" },
-  },
-};
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-  });
-}
+type CategoryFilter =
+  | "featured"
+  | "all"
+  | "web-nextjs"
+  | "java-desktop"
+  | "c-systems"
+  | "media-legacy";
 
 export default function Projects() {
-  const projects = projectsData as Project[];
+  const [activeFilter, setActiveFilter] = useState<CategoryFilter>("featured");
+  const [showAllExpanded, setShowAllExpanded] = useState(false);
 
-  // Derive unique categories
-  const categories = useMemo(() => {
-    const cats = Array.from(new Set(projects.map((p) => p.category)));
-    return [ALL_LABEL, ...cats];
-  }, [projects]);
+  const filterTabs: { id: CategoryFilter; label: string }[] = [
+    { id: "all", label: "All" },
+    { id: "featured", label: "Featured" },
+    { id: "web-nextjs", label: "Web & Next.js" },
+    { id: "java-desktop", label: "Java Desktop" },
+    { id: "c-systems", label: "C Systems" },
+    { id: "media-legacy", label: "Media" },
+  ];
 
-  const [activeCategory, setActiveCategory] = useState<string>(ALL_LABEL);
+  // Filtering Logic
+  const filteredProjects = projectsData.filter((project) => {
+    if (activeFilter === "featured") return project.isFeatured;
+    if (activeFilter === "all") return true;
+    return project.category === activeFilter;
+  });
 
-  // Sort by newest first, then filter
-  const filtered = useMemo(() => {
-    const sorted = [...projects].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-    if (activeCategory === ALL_LABEL) return sorted;
-    return sorted.filter((p) => p.category === activeCategory);
-  }, [projects, activeCategory]);
+  // Limit displayed projects if not expanded
+  const visibleProjects =
+    !showAllExpanded && (activeFilter === "featured" || activeFilter === "all")
+      ? filteredProjects.slice(0, 6)
+      : filteredProjects;
 
   return (
-    <section
-      id="projects"
-      className="section-padding relative overflow-hidden"
-      aria-label="My projects"
-    >
-      {/* BG Orb */}
-      <div
-        className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full opacity-[0.06] pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(99,102,241,1) 0%, transparent 70%)",
-          filter: "blur(70px)",
-        }}
-        aria-hidden="true"
-      />
+    <Section id="projects" watermark="FEATURED WORK" ariaLabel="My projects catalog">
+      <Container>
+        {/* Header */}
+        <div className="flex flex-col items-center text-center space-y-4 mb-10">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Featured <span className="text-purple-400">Projects</span>
+          </h2>
+          <p className="text-slate-400 text-sm sm:text-base max-w-2xl">
+            A complete trajectory of software built across my full-stack development journey—from foundational C programs and JavaFX desktop suites to modern Next.js web platforms.
+          </p>
 
-      <div className="container-custom relative z-10">
-        {/* Section Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={containerVariants}
-          className="text-center mb-12"
-        >
-          <motion.p variants={cardVariants} className="section-label">
-            <span aria-hidden="true">✦</span> Portfolio
-          </motion.p>
-          <motion.h2 variants={cardVariants} className="section-title">
-            Projects I&apos;ve{" "}
-            <span className="gradient-text">Built</span>
-          </motion.h2>
-          <motion.p variants={cardVariants} className="section-subtitle mx-auto">
-            A selection of my best work — from full-stack web apps to
-            performance-focused frontends.
-          </motion.p>
-        </motion.div>
+          {/* Category Filter Tabs */}
+          <div className="flex flex-wrap justify-center gap-2 pt-4">
+            {filterTabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveFilter(tab.id);
+                  if (tab.id !== "all") setShowAllExpanded(false);
+                }}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 border focus-ring ${
+                  activeFilter === tab.id
+                    ? "bg-purple-600 text-white border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                    : "bg-slate-900/60 text-slate-400 border-white/10 hover:border-white/20 hover:text-white"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        {/* Filter Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-wrap justify-center gap-2 mb-10"
-          role="tablist"
-          aria-label="Filter projects by category"
-        >
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              role="tab"
-              aria-selected={activeCategory === cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`relative px-5 py-2 rounded-full text-sm font-medium transition-all duration-250 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 ${
-                activeCategory === cat
-                  ? "text-white"
-                  : "text-[#a0a0c0] hover:text-white glass border border-white/5 hover:border-violet-500/20"
-              }`}
-            >
-              {activeCategory === cat && (
-                <motion.span
-                  layoutId="filter-pill"
-                  className="absolute inset-0 gradient-bg rounded-full shadow-[0_0_24px_rgba(139,92,246,0.4)]"
-                  transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
-                />
-              )}
-              <span className="relative z-10">{cat}</span>
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Project Cards Grid */}
-        <motion.div
-          layout
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.05 }}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          role="tabpanel"
-          aria-label={`${activeCategory} projects`}
-        >
+        {/* Projects Grid */}
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           <AnimatePresence mode="popLayout">
-            {filtered.map((project) => (
-              <motion.article
+            {visibleProjects.map((project, idx) => (
+              <motion.div
                 key={project.id}
                 layout
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                whileHover={{ y: -6 }}
-                className="glass-card group overflow-hidden flex flex-col"
-                aria-label={`Project: ${project.title}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3, delay: idx * 0.05 }}
+                className={`group relative flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-slate-900/40 border ${
+                  project.badge
+                    ? "border-purple-500/40 shadow-[0_0_20px_rgba(168,85,247,0.1)]"
+                    : "border-white/10"
+                } hover:border-purple-500/60 hover:bg-slate-900/70 transition-all duration-300 hover:-translate-y-1`}
               >
-                {/* Image */}
-                <div className="relative h-48 overflow-hidden rounded-t-2xl bg-[#0d0d1a]">
-                  <Image
-                    src={project.image}
-                    alt={`Screenshot of ${project.title}`}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    unoptimized
-                  />
-                  {/* Hover overlay with links */}
-                  <div className="project-overlay flex items-end justify-end p-4 gap-2">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${project.title} GitHub repository`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="w-9 h-9 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-violet-500/80 transition-colors duration-200"
-                    >
-                      <FaGithub className="w-4 h-4" aria-hidden="true" />
-                    </a>
-                    <a
-                      href={project.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${project.title} live demo`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="w-9 h-9 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-cyan-500/80 transition-colors duration-200"
-                    >
-                      <ExternalLink className="w-4 h-4" aria-hidden="true" />
-                    </a>
-                  </div>
-
-                  {/* Featured badge */}
-                  {project.featured && (
-                    <span className="absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full gradient-bg text-white shadow-lg">
-                      Featured
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-md border border-purple-500/20">
+                      {project.tech[0]}
                     </span>
-                  )}
-                </div>
-
-                {/* Card Body */}
-                <div className="flex flex-col flex-1 p-5 gap-3">
-                  {/* Meta */}
-                  <div className="flex items-center gap-3 text-xs text-[#5a5a8a]">
-                    <span className="flex items-center gap-1">
-                      <Tag className="w-3 h-3" aria-hidden="true" />
-                      {project.category}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" aria-hidden="true" />
-                      {formatDate(project.date)}
-                    </span>
-                  </div>
-
-                  {/* Title + Description */}
-                  <h3 className="font-bold text-lg text-[#f0f0ff] leading-snug group-hover:text-violet-300 transition-colors duration-300">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-[#a0a0c0] leading-relaxed flex-1">
-                    {project.description}
-                  </p>
-
-                  {/* Tech Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {project.technologies.slice(0, 5).map((tech) => (
-                      <span
-                        key={tech}
-                        className="skill-badge text-xs"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                    {project.technologies.length > 5 && (
-                      <span className="skill-badge text-xs">
-                        +{project.technologies.length - 5}
+                    {project.badge && (
+                      <span className="text-[10px] font-bold tracking-wider uppercase text-amber-300 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                        {project.badge}
                       </span>
                     )}
                   </div>
 
-                  {/* Footer Links */}
-                  <div className="flex gap-3 pt-2 border-t border-white/5">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs font-medium text-[#a0a0c0] hover:text-violet-400 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded"
-                      aria-label={`View ${project.title} source code on GitHub`}
-                    >
-                      <FaGithub className="w-3.5 h-3.5" aria-hidden="true" />
-                      Source
-                    </a>
-                    <a
-                      href={project.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs font-medium text-[#a0a0c0] hover:text-cyan-400 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded"
-                      aria-label={`View ${project.title} live demo`}
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-                      Live Demo
-                    </a>
+                  <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">
+                    {project.title}
+                  </h3>
+
+                  <p className="text-slate-400 text-xs leading-relaxed">
+                    {project.description}
+                  </p>
+
+                  {/* Highlights Bullet List */}
+                  {project.highlights && project.highlights.length > 0 && (
+                    <div className="pt-2">
+                      <p className="text-[11px] font-semibold text-slate-300 mb-1">Key Features:</p>
+                      <ul className="grid grid-cols-2 gap-1 text-[10px] text-slate-400">
+                        {project.highlights.map((hl) => (
+                          <li key={hl} className="flex items-center gap-1">
+                            <span className="text-purple-400">•</span> {hl}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-6 mt-4 border-t border-white/5 flex items-center justify-between">
+                  <div className="flex flex-wrap gap-1">
+                    {project.tech.map((t) => (
+                      <span key={t} className="text-[10px] text-slate-300 bg-white/5 px-2 py-0.5 rounded border border-white/10">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-3 ml-2 shrink-0">
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-slate-400 hover:text-white transition-colors text-xs font-semibold focus-ring rounded"
+                        title="View Code on GitHub"
+                      >
+                        GitHub ↗
+                      </a>
+                    )}
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-purple-400 hover:text-purple-300 transition-colors text-xs font-semibold focus-ring rounded"
+                        title="Live Preview"
+                      >
+                        Live ↗
+                      </a>
+                    )}
                   </div>
                 </div>
-              </motion.article>
+              </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
 
-        {filtered.length === 0 && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center text-[#5a5a8a] mt-8"
-          >
-            No projects in this category yet.
-          </motion.p>
+        {/* "Show All Projects (10)" Toggle Button */}
+        {(activeFilter === "featured" || activeFilter === "all") && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={() => {
+                if (!showAllExpanded) {
+                  setActiveFilter("all");
+                  setShowAllExpanded(true);
+                } else {
+                  setActiveFilter("featured");
+                  setShowAllExpanded(false);
+                }
+              }}
+              className="px-6 py-3 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 font-medium text-sm transition-all duration-300 hover:scale-[1.02] focus-ring"
+            >
+              {showAllExpanded
+                ? "Show Featured Only"
+                : `Show All Projects (${projectsData.length})`}
+            </button>
+          </div>
         )}
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

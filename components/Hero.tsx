@@ -1,312 +1,211 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, type Variants } from "framer-motion";
-import { ArrowDown, Download, Eye } from "lucide-react";
-import { FaGithub, FaLinkedin, FaYoutube } from "react-icons/fa6";
+import Section from "./ui/Section";
+import Container from "./ui/Container";
 
-const ROLES = [
-  "Software Developer",
-  "Frontend Developer",
-  "BCA Student",
-  "Content Creator",
-];
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (delay: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
-
-const SOCIAL_LINKS = [
-  { icon: FaGithub, href: "https://github.com/GautamPrasid", label: "GitHub" },
-  {
-    icon: FaLinkedin,
-    href: "https://www.linkedin.com/in/prasid-gautam/",
-    label: "LinkedIn",
-  },
-  {
-    icon: FaYoutube,
-    href: "https://www.youtube.com/@deeeznotfound",
-    label: "YouTube",
-  },
+const roles = [
+  "Full-Stack Developer",
+  "BCA Student @ LA GRANDEE",
+  "Java & Next.js Creator",
+  "UI/UX Enthusiast",
 ];
 
 export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
-  const [displayedRole, setDisplayedRole] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const typingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Typewriter effect
+  // Rotating role text animation
   useEffect(() => {
-    const currentRole = ROLES[roleIndex];
-
-    if (!isDeleting && displayedRole === currentRole) {
-      typingRef.current = setTimeout(() => setIsDeleting(true), 2000);
-      return;
-    }
-
-    if (isDeleting && displayedRole === "") {
-      setIsDeleting(false);
-      setRoleIndex((prev) => (prev + 1) % ROLES.length);
-      return;
-    }
-
-    const speed = isDeleting ? 40 : 70;
-    typingRef.current = setTimeout(() => {
-      setDisplayedRole((prev) =>
-        isDeleting
-          ? prev.slice(0, prev.length - 1)
-          : currentRole.slice(0, prev.length + 1)
-      );
-    }, speed);
-
-    return () => {
-      if (typingRef.current) clearTimeout(typingRef.current);
-    };
-  }, [displayedRole, isDeleting, roleIndex]);
-
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
+    const interval = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % roles.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <section
+    <Section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      aria-label="Hero section"
+      watermark="SOFTWARE DEV"
+      className="min-h-screen flex flex-col justify-between pt-32 pb-12 lg:pt-40 lg:pb-16 bg-[#090a0f]"
     >
-      {/* Mesh gradient background */}
-      <div className="mesh-gradient" aria-hidden="true">
-        <div className="mesh-orb mesh-orb-1" />
-        <div className="mesh-orb mesh-orb-2" />
-        <div className="mesh-orb mesh-orb-3" />
-      </div>
 
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(139,92,246,1) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,1) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-        aria-hidden="true"
-      />
+      {/* Background Ambient Glows */}
+      <div className="absolute top-1/4 left-10 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute top-1/3 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none -z-10" />
 
-      {/* Content */}
-      <div className="container-custom relative z-10 pt-24 pb-16 text-center">
-
-        {/* Profile Picture */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.05}
-          className="flex justify-center mb-8"
-        >
-          <motion.div
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="relative w-28 h-28 sm:w-32 sm:h-32"
-            aria-label="Prasid Gautam profile photo"
-          >
-            {/* Animated glow ring */}
-            <div
-              className="absolute -inset-1 rounded-full opacity-75 blur-md"
-              style={{
-                background:
-                  "linear-gradient(135deg, #7c3aed, #a855f7, #06b6d4)",
-                animation: "orb-float 4s ease-in-out infinite",
-              }}
-              aria-hidden="true"
-            />
-            {/* Gradient border */}
-            <div
-              className="absolute inset-0 rounded-full p-[3px]"
-              style={{
-                background:
-                  "linear-gradient(135deg, #7c3aed, #a855f7, #06b6d4)",
-              }}
-              aria-hidden="true"
-            >
-              <div className="w-full h-full rounded-full bg-[#050508]" />
+      <Container className="my-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          
+          {/* LEFT COLUMN: HERO TEXT & CONTENT (lg:col-span-7) */}
+          <div className="lg:col-span-7 flex flex-col items-start space-y-6 text-left">
+            
+            {/* Status Pill */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              Available for work
             </div>
-            {/* Photo */}
-            <div className="absolute inset-[3px] rounded-full overflow-hidden">
-              <Image
-                src="/profile.JPG"
-                alt="Prasid Gautam"
-                fill
-                sizes="(max-width: 640px) 112px, 128px"
-                className="object-cover"
-                priority
-              />
+
+            {/* Main Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.15]">
+              Hi, I'm{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+                Prasid Gautam
+              </span>
+            </h1>
+
+            {/* Sub-headline / Role Badge Line */}
+            <div className="flex flex-wrap items-center gap-3 text-lg sm:text-xl font-medium text-slate-300">
+              <span>I am a</span>
+              <span className="px-3 py-1 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-300 font-semibold min-w-[140px] text-center transition-all duration-500">
+                {roles[roleIndex]}
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs font-normal text-slate-400 bg-slate-900/80 px-3 py-1.5 rounded-full border border-white/10">
+                📍 Pokhara, Nepal
+              </span>
             </div>
-            {/* Online dot */}
-            <span
-              className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-[#050508] shadow-[0_0_10px_rgba(52,211,153,0.9)]"
-              aria-hidden="true"
-            />
-          </motion.div>
-        </motion.div>
 
-        {/* Badge */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.1}
-          className="flex justify-center mb-6"
-        >
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-violet-500/25 text-sm font-medium text-[#c4b5fd]">
-            <span
-              className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse"
-              aria-hidden="true"
-            />
-            Available for work
-          </span>
-        </motion.div>
+            {/* Bio Paragraph */}
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
+              I build responsive web applications, desktop software, and modern user interfaces using Java, React, Next.js, and TypeScript.
+            </p>
 
-        {/* Name */}
-        <motion.h1
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.2}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-none tracking-tight mb-4"
-        >
-          <span className="text-[#f0f0ff]">Hi, I&apos;m </span>
-          <span className="gradient-text glow-text">Prasid Gautam</span>
-        </motion.h1>
+            {/* CTA Action Buttons */}
+            <div className="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
+              <a
+                href="#projects"
+                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm sm:text-base shadow-[0_0_25px_rgba(168,85,247,0.4)] transition-all duration-300 focus-ring active:scale-[0.98]"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                View My Work
+              </a>
 
-        {/* Typewriter Role */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.35}
-          className="flex items-center justify-center gap-2 text-2xl sm:text-3xl md:text-4xl font-semibold mb-6 h-12"
-          aria-live="polite"
-          aria-label={`Current role: ${displayedRole}`}
-        >
-          <span className="text-[#a0a0c0]">I am a </span>
-          <span className="gradient-text min-w-0">{displayedRole}</span>
-          <span className="cursor-blink text-violet-400 font-light">|</span>
-        </motion.div>
-
-        {/* Bio */}
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.5}
-          className="max-w-2xl mx-auto text-[#a0a0c0] text-lg leading-relaxed mb-10"
-        >
-          🎓 BCA Student &amp; Software Developer from Pokhara, Nepal. I build
-          fast, beautiful, and accessible web experiences — from pixel-perfect
-          frontends to robust backend systems. Beyond code, I create content
-          that connects.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.65}
-          className="flex flex-wrap items-center justify-center gap-4 mb-12"
-        >
-          <button
-            onClick={() => scrollToSection("projects")}
-            className="btn-primary"
-            aria-label="View my work"
-          >
-            <Eye className="w-4 h-4" aria-hidden="true" />
-            View My Work
-          </button>
-          <a
-            href="/Prasid_Gautam_Resume.pdf"
-            download="Prasid_Gautam_Resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-secondary"
-            aria-label="Download Resume"
-          >
-            <Download className="w-4 h-4" aria-hidden="true" />
-            Download Resume
-          </a>
-        </motion.div>
-
-        {/* Social Links */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.75}
-          className="flex items-center justify-center gap-4 mb-16"
-        >
-          {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
-            <motion.a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              whileHover={{ scale: 1.12, y: -3 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-11 h-11 glass rounded-xl flex items-center justify-center text-[#a0a0c0] hover:text-white hover:border-violet-500/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all duration-300 border border-white/5"
-            >
-              <Icon className="w-5 h-5" aria-hidden="true" />
-            </motion.a>
-          ))}
-        </motion.div>
-
-        {/* Stats Row */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.85}
-          className="flex items-center justify-center gap-8 sm:gap-16"
-        >
-          {[
-            { value: "2+", label: "Years Coding" },
-            { value: "10+", label: "Projects Built" },
-            { value: "5K+", label: "Content Views" },
-          ].map(({ value, label }) => (
-            <div key={label} className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold gradient-text">
-                {value}
-              </p>
-              <p className="text-xs sm:text-sm text-[#5a5a8a] mt-1">{label}</p>
+              <a
+                href="/Prasid_Gautam_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-slate-900/80 border border-white/15 hover:border-purple-400/50 text-slate-200 hover:text-white font-medium text-sm sm:text-base transition-all duration-300 focus-ring active:scale-[0.98]"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download Resume
+              </a>
             </div>
-          ))}
-        </motion.div>
-      </div>
 
-      {/* Scroll Indicator */}
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        onClick={() => scrollToSection("about")}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#5a5a8a] hover:text-[#a0a0c0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded-lg p-2"
-        aria-label="Scroll to about section"
-      >
-        <span className="text-xs font-medium tracking-widest uppercase">
-          Scroll
-        </span>
-        <div className="scroll-indicator w-5 h-5 flex items-center justify-center">
-          <ArrowDown className="w-4 h-4" aria-hidden="true" />
+            {/* Bottom Row: Social Icons + Stats Divider */}
+            <div className="pt-8 border-t border-white/10 w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              
+              {/* Social Icons Group */}
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://github.com/GautamPrasid"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                  className="w-10 h-10 rounded-xl bg-slate-900/80 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300 focus-ring"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/prasid-gautam/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="w-10 h-10 rounded-xl bg-slate-900/80 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300 focus-ring"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.74a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.youtube.com/@deeeznotfound"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="w-10 h-10 rounded-xl bg-slate-900/80 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300 focus-ring"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                  </svg>
+                </a>
+              </div>
+
+              <div className="hidden sm:block h-8 w-[1px] bg-white/10" />
+
+              {/* Stats Numbers */}
+              <div className="grid grid-cols-3 gap-6 sm:gap-8">
+                <div>
+                  <p className="text-xl sm:text-2xl font-extrabold text-white">2+</p>
+                  <p className="text-[11px] text-slate-400 uppercase tracking-wider font-medium">Years Coding</p>
+                </div>
+                <div>
+                  <p className="text-xl sm:text-2xl font-extrabold text-white">10+</p>
+                  <p className="text-[11px] text-slate-400 uppercase tracking-wider font-medium">Projects Built</p>
+                </div>
+                <div>
+                  <p className="text-xl sm:text-2xl font-extrabold text-white">5K+</p>
+                  <p className="text-[11px] text-slate-400 uppercase tracking-wider font-medium">Views</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* RIGHT COLUMN: PROFILE CARD WITH FLOATING BADGE (lg:col-span-5) */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-sm aspect-[4/5] sm:aspect-square rounded-3xl bg-slate-900/50 border border-white/15 p-3 backdrop-blur-xl shadow-2xl">
+              
+              {/* Profile Image Frame */}
+              <div className="relative w-full h-full rounded-2xl overflow-hidden bg-slate-800">
+                <Image
+                  src="/profile.JPG"
+                  alt="Prasid Gautam"
+                  fill
+                  priority
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
+                  className="object-cover object-center"
+                />
+              </div>
+
+              {/* Floating Tech Badge (Bottom-Left Overlap) */}
+              <div className="absolute -bottom-4 -left-3 sm:-left-6 bg-[#090a0f]/90 backdrop-blur-md border border-white/15 p-3 rounded-2xl shadow-xl flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-white leading-tight">Next.js &amp; JavaFX Developer</p>
+                  <p className="text-[10px] font-medium text-purple-300">Full-Stack Tech Stack</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
-      </motion.button>
-    </section>
+      </Container>
+
+      {/* Bottom Scroll Indicator */}
+      <div className="w-full flex justify-center pt-8">
+        <a
+          href="#about"
+          className="flex flex-col items-center gap-1 text-[10px] font-semibold tracking-widest text-slate-400 hover:text-white uppercase transition-colors"
+        >
+          <span>Scroll</span>
+          <svg className="w-4 h-4 animate-bounce text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </a>
+      </div>
+    </Section>
   );
 }
+

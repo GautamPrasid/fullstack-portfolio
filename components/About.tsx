@@ -11,27 +11,30 @@ import {
   HeartHandshake,
   Globe,
 } from "lucide-react";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import Card from "@/components/ui/Card";
 
 const containerVariants: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 const STATS = [
   { value: "2+", label: "Years of Experience", icon: Coffee },
-  { value: "10+", label: "Projects Delivered", icon: Rocket },
-  { value: "8+", label: "Technologies Mastered", icon: Layers },
+  { value: "10+", label: "Projects Shipped", icon: Rocket },
+  { value: "8+", label: "Tech Stack", icon: Layers },
   { value: "5K+", label: "Content Views", icon: Globe },
 ];
 
@@ -39,184 +42,170 @@ const TRAITS = [
   {
     icon: Zap,
     title: "Fast Learner",
-    description: "I adapt quickly to new technologies and embrace challenges as opportunities to grow.",
-    color: "from-amber-500/20 to-orange-500/10",
-    border: "border-amber-500/20",
+    description: "Adapting quickly to emerging frameworks and continuous industry shifts.",
     iconColor: "text-amber-400",
   },
   {
     icon: HeartHandshake,
     title: "Team Player",
-    description: "I thrive in collaborative environments and communicate clearly to keep projects on track.",
-    color: "from-rose-500/20 to-pink-500/10",
-    border: "border-rose-500/20",
+    description: "Thriving in collaborative environments with clear communication.",
     iconColor: "text-rose-400",
   },
   {
     icon: Award,
     title: "Quality-Focused",
-    description: "I write clean, maintainable code and care deeply about the end-user experience.",
-    color: "from-violet-500/20 to-purple-500/10",
-    border: "border-violet-500/20",
-    iconColor: "text-violet-400",
+    description: "Writing clean, maintainable code with strict attention to detail.",
+    iconColor: "text-purple-400",
   },
   {
     icon: Users,
     title: "User-Centric",
-    description: "I design and build with the user at the center — accessibility and UX are never afterthoughts.",
-    color: "from-cyan-500/20 to-sky-500/10",
-    border: "border-cyan-500/20",
+    description: "Designing intuitive user experiences backed by accessibility.",
     iconColor: "text-cyan-400",
   },
 ];
 
 export default function About() {
   return (
-    <section
-      id="about"
-      className="section-padding relative overflow-hidden"
-      aria-label="About me"
-    >
-      {/* Subtle background orb */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.06] pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(139,92,246,1) 0%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="container-custom relative z-10">
+    <Section id="about" watermark="ABOUT ME" ariaLabel="About me">
+      <Container>
         {/* Section Header */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="text-center mb-16"
+          className="text-center"
         >
-          <motion.p variants={itemVariants} className="section-label">
-            <span aria-hidden="true">✦</span> About Me
-          </motion.p>
-          <motion.h2 variants={itemVariants} className="section-title">
+          <motion.span variants={itemVariants} className="text-xs uppercase tracking-widest text-purple-400 font-semibold text-center block mb-2">
+            ✦ About Me
+          </motion.span>
+          <motion.h2 variants={itemVariants} className="text-2xl sm:text-4xl lg:text-5xl font-bold text-center text-white tracking-tight mb-3">
             The Person Behind the{" "}
-            <span className="gradient-text">Code</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+              Code
+            </span>
           </motion.h2>
-          <motion.p variants={itemVariants} className="section-subtitle mx-auto">
-            A passionate developer from Pokhara, Nepal who blends technical
-            expertise with creative storytelling.
+          <motion.p variants={itemVariants} className="text-slate-400 text-xs sm:text-sm md:text-base text-center max-w-2xl mx-auto leading-relaxed">
+            A software developer from Pokhara, Nepal who blends technical
+            precision with minimalist user experience design.
           </motion.p>
         </motion.div>
 
-        {/* Main Content — Two Column */}
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center mb-20">
-          {/* Left: Text Content */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.25 }}
-            className="space-y-6"
-          >
-            <motion.p
-              variants={itemVariants}
-              className="text-[#a0a0c0] text-lg leading-relaxed"
-            >
-              I&apos;m <strong className="text-[#f0f0ff] font-semibold">Prasid Gautam</strong>, a BCA
-              student and frontend &amp; software developer based in Pokhara, Nepal. I specialize
-              in building clean, modern web applications and creating digital content that
-              resonates with audiences.
-            </motion.p>
-            <motion.p
-              variants={itemVariants}
-              className="text-[#a0a0c0] text-lg leading-relaxed"
-            >
-              My tech journey started with curiosity — I wanted to understand how the web works.
-              That curiosity evolved into a passion, and today I work across the full stack,
-              designing APIs, building pixel-perfect UIs with React and Next.js, and crafting
-              smooth user experiences.
-            </motion.p>
-            <motion.p
-              variants={itemVariants}
-              className="text-[#a0a0c0] text-lg leading-relaxed"
-            >
-              When I&apos;m not writing code, I&apos;m editing videos, creating content, or
-              exploring the intersection of technology and creativity. I believe the best
-              products are built where engineering meets artistry.
-            </motion.p>
-
-            {/* Timeline milestones */}
-            <motion.div variants={itemVariants} className="space-y-4 pt-2">
-              {[
-                { year: "2022", event: "Started learning web development — HTML, CSS, JavaScript" },
-                { year: "2023", event: "Enrolled in BCA; deep-dived into React, Node.js, and databases" },
-                { year: "2024", event: "Built full-stack projects &amp; launched YouTube channel" },
-                { year: "2025", event: "Freelancing &amp; contributing to open source — 10+ projects shipped" },
-              ].map(({ year, event }) => (
-                <div key={year} className="flex gap-4 items-start">
-                  <span className="text-xs font-bold text-violet-400 bg-violet-500/10 border border-violet-500/20 rounded-md px-2 py-1 mt-0.5 shrink-0 font-mono">
-                    {year}
-                  </span>
-                  <p className="text-[#a0a0c0] text-sm leading-relaxed">{event}</p>
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Right: Stats Cards */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.25 }}
-            className="grid grid-cols-2 gap-4"
-          >
-            {STATS.map(({ value, label, icon: Icon }) => (
-              <motion.div
-                key={label}
-                variants={itemVariants}
-                whileHover={{ scale: 1.04, y: -4 }}
-                className="glass-card p-6 flex flex-col items-center text-center gap-3"
-              >
-                <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-                  <Icon className="w-6 h-6 text-violet-400" aria-hidden="true" />
+        {/* Stats Grid: grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+        >
+          {STATS.map(({ value, label, icon: Icon }) => (
+            <motion.div key={label} variants={itemVariants}>
+              <Card className="flex flex-col items-center justify-center text-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                  <Icon className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="text-3xl font-extrabold gradient-text">{value}</p>
-                  <p className="text-xs text-[#5a5a8a] mt-1 font-medium">{label}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 leading-tight">
+                    {value}
+                  </p>
+                  <p className="text-xs text-slate-400 mt-1 font-medium">{label}</p>
                 </div>
-              </motion.div>
-            ))}
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* About Split: grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="lg:col-span-7"
+          >
+            <Card className="space-y-6">
+              <motion.p variants={itemVariants} className="text-slate-300 text-sm md:text-base leading-relaxed">
+                I&apos;m <strong className="text-white font-semibold">Prasid Gautam</strong>, a Full-Stack Software Developer &amp; <strong className="text-purple-300 font-semibold">BCA Student at LA GRANDEE International College in Pokhara, Nepal 🇳🇵</strong>.
+              </motion.p>
+              <motion.p variants={itemVariants} className="text-slate-300 text-sm md:text-base leading-relaxed">
+                My engineering growth spans from low-level <strong className="text-cyan-300 font-medium">C systems programming</strong> and desktop application development with <strong className="text-purple-300 font-medium">Java &amp; JavaFX</strong> (StudyBuddy) to modern full-stack web platforms built with <strong className="text-pink-300 font-medium">Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS v4</strong>.
+              </motion.p>
+              <motion.p variants={itemVariants} className="text-slate-300 text-sm md:text-base leading-relaxed">
+                I prioritize clean architecture, performance, accessibility, and visual elegance across desktop and web mediums.
+              </motion.p>
+            </Card>
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="lg:col-span-5"
+          >
+            <Card className="space-y-4">
+              <h3 className="text-lg font-bold text-white mb-3">Current Technical Focus</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {[
+                  "Next.js 16 & React Ecosystem",
+                  "TypeScript & Full-Stack Architecture",
+                  "REST APIs & Authentication",
+                  "Performance Optimization & UI/UX",
+                ].map((focus) => (
+                  <div
+                    key={focus}
+                    className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-200 text-xs font-semibold flex items-center gap-2"
+                  >
+                    <span className="text-purple-400">✦</span>
+                    <span>{focus}</span>
+                  </div>
+                ))}
+              </div>
+
+              <h3 className="text-lg font-bold text-white pt-3 mb-2 border-t border-white/5">Milestones &amp; Education</h3>
+              {[
+                { year: "2025", event: "Enrolled in BCA at LA GRANDEE International College; built C CLI projects" },
+                { year: "2025 Late", event: "Developed object-oriented systems & relational database integrations (SQL)" },
+                { year: "2026 Early", event: "Architected StudyBuddy desktop application (JavaFX, MSSQL, JDBC)" },
+                { year: "2026 Present", event: "Engineering full-stack Next.js 16 web applications & Resend API integrations" },
+              ].map(({ year, event }) => (
+                <div key={year} className="flex gap-3 items-center border-b border-white/5 pb-2.5 last:border-none last:pb-0">
+                  <span className="text-xs font-bold text-purple-300 bg-purple-500/15 border border-purple-500/30 rounded-lg px-2.5 py-1 font-mono shrink-0">
+                    {year}
+                  </span>
+                  <p className="text-slate-300 text-xs leading-snug">{event}</p>
+                </div>
+              ))}
+            </Card>
           </motion.div>
         </div>
 
-        {/* Trait Cards */}
+        {/* Values Grid: grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
         >
-          {TRAITS.map(({ icon: Icon, title, description, color, border, iconColor }) => (
-            <motion.div
-              key={title}
-              variants={itemVariants}
-              whileHover={{ y: -6, scale: 1.02 }}
-              className={`p-6 rounded-2xl border bg-gradient-to-br ${color} ${border} transition-all duration-300 group`}
-            >
-              <div
-                className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
-              >
-                <Icon className={`w-5 h-5 ${iconColor}`} aria-hidden="true" />
-              </div>
-              <h3 className="font-semibold text-[#f0f0ff] mb-2">{title}</h3>
-              <p className="text-sm text-[#a0a0c0] leading-relaxed">{description}</p>
+          {TRAITS.map(({ icon: Icon, title, description, iconColor }) => (
+            <motion.div key={title} variants={itemVariants}>
+              <Card className="flex flex-col justify-between h-full group">
+                <div>
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300">
+                    <Icon className={`w-5 h-5 ${iconColor}`} aria-hidden="true" />
+                  </div>
+                  <h3 className="font-bold text-white text-base mb-2">{title}</h3>
+                  <p className="text-slate-300 text-xs md:text-sm leading-relaxed">{description}</p>
+                </div>
+              </Card>
             </motion.div>
           ))}
         </motion.div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

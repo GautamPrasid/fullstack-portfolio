@@ -12,6 +12,10 @@ import {
   MapPin,
 } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
 
 interface FormState {
   name: string;
@@ -26,16 +30,16 @@ const INITIAL_FORM: FormState = { name: "", email: "", message: "" };
 const containerVariants: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -118,331 +122,315 @@ export default function Contact() {
   };
 
   return (
-    <section
-      id="contact"
-      className="relative py-24 sm:py-32 overflow-hidden"
-      aria-label="Contact section"
-    >
-      {/* Background decoration */}
-      <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] opacity-[0.07] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse, rgba(139,92,246,1) 0%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="container-custom relative z-10">
+    <Section id="contact" watermark="GET IN TOUCH" ariaLabel="Contact section">
+      <Container>
         {/* Section header */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="text-center mb-16"
+          className="text-center"
         >
-          <motion.p variants={itemVariants} className="section-label">
-            <span aria-hidden="true">✦</span> Contact
-          </motion.p>
-          <motion.h2 variants={itemVariants} className="section-title">
-            Let&apos;s Work{" "}
-            <span className="gradient-text">Together</span>
+          <motion.span variants={itemVariants} className="text-xs uppercase tracking-widest text-purple-400 font-semibold text-center block mb-2">
+            ✦ Contact
+          </motion.span>
+          <motion.h2 variants={itemVariants} className="text-2xl sm:text-4xl lg:text-5xl font-bold text-center text-white tracking-tight mb-3">
+            Let&apos;s Work <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Together</span>
           </motion.h2>
           <motion.p
             variants={itemVariants}
-            className="section-subtitle mx-auto"
+            className="text-slate-400 text-xs sm:text-sm md:text-base text-center max-w-2xl mx-auto leading-relaxed"
           >
-            Have a project in mind or just want to say hello? Drop me a
-            message — I&apos;ll get back to you within 24 hours.
+            Have a project in mind or want to explore potential collaboration? Send a message directly below.
           </motion.p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
-          {/* Contact Info — left column */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
+          {/* Contact Info — Left Column */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            className="lg:col-span-2 space-y-5"
+            className="lg:col-span-5 space-y-4"
           >
             {CONTACT_INFO.map(({ icon: Icon, label, value, href }) => (
-              <motion.div
-                key={label}
-                variants={itemVariants}
-                className="glass rounded-xl p-4 border border-white/5 flex items-center gap-4 group hover:border-violet-500/25 transition-colors duration-300"
-              >
-                <div className="w-10 h-10 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
-                  <Icon className="w-4 h-4 text-violet-400" aria-hidden="true" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs text-[#5a5a8a] font-medium mb-0.5">
-                    {label}
-                  </p>
-                  {href ? (
-                    <a
-                      href={href}
-                      target={href.startsWith("mailto") ? "_self" : "_blank"}
-                      rel="noopener noreferrer"
-                      className="text-sm text-[#a0a0c0] hover:text-violet-400 transition-colors duration-200 truncate block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded"
-                    >
-                      {value}
-                    </a>
-                  ) : (
-                    <p className="text-sm text-[#a0a0c0] truncate">{value}</p>
-                  )}
-                </div>
+              <motion.div key={label} variants={itemVariants}>
+                <Card className="p-5 flex items-center gap-4 group">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0 text-purple-400">
+                    <Icon className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5">
+                      {label}
+                    </p>
+                    {href ? (
+                      <a
+                        href={href}
+                        target={href.startsWith("mailto") ? "_self" : "_blank"}
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium text-slate-300 hover:text-purple-300 transition-colors duration-200 truncate block focus-ring rounded"
+                      >
+                        {value}
+                      </a>
+                    ) : (
+                      <p className="text-sm font-medium text-slate-300 truncate">{value}</p>
+                    )}
+                  </div>
+                </Card>
               </motion.div>
             ))}
 
             {/* Availability badge */}
-            <motion.div
-              variants={itemVariants}
-              className="glass rounded-xl p-4 border border-emerald-500/20 flex items-center gap-3"
-            >
-              <span
-                className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse shrink-0"
-                aria-hidden="true"
-              />
-              <div>
-                <p className="text-sm font-semibold text-emerald-400">
-                  Available for work
-                </p>
-                <p className="text-xs text-[#5a5a8a] mt-0.5">
-                  Open to freelance &amp; full-time opportunities
-                </p>
-              </div>
+            <motion.div variants={itemVariants}>
+              <Card className="p-6 border-emerald-500/20 flex items-center gap-3.5 mt-2" hoverEffect={false}>
+                <span
+                  className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse shrink-0"
+                  aria-hidden="true"
+                />
+                <div>
+                  <p className="text-sm font-bold text-emerald-400">
+                    Available for work
+                  </p>
+                  <p className="text-xs text-slate-400 mt-0.5 font-medium">
+                    Open to freelance &amp; full-time opportunities
+                  </p>
+                </div>
+              </Card>
             </motion.div>
           </motion.div>
 
-          {/* Contact Form — right column */}
+          {/* Contact Form — Right Column */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            className="lg:col-span-3"
+            className="lg:col-span-7"
           >
             {status === "success" ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="glass rounded-2xl p-10 border border-emerald-500/20 flex flex-col items-center justify-center text-center gap-4 min-h-[380px]"
               >
-                <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                  <CircleCheck
-                    className="w-8 h-8 text-emerald-400"
-                    aria-hidden="true"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-[#f0f0ff]">
-                  Message Sent!
-                </h3>
-                <p className="text-[#a0a0c0] max-w-xs">
-                  Thanks for reaching out. I&apos;ll get back to you within
-                  24 hours.
-                </p>
-                <button
-                  onClick={() => setStatus("idle")}
-                  className="btn-secondary mt-2"
-                >
-                  Send Another
-                </button>
+                <Card className="p-10 flex flex-col items-center justify-center text-center gap-4 min-h-[420px] border-emerald-500/30">
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center">
+                    <CircleCheck
+                      className="w-8 h-8 text-emerald-400"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">
+                    Message Sent!
+                  </h3>
+                  <p className="text-slate-300 max-w-sm text-sm sm:text-base">
+                    Thanks for reaching out. I&apos;ll get back to you within
+                    24 hours.
+                  </p>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setStatus("idle")}
+                    className="mt-2"
+                  >
+                    Send Another Message
+                  </Button>
+                </Card>
               </motion.div>
             ) : (
               <motion.form
                 variants={itemVariants}
                 onSubmit={handleSubmit}
                 noValidate
-                className="glass rounded-2xl p-6 sm:p-8 border border-white/5 space-y-5"
                 aria-label="Contact form"
               >
-                {/* Name */}
-                <div>
-                  <label
-                    htmlFor="contact-name"
-                    className="block text-sm font-medium text-[#a0a0c0] mb-2"
-                  >
-                    Your Name
-                  </label>
-                  <div className="relative">
-                    <User
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5a5a8a]"
-                      aria-hidden="true"
-                    />
-                    <input
-                      id="contact-name"
-                      name="name"
-                      type="text"
-                      value={form.name}
-                      onChange={handleChange}
-                      placeholder="Prasid Gautam"
-                      autoComplete="name"
-                      className={`w-full bg-white/[0.03] border rounded-xl pl-10 pr-4 py-3 text-sm text-[#f0f0ff] placeholder-[#3a3a5a] focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-colors duration-200 ${
-                        errors.name
-                          ? "border-rose-500/50"
-                          : "border-white/8 hover:border-white/15"
-                      }`}
-                      aria-invalid={!!errors.name}
-                      aria-describedby={
-                        errors.name ? "contact-name-error" : undefined
-                      }
-                    />
-                  </div>
-                  {errors.name && (
-                    <p
-                      id="contact-name-error"
-                      role="alert"
-                      className="flex items-center gap-1.5 text-xs text-rose-400 mt-1.5"
+                <Card className="p-6 md:p-8 space-y-6 shadow-2xl">
+                  {/* Name */}
+                  <div>
+                    <label
+                      htmlFor="contact-name"
+                      className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2"
                     >
-                      <CircleAlert className="w-3 h-3" aria-hidden="true" />
-                      {errors.name}
-                    </p>
-                  )}
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label
-                    htmlFor="contact-email"
-                    className="block text-sm font-medium text-[#a0a0c0] mb-2"
-                  >
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5a5a8a]"
-                      aria-hidden="true"
-                    />
-                    <input
-                      id="contact-email"
-                      name="email"
-                      type="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      placeholder="you@example.com"
-                      autoComplete="email"
-                      className={`w-full bg-white/[0.03] border rounded-xl pl-10 pr-4 py-3 text-sm text-[#f0f0ff] placeholder-[#3a3a5a] focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-colors duration-200 ${
-                        errors.email
-                          ? "border-rose-500/50"
-                          : "border-white/8 hover:border-white/15"
-                      }`}
-                      aria-invalid={!!errors.email}
-                      aria-describedby={
-                        errors.email ? "contact-email-error" : undefined
-                      }
-                    />
-                  </div>
-                  {errors.email && (
-                    <p
-                      id="contact-email-error"
-                      role="alert"
-                      className="flex items-center gap-1.5 text-xs text-rose-400 mt-1.5"
-                    >
-                      <CircleAlert className="w-3 h-3" aria-hidden="true" />
-                      {errors.email}
-                    </p>
-                  )}
-                </div>
-
-                {/* Message */}
-                <div>
-                  <label
-                    htmlFor="contact-message"
-                    className="block text-sm font-medium text-[#a0a0c0] mb-2"
-                  >
-                    Message
-                  </label>
-                  <div className="relative">
-                    <MessageSquare
-                      className="absolute left-3.5 top-3.5 w-4 h-4 text-[#5a5a8a]"
-                      aria-hidden="true"
-                    />
-                    <textarea
-                      id="contact-message"
-                      name="message"
-                      rows={5}
-                      value={form.message}
-                      onChange={handleChange}
-                      placeholder="Tell me about your project or just say hi..."
-                      className={`w-full bg-white/[0.03] border rounded-xl pl-10 pr-4 py-3 text-sm text-[#f0f0ff] placeholder-[#3a3a5a] focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-colors duration-200 resize-none ${
-                        errors.message
-                          ? "border-rose-500/50"
-                          : "border-white/8 hover:border-white/15"
-                      }`}
-                      aria-invalid={!!errors.message}
-                      aria-describedby={
-                        errors.message ? "contact-message-error" : undefined
-                      }
-                    />
-                  </div>
-                  {errors.message && (
-                    <p
-                      id="contact-message-error"
-                      role="alert"
-                      className="flex items-center gap-1.5 text-xs text-rose-400 mt-1.5"
-                    >
-                      <CircleAlert className="w-3 h-3" aria-hidden="true" />
-                      {errors.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* Submit */}
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="btn-primary w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed"
-                  aria-label="Send message"
-                >
-                  {status === "loading" ? (
-                    <>
-                      <svg
-                        className="w-4 h-4 animate-spin"
-                        viewBox="0 0 24 24"
-                        fill="none"
+                      Your Name
+                    </label>
+                    <div className="relative">
+                      <User
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
                         aria-hidden="true"
+                      />
+                      <input
+                        id="contact-name"
+                        name="name"
+                        type="text"
+                        value={form.name}
+                        onChange={handleChange}
+                        placeholder="Prasid Gautam"
+                        autoComplete="name"
+                        className={`w-full bg-[#090a0f]/80 border rounded-xl pl-11 pr-4 h-12 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 ${
+                          errors.name
+                            ? "border-rose-500/50"
+                            : "border-white/10 hover:border-white/20"
+                        }`}
+                        aria-invalid={!!errors.name}
+                        aria-describedby={
+                          errors.name ? "contact-name-error" : undefined
+                        }
+                      />
+                    </div>
+                    {errors.name && (
+                      <p
+                        id="contact-name-error"
+                        role="alert"
+                        className="flex items-center gap-1.5 text-xs text-rose-400 mt-2 font-medium"
                       >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8v8H4z"
-                        />
-                      </svg>
-                      Sending…
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" aria-hidden="true" />
-                      Send Message
-                    </>
-                  )}
-                </button>
+                        <CircleAlert className="w-3.5 h-3.5" aria-hidden="true" />
+                        {errors.name}
+                      </p>
+                    )}
+                  </div>
 
-                {status === "error" && (
-                  <p
-                    role="alert"
-                    className="flex items-center gap-2 text-sm text-rose-400 text-center justify-center"
+                  {/* Email */}
+                  <div>
+                    <label
+                      htmlFor="contact-email"
+                      className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2"
+                    >
+                      Email Address
+                    </label>
+                    <div className="relative">
+                      <Mail
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                        aria-hidden="true"
+                      />
+                      <input
+                        id="contact-email"
+                        name="email"
+                        type="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        placeholder="you@example.com"
+                        autoComplete="email"
+                        className={`w-full bg-[#090a0f]/80 border rounded-xl pl-11 pr-4 h-12 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 ${
+                          errors.email
+                            ? "border-rose-500/50"
+                            : "border-white/10 hover:border-white/20"
+                        }`}
+                        aria-invalid={!!errors.email}
+                        aria-describedby={
+                          errors.email ? "contact-email-error" : undefined
+                        }
+                      />
+                    </div>
+                    {errors.email && (
+                      <p
+                        id="contact-email-error"
+                        role="alert"
+                        className="flex items-center gap-1.5 text-xs text-rose-400 mt-2 font-medium"
+                      >
+                        <CircleAlert className="w-3.5 h-3.5" aria-hidden="true" />
+                        {errors.email}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Message */}
+                  <div>
+                    <label
+                      htmlFor="contact-message"
+                      className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2"
+                    >
+                      Message
+                    </label>
+                    <div className="relative">
+                      <MessageSquare
+                        className="absolute left-3.5 top-4 w-4 h-4 text-slate-400 pointer-events-none"
+                        aria-hidden="true"
+                      />
+                      <textarea
+                        id="contact-message"
+                        name="message"
+                        rows={5}
+                        value={form.message}
+                        onChange={handleChange}
+                        placeholder="Tell me about your project or just say hi..."
+                        className={`w-full bg-[#090a0f]/80 border rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 resize-none ${
+                          errors.message
+                            ? "border-rose-500/50"
+                            : "border-white/10 hover:border-white/20"
+                        }`}
+                        aria-invalid={!!errors.message}
+                        aria-describedby={
+                          errors.message ? "contact-message-error" : undefined
+                        }
+                      />
+                    </div>
+                    {errors.message && (
+                      <p
+                        id="contact-message-error"
+                        role="alert"
+                        className="flex items-center gap-1.5 text-xs text-rose-400 mt-2 font-medium"
+                      >
+                        <CircleAlert className="w-3.5 h-3.5" aria-hidden="true" />
+                        {errors.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={status === "loading"}
+                    className="w-full justify-center"
+                    aria-label="Send message"
                   >
-                    <CircleAlert className="w-4 h-4" aria-hidden="true" />
-                    Something went wrong. Please try again.
-                  </p>
-                )}
+                    {status === "loading" ? (
+                      <>
+                        <svg
+                          className="w-4 h-4 animate-spin text-white"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8H4z"
+                          />
+                        </svg>
+                        Sending…
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" aria-hidden="true" />
+                        Send Message
+                      </>
+                    )}
+                  </Button>
+
+                  {status === "error" && (
+                    <p
+                      role="alert"
+                      className="flex items-center gap-2 text-sm text-rose-400 text-center justify-center font-medium"
+                    >
+                      <CircleAlert className="w-4 h-4" aria-hidden="true" />
+                      Something went wrong. Please try again.
+                    </p>
+                  )}
+                </Card>
               </motion.form>
             )}
           </motion.div>
         </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

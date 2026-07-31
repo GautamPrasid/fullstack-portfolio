@@ -4,11 +4,15 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import Button from "@/components/ui/Button";
 
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Timeline", href: "#timeline" },
   { label: "Skills", href: "#skills" },
+  { label: "GitHub", href: "#github" },
   { label: "Projects", href: "#projects" },
   { label: "Content", href: "#content" },
   { label: "Contact", href: "#contact" },
@@ -19,7 +23,6 @@ export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
-  // Track scroll for blur-background and active section
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -28,38 +31,39 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // IntersectionObserver to detect active section
+  const handleNavClick = useCallback((href: string) => {
+    setIsMobileOpen(false);
+    const id = href.replace("#", "");
+    setActiveSection(id);
+    const el = document.getElementById(id);
+    el?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     const sectionIds = NAV_LINKS.map((l) => l.href.replace("#", ""));
     const observers: IntersectionObserver[] = [];
 
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActiveSection(id);
-        },
-        { threshold: 0.4 }
-      );
-      observer.observe(el);
-      observers.push(observer);
+    const handleObserver = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleObserver, {
+      rootMargin: "-20% 0px -40% 0px",
+      threshold: 0.1,
     });
 
-    return () => observers.forEach((o) => o.disconnect());
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
-  const handleNavClick = useCallback(
-    (href: string) => {
-      setIsMobileOpen(false);
-      const id = href.replace("#", "");
-      const el = document.getElementById(id);
-      el?.scrollIntoView({ behavior: "smooth" });
-    },
-    []
-  );
-
-  // Close mobile menu on resize to desktop or Escape key press
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 768) setIsMobileOpen(false);
@@ -81,40 +85,38 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "glass-strong shadow-[0_1px_0_rgba(139,92,246,0.15)]"
-            : "bg-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 bg-[#090a0f]/80 backdrop-blur-md border-b border-white/10 transition-all duration-300 ${
+          isScrolled ? "shadow-[0_4px_30px_rgba(0,0,0,0.5)]" : ""
         }`}
         role="banner"
       >
         <nav
-          className="container-custom flex items-center justify-between h-16 md:h-20"
+          className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 sm:h-20"
           aria-label="Main navigation"
         >
           {/* Logo */}
           <button
             onClick={() => handleNavClick("#home")}
-            className="flex items-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded-lg p-1"
+            className="flex items-center gap-2.5 group focus-ring rounded-lg p-1"
             aria-label="Go to top"
           >
-            <div className="relative w-8 h-8 rounded-lg overflow-hidden shadow-[0_0_16px_rgba(139,92,246,0.5)] group-hover:shadow-[0_0_24px_rgba(139,92,246,0.7)] transition-shadow duration-300">
+            <div className="relative w-9 h-9 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(168,85,247,0.4)] border border-purple-500/30 group-hover:border-purple-400 transition-colors">
               <Image
                 src="/logo.png"
                 alt="Prasid Gautam Logo"
                 fill
-                sizes="32px"
+                sizes="36px"
                 className="object-contain"
                 priority
               />
             </div>
-            <span className="font-bold text-lg text-[#f0f0ff] group-hover:text-violet-400 transition-colors duration-300">
-              Prasid<span className="gradient-text">.</span>
+            <span className="font-bold text-xl text-white group-hover:text-purple-300 transition-colors">
+              Prasid<span className="text-purple-400">.dev</span>
             </span>
           </button>
 
           {/* Desktop Nav Links */}
-          <ul className="hidden md:flex items-center gap-1" role="list">
+          <ul className="hidden md:flex items-center gap-1.5" role="list">
             {NAV_LINKS.map(({ label, href }) => {
               const sectionId = href.replace("#", "");
               const isActive = activeSection === sectionId;
@@ -122,17 +124,17 @@ export default function Navbar() {
                 <li key={href}>
                   <button
                     onClick={() => handleNavClick(href)}
-                    className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 ${
+                    className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 focus-ring ${
                       isActive
-                        ? "text-[#c4b5fd]"
-                        : "text-[#a0a0c0] hover:text-[#f0f0ff]"
+                        ? "text-purple-300"
+                        : "text-slate-300 hover:text-white"
                     }`}
                     aria-current={isActive ? "page" : undefined}
                   >
                     {isActive && (
                       <motion.span
                         layoutId="nav-active"
-                        className="absolute inset-0 rounded-lg bg-violet-500/10 border border-violet-500/20"
+                        className="absolute inset-0 rounded-xl bg-purple-500/15 border border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.15)]"
                         transition={{
                           type: "spring",
                           bounce: 0.2,
@@ -149,20 +151,21 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <button
+            <Button
+              variant="primary"
               onClick={() => handleNavClick("#contact")}
-              className="btn-primary text-sm py-2 px-5"
+              className="h-10 px-5 text-sm"
               aria-label="Hire me"
             >
               Hire Me
-            </button>
+            </Button>
           </div>
 
           {/* Mobile Hamburger */}
           <button
             id="mobile-menu-button"
             onClick={() => setIsMobileOpen((prev) => !prev)}
-            className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg glass text-[#a0a0c0] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+            className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-900/60 border border-white/10 text-slate-300 hover:text-white transition-colors focus-ring"
             aria-expanded={isMobileOpen}
             aria-controls="mobile-menu"
             aria-label={isMobileOpen ? "Close menu" : "Open menu"}
@@ -176,7 +179,7 @@ export default function Navbar() {
                   exit={{ rotate: 90, opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <X className="w-5 h-5" aria-hidden="true" />
+                  <X className="w-5 h-5 text-white" aria-hidden="true" />
                 </motion.span>
               ) : (
                 <motion.span
@@ -186,7 +189,7 @@ export default function Navbar() {
                   exit={{ rotate: -90, opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <Menu className="w-5 h-5" aria-hidden="true" />
+                  <Menu className="w-5 h-5 text-slate-300" aria-hidden="true" />
                 </motion.span>
               )}
             </AnimatePresence>
@@ -204,11 +207,11 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.98 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-16 left-4 right-4 z-40 glass-strong rounded-2xl p-4 shadow-[0_8px_64px_rgba(0,0,0,0.6)] border border-violet-500/20"
+            className="fixed top-16 left-4 right-4 z-40 bg-[#090a0f]/95 backdrop-blur-2xl rounded-2xl p-5 shadow-[0_12px_48px_rgba(0,0,0,0.8)] border border-white/15"
             role="dialog"
             aria-label="Mobile navigation"
           >
-            <ul className="flex flex-col gap-1" role="list">
+            <ul className="flex flex-col gap-1.5" role="list">
               {NAV_LINKS.map(({ label, href }, index) => {
                 const sectionId = href.replace("#", "");
                 const isActive = activeSection === sectionId;
@@ -217,14 +220,14 @@ export default function Navbar() {
                     key={href}
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
+                    transition={{ delay: index * 0.04 }}
                   >
                     <button
                       onClick={() => handleNavClick(href)}
-                      className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 ${
+                      className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 focus-ring ${
                         isActive
-                          ? "text-[#c4b5fd] bg-violet-500/10 border border-violet-500/20"
-                          : "text-[#a0a0c0] hover:text-[#f0f0ff] hover:bg-white/5"
+                          ? "text-purple-300 bg-purple-500/15 border border-purple-500/30"
+                          : "text-slate-300 hover:text-white hover:bg-white/5"
                       }`}
                       aria-current={isActive ? "page" : undefined}
                     >
@@ -236,16 +239,17 @@ export default function Navbar() {
               <motion.li
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: NAV_LINKS.length * 0.05 }}
-                className="mt-2 pt-2 border-t border-violet-500/10"
+                transition={{ delay: NAV_LINKS.length * 0.04 }}
+                className="mt-3 pt-3 border-t border-white/10"
               >
-                <button
+                <Button
+                  variant="primary"
                   onClick={() => handleNavClick("#contact")}
-                  className="btn-primary w-full justify-center text-sm"
+                  className="w-full text-sm justify-center"
                   aria-label="Hire me"
                 >
                   Hire Me
-                </button>
+                </Button>
               </motion.li>
             </ul>
           </motion.div>
