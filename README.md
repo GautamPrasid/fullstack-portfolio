@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌐 Prasid Gautam Portfolio
 
-## Getting Started
+A modern, responsive, and high-performance personal portfolio built with **Next.js**, **TypeScript**, **Tailwind CSS**, and **Framer Motion**. This website showcases my projects, technical skills, and content creation work while providing an easy way to get in touch.
 
-First, run the development server:
+## 🚀 Live Demo
+
+> Coming Soon
+
+## ✨ Features
+
+* ⚡ Built with Next.js 16 (App Router)
+* 🔷 TypeScript for type safety
+* 🎨 Tailwind CSS for modern styling
+* 🎬 Framer Motion animations
+* 📱 Fully responsive design
+* 🌙 Modern dark UI
+* 💼 Dynamic projects loaded from JSON
+* 🎥 Content Creator & Video Editing section
+* 📬 Contact form
+* 🔍 SEO-friendly structure
+* 🚀 Optimized for Vercel deployment
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* Framer Motion
+* Lucide React
+
+### Backend
+
+* Next.js API Routes
+* Resend (Contact Form)
+
+### Deployment
+
+* Vercel
+
+## 📂 Project Structure
+
+```text
+src/
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+│
+├── components/
+│   ├── Navbar.tsx
+│   ├── Hero.tsx
+│   ├── About.tsx
+│   ├── Skills.tsx
+│   ├── Projects.tsx
+│   ├── ContentWork.tsx
+│   ├── Contact.tsx
+│   └── Footer.tsx
+│
+└── data/
+    └── projects.json
+
+public/
+```
+
+## ⚙️ Getting Started
+
+Clone the repository:
+
+```bash
+git clone https://github.com/your-username/portfolio.git
+```
+
+Navigate into the project:
+
+```bash
+cd portfolio
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open your browser and visit:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Build for Production
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Run the production server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Deployment
 
-## Deploy on Vercel
+This project is designed for deployment on **Vercel**.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Push the project to GitHub.
+2. Import the repository into Vercel.
+3. Add any required environment variables.
+4. Deploy.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📬 Contact
+
+If you'd like to collaborate, discuss a project, or just say hello, feel free to reach out through the contact form on the website.
+
+## 📄 License
+
+This project is licensed under the MIT License. Feel free to fork it, learn from it, and customize it for your own portfolio.
+
+---
+
+⭐ If you like this project, consider giving it a star on GitHub!

@@ -1,0 +1,96 @@
+[
+  {
+    "id": "1",
+    "title": "ShopNest — E-Commerce Platform",
+    "description": "A full-featured e-commerce platform with product management, cart, checkout, Stripe payments, order tracking, and admin dashboard. Built with Next.js App Router and MongoDB.",
+    "image": "https://placehold.co/800x450/0d0d1a/8b5cf6?text=ShopNest",
+    "technologies": [
+      "Next.js",
+      "TypeScript",
+      "MongoDB",
+      "Stripe",
+      "Tailwind CSS",
+      "Node.js"
+    ],
+    "category": "Full Stack",
+    "github": "https://github.com/alexpoudel/shopnest",
+    "live": "https://shopnest.vercel.app",
+    "date": "2024-11-15",
+    "featured": true
+  },
+  {
+    "id": "2",
+    "title": "DevCollab — Real-time Code Editor",
+    "description": "A collaborative real-time code editor with syntax highlighting, multi-user cursors, room-based sessions, and live execution for 15+ programming languages via Judge0 API.",
+    "image": "https://placehold.co/800x450/0d0d1a/a855f7?text=DevCollab",
+    "technologies": [
+      "React",
+      "Socket.io",
+      "Node.js",
+      "Express",
+      "Monaco Editor",
+      "Redis"
+    ],
+    "category": "Full Stack",
+    "github": "https://github.com/alexpoudel/devcollab",
+    "live": "https://devcollab.vercel.app",
+    "date": "2024-08-20",
+    "featured": true
+  },
+  {
+    "id": "3",
+    "title": "TaskFlow — Project Management App",
+    "description": "A Trello-inspired project management app with drag-and-drop boards, task assignments, due dates, notifications, and team collaboration features.",
+    "image": "https://placehold.co/800x450/0d0d1a/6366f1?text=TaskFlow",
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Express",
+      "MySQL",
+      "Framer Motion",
+      "JWT"
+    ],
+    "category": "Full Stack",
+    "github": "https://github.com/alexpoudel/taskflow",
+    "live": "https://taskflow-app.vercel.app",
+    "date": "2024-05-10",
+    "featured": false
+  },
+  {
+    "id": "4",
+    "title": "NepalWeather — Weather Dashboard",
+    "description": "A beautiful weather dashboard focused on Nepal featuring 7-day forecasts, hourly charts, air quality index, and interactive maps powered by OpenWeatherMap API.",
+    "image": "https://placehold.co/800x450/0d0d1a/06b6d4?text=NepalWeather",
+    "technologies": [
+      "Next.js",
+      "TypeScript",
+      "Recharts",
+      "Tailwind CSS",
+      "OpenWeatherMap API"
+    ],
+    "category": "Frontend",
+    "github": "https://github.com/alexpoudel/nepal-weather",
+    "live": "https://nepal-weather.vercel.app",
+    "date": "2024-02-28",
+    "featured": false
+  },
+  {
+    "id": "5",
+    "title": "CodeBlog — Developer Blog Platform",
+    "description": "A developer-focused blogging platform with MDX support, syntax highlighting, full-text search, newsletter subscription, and SEO-optimized static generation.",
+    "image": "https://placehold.co/800x450/0d0d1a/10b981?text=CodeBlog",
+    "technologies": [
+      "Next.js",
+      "TypeScript",
+      "MDX",
+      "Contentlayer",
+      "Tailwind CSS",
+      "Algolia"
+    ],
+    "category": "Frontend",
+    "github": "https://github.com/alexpoudel/codeblog",
+    "live": "https://codeblog-alex.vercel.app",
+    "date": "2023-12-05",
+    "featured": false
+  }
+]
