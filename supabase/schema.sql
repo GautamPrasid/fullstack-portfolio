@@ -5,125 +5,217 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- 1. PROJECTS TABLE
 CREATE TABLE IF NOT EXISTS public.projects (
-  id VARCHAR(100) PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
   description TEXT NOT NULL,
-  category VARCHAR(100) NOT NULL,
-  tech TEXT[] NOT NULL DEFAULT '{}',
-  highlights TEXT[] NOT NULL DEFAULT '{}',
-  date DATE NOT NULL DEFAULT CURRENT_DATE,
-  is_featured BOOLEAN NOT NULL DEFAULT false,
-  github VARCHAR(255) DEFAULT '',
-  demo VARCHAR(255) DEFAULT '',
-  badge VARCHAR(100) DEFAULT '',
-  image TEXT NOT NULL DEFAULT '',
-  sort_order INT NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  category TEXT NOT NULL,
+  badge TEXT,
+  is_featured BOOLEAN DEFAULT false,
+  is_published BOOLEAN DEFAULT true,
+  highlights TEXT[] DEFAULT '{}',
+  tech TEXT[] DEFAULT '{}',
+  github_url TEXT,
+  demo_url TEXT,
+  image_url TEXT,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- 2. SKILLS TABLE
 CREATE TABLE IF NOT EXISTS public.skills (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(100) NOT NULL,
-  level INT NOT NULL CHECK (level >= 0 AND level <= 100),
-  category VARCHAR(100) NOT NULL DEFAULT 'General',
-  sort_order INT NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  name TEXT NOT NULL,
+  category TEXT NOT NULL, -- e.g., 'frontend', 'backend', 'media'
+  icon TEXT,
+  percentage INT CHECK (percentage >= 0 AND percentage <= 100),
+  color TEXT DEFAULT '#a855f7',
+  sort_order INT DEFAULT 0,
+  is_hidden BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. ABOUT TABLE
-CREATE TABLE IF NOT EXISTS public.about (
+-- 3. ABOUT ME TABLE
+CREATE TABLE IF NOT EXISTS public.about_me (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  bio TEXT NOT NULL,
-  focus_items TEXT[] NOT NULL DEFAULT '{}',
-  location VARCHAR(255) NOT NULL DEFAULT 'Pokhara, Nepal',
-  education_institution VARCHAR(255) NOT NULL DEFAULT 'LA GRANDEE International College',
-  degree VARCHAR(255) NOT NULL DEFAULT 'Bachelor of Computer Applications (BCA)',
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
--- 4. EXPERIENCE TABLE
-CREATE TABLE IF NOT EXISTS public.experience (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  period VARCHAR(100) NOT NULL,
-  role VARCHAR(255) NOT NULL,
-  institution VARCHAR(255) NOT NULL,
+  photo_url TEXT,
+  headline TEXT NOT NULL,
   description TEXT NOT NULL,
-  skills TEXT[] NOT NULL DEFAULT '{}',
-  icon VARCHAR(100) DEFAULT 'Sparkles',
-  is_highlight BOOLEAN NOT NULL DEFAULT false,
-  sort_order INT NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  bio TEXT NOT NULL,
+  location TEXT DEFAULT 'Pokhara, Nepal',
+  availability TEXT DEFAULT 'Available for Work',
+  experience_years INT DEFAULT 2,
+  projects_count INT DEFAULT 10,
+  current_learning TEXT[] DEFAULT '{}',
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. EXPERIENCES TABLE
+CREATE TABLE IF NOT EXISTS public.experiences (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company TEXT NOT NULL,
+  position TEXT NOT NULL,
+  location TEXT,
+  start_date DATE NOT NULL,
+  end_date DATE,
+  is_current BOOLEAN DEFAULT false,
+  description TEXT NOT NULL,
+  technologies TEXT[] DEFAULT '{}',
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- 5. EDUCATION TABLE
 CREATE TABLE IF NOT EXISTS public.education (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  degree VARCHAR(255) NOT NULL,
-  institution VARCHAR(255) NOT NULL,
-  period VARCHAR(100) NOT NULL,
-  gpa VARCHAR(50) DEFAULT '',
-  highlights TEXT[] DEFAULT '{}',
-  sort_order INT NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  institute TEXT NOT NULL,
+  degree TEXT NOT NULL,
+  year TEXT NOT NULL,
+  logo_url TEXT,
+  description TEXT,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 6. CONTENT WORK TABLE
-CREATE TABLE IF NOT EXISTS public.content (
+-- 6. CERTIFICATES TABLE
+CREATE TABLE IF NOT EXISTS public.certificates (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  title VARCHAR(255) NOT NULL,
-  platform VARCHAR(100) NOT NULL,
-  handle VARCHAR(100) NOT NULL,
-  description TEXT DEFAULT '',
-  stat VARCHAR(100) DEFAULT '',
-  link TEXT NOT NULL,
-  sort_order INT NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  name TEXT NOT NULL,
+  issuer TEXT NOT NULL,
+  issue_date DATE NOT NULL,
+  credential_url TEXT,
+  image_url TEXT,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 7. MESSAGES INBOX TABLE
-CREATE TABLE IF NOT EXISTS public.messages (
+-- 7. SOCIAL LINKS TABLE
+CREATE TABLE IF NOT EXISTS public.social_links (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
+  platform TEXT NOT NULL,
+  url TEXT NOT NULL,
+  handle TEXT NOT NULL,
+  follower_count INT DEFAULT 0,
+  is_visible BOOLEAN DEFAULT true,
+  sort_order INT DEFAULT 0
+);
+
+-- 8. CONTENT CREATOR TABLE
+CREATE TABLE IF NOT EXISTS public.content_creator (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  platform TEXT NOT NULL, -- 'youtube', 'instagram', 'facebook', 'tiktok'
+  title TEXT NOT NULL,
+  url TEXT NOT NULL,
+  thumbnail_url TEXT,
+  views INT DEFAULT 0,
+  is_featured BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 9. GALLERY TABLE
+CREATE TABLE IF NOT EXISTS public.gallery (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT,
+  category TEXT NOT NULL,
+  image_url TEXT NOT NULL,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 10. RESUME TABLE
+CREATE TABLE IF NOT EXISTS public.resume (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  pdf_url TEXT NOT NULL,
+  cv_image_url TEXT,
+  download_count INT DEFAULT 0,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 11. CONTACT MESSAGES TABLE
+CREATE TABLE IF NOT EXISTS public.contact_messages (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
   message TEXT NOT NULL,
-  is_read BOOLEAN NOT NULL DEFAULT false,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  status TEXT DEFAULT 'unread' CHECK (status IN ('unread', 'read', 'replied')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 8. SETTINGS TABLE
-CREATE TABLE IF NOT EXISTS public.settings (
-  key VARCHAR(100) PRIMARY KEY,
-  value JSONB NOT NULL,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+-- 12. SEO SETTINGS TABLE
+CREATE TABLE IF NOT EXISTS public.seo_settings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  site_title TEXT NOT NULL,
+  meta_description TEXT NOT NULL,
+  keywords TEXT[] DEFAULT '{}',
+  og_image_url TEXT,
+  twitter_card TEXT DEFAULT 'summary_large_image',
+  favicon_url TEXT,
+  robots TEXT DEFAULT 'index, follow',
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- 13. SITE SETTINGS TABLE
+CREATE TABLE IF NOT EXISTS public.site_settings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  site_name TEXT DEFAULT 'Prasid Gautam Portfolio',
+  primary_color TEXT DEFAULT '#a855f7',
+  accent_color TEXT DEFAULT '#ec4899',
+  theme TEXT DEFAULT 'dark',
+  maintenance_mode BOOLEAN DEFAULT false,
+  google_analytics_id TEXT,
+  google_search_console_id TEXT,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+------------------------------------------------------------------
 -- ROW LEVEL SECURITY (RLS) POLICIES
-ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.skills ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.about ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.experience ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.education ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.content ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.settings ENABLE ROW LEVEL SECURITY;
+------------------------------------------------------------------
+
+DO $$
+DECLARE
+  t text;
+BEGIN
+  FOR t IN SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' LOOP
+    EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY;', t);
+  END LOOP;
+END $$;
 
 -- Public Read Policies
-CREATE POLICY "Public Read Projects" ON public.projects FOR SELECT USING (true);
-CREATE POLICY "Public Read Skills" ON public.skills FOR SELECT USING (true);
-CREATE POLICY "Public Read About" ON public.about FOR SELECT USING (true);
-CREATE POLICY "Public Read Experience" ON public.experience FOR SELECT USING (true);
+CREATE POLICY "Public Read Projects" ON public.projects FOR SELECT USING (is_published = true OR auth.role() = 'authenticated');
+CREATE POLICY "Public Read Skills" ON public.skills FOR SELECT USING (is_hidden = false OR auth.role() = 'authenticated');
+CREATE POLICY "Public Read About" ON public.about_me FOR SELECT USING (true);
+CREATE POLICY "Public Read Experiences" ON public.experiences FOR SELECT USING (true);
 CREATE POLICY "Public Read Education" ON public.education FOR SELECT USING (true);
-CREATE POLICY "Public Read Content" ON public.content FOR SELECT USING (true);
-CREATE POLICY "Public Insert Messages" ON public.messages FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public Read Certificates" ON public.certificates FOR SELECT USING (true);
+CREATE POLICY "Public Read Socials" ON public.social_links FOR SELECT USING (is_visible = true OR auth.role() = 'authenticated');
+CREATE POLICY "Public Read Content" ON public.content_creator FOR SELECT USING (true);
+CREATE POLICY "Public Read Gallery" ON public.gallery FOR SELECT USING (true);
+CREATE POLICY "Public Read Resume" ON public.resume FOR SELECT USING (true);
+CREATE POLICY "Public Read SEO" ON public.seo_settings FOR SELECT USING (true);
+CREATE POLICY "Public Read Settings" ON public.site_settings FOR SELECT USING (true);
 
--- Authenticated Admin Policies (Full Access)
-CREATE POLICY "Admin Full Projects" ON public.projects FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Full Skills" ON public.skills FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Full About" ON public.about FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Full Experience" ON public.experience FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Full Education" ON public.education FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Full Content" ON public.content FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Full Messages" ON public.messages FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Full Settings" ON public.settings FOR ALL USING (auth.role() = 'authenticated');
+-- Public Write Policy (Allow visitors to submit contact messages)
+CREATE POLICY "Public Insert Messages" ON public.contact_messages FOR INSERT WITH CHECK (true);
+
+-- Admin Full Write Policies
+DO $$
+DECLARE
+  t text;
+BEGIN
+  FOR t IN SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' LOOP
+    EXECUTE format('CREATE POLICY "Admin Full Access %I" ON public.%I FOR ALL TO authenticated USING (true) WITH CHECK (true);', t, t);
+  END LOOP;
+END $$;
+
+------------------------------------------------------------------
+-- SUPABASE STORAGE BUCKET CONFIGURATION
+------------------------------------------------------------------
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('portfolio-media', 'portfolio-media', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Storage RLS Policies
+CREATE POLICY "Public Read Storage" ON storage.objects FOR SELECT USING (bucket_id = 'portfolio-media');
+CREATE POLICY "Admin Upload Storage" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'portfolio-media');
+CREATE POLICY "Admin Delete Storage" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'portfolio-media');

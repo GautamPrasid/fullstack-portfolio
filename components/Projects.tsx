@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import projectsData from "@/data/projects.json";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
+import { createClient } from "@/lib/supabase/client";
 
 type CategoryFilter =
   | "featured"
@@ -17,6 +18,42 @@ type CategoryFilter =
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("featured");
   const [showAllExpanded, setShowAllExpanded] = useState(false);
+  const [projectsList, setProjectsList] = useState(projectsData);
+
+  useEffect(() => {
+    async function loadLiveProjects() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("projects")
+          .select("*")
+          .eq("is_published", true)
+          .order("sort_order", { ascending: true });
+
+        if (!error && data && data.length > 0) {
+          const mapped = data.map((p) => ({
+            id: p.id,
+            title: p.title,
+            description: p.description,
+            category: p.category,
+            tech: p.tech || [],
+            highlights: p.highlights || [],
+            date: p.created_at ? new Date(p.created_at).getFullYear().toString() : "2026",
+            isFeatured: Boolean(p.is_featured),
+            github: p.github_url || "",
+            demo: p.demo_url || "",
+            badge: p.badge || "",
+            image: p.image_url || "",
+          }));
+          setProjectsList(mapped as any);
+        }
+      } catch (err) {
+        console.error("Failed to fetch live Supabase projects:", err);
+      }
+    }
+
+    loadLiveProjects();
+  }, []);
 
   const filterTabs: { id: CategoryFilter; label: string }[] = [
     { id: "all", label: "All" },
@@ -28,7 +65,7 @@ export default function Projects() {
   ];
 
   // Filtering Logic
-  const filteredProjects = projectsData.filter((project) => {
+  const filteredProjects = projectsList.filter((project) => {
     if (activeFilter === "featured") return project.isFeatured;
     if (activeFilter === "all") return true;
     return project.category === activeFilter;
