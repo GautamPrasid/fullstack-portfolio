@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Youtube, Facebook, Instagram, ExternalLink, Users, Play } from "lucide-react";
+import { ExternalLink, Users, Play } from "lucide-react";
+import { FaYoutube, FaFacebook, FaInstagram } from "react-icons/fa6";
 
 const containerVariants = {
   hidden: {},
@@ -25,7 +26,7 @@ const PLATFORMS = [
     stat: "10K+ Views",
     statIcon: Play,
     href: "https://youtube.com/@alexpoudel",
-    icon: Youtube,
+    icon: FaYoutube,
     color: "from-red-500/20 to-orange-500/5",
     border: "border-red-500/20",
     iconBg: "bg-red-500/10",
@@ -39,7 +40,7 @@ const PLATFORMS = [
     stat: "2K+ Followers",
     statIcon: Users,
     href: "https://facebook.com/alexpoudel",
-    icon: Facebook,
+    icon: FaFacebook,
     color: "from-blue-500/20 to-indigo-500/5",
     border: "border-blue-500/20",
     iconBg: "bg-blue-500/10",
@@ -53,7 +54,7 @@ const PLATFORMS = [
     stat: "1.5K+ Followers",
     statIcon: Users,
     href: "https://instagram.com/alex.poudel",
-    icon: Instagram,
+    icon: FaInstagram,
     color: "from-pink-500/20 to-rose-500/5",
     border: "border-pink-500/20",
     iconBg: "bg-pink-500/10",

@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Linkedin, Youtube, Instagram, ArrowUp, Code2 } from "lucide-react";
+import { ArrowUp, Code2 } from "lucide-react";
+import { FaGithub, FaLinkedin, FaYoutube, FaInstagram } from "react-icons/fa6";
 
 const SOCIAL_LINKS = [
-  { icon: Github, href: "https://github.com/alexpoudel", label: "GitHub" },
-  { icon: Linkedin, href: "https://linkedin.com/in/alexpoudel", label: "LinkedIn" },
-  { icon: Youtube, href: "https://youtube.com/@alexpoudel", label: "YouTube" },
-  { icon: Instagram, href: "https://instagram.com/alex.poudel", label: "Instagram" },
+  { icon: FaGithub, href: "https://github.com/alexpoudel", label: "GitHub" },
+  { icon: FaLinkedin, href: "https://linkedin.com/in/alexpoudel", label: "LinkedIn" },
+  { icon: FaYoutube, href: "https://youtube.com/@alexpoudel", label: "YouTube" },
+  { icon: FaInstagram, href: "https://instagram.com/alex.poudel", label: "Instagram" },
 ];
 
 const NAV_LINKS = [

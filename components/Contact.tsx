@@ -10,9 +10,8 @@ import {
   CheckCircle,
   AlertCircle,
   MapPin,
-  Github,
-  Linkedin,
 } from "lucide-react";
+import { FaGithub, FaLinkedin } from "react-icons/fa6";
 
 interface FormState {
   name: string;
@@ -52,13 +51,13 @@ const CONTACT_INFO = [
     href: null,
   },
   {
-    icon: Github,
+    icon: FaGithub,
     label: "GitHub",
     value: "github.com/alexpoudel",
     href: "https://github.com/alexpoudel",
   },
   {
-    icon: Linkedin,
+    icon: FaLinkedin,
     label: "LinkedIn",
     value: "linkedin.com/in/alexpoudel",
     href: "https://linkedin.com/in/alexpoudel",

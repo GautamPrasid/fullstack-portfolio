@@ -15,33 +15,55 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "Alex Poudel — Full Stack Developer & Content Creator",
+  title: "Prasid Gautam | Software & Frontend Developer",
   description:
-    "Personal portfolio of Alex Poudel — Full Stack Developer, Video Editor, and Content Creator. Specializing in React, Next.js, Node.js, and creative digital experiences.",
+    "Personal portfolio of Prasid Gautam, a BCA student, software and frontend developer from Pokhara, Nepal. Explore my projects, skills, and content creation work.",
   keywords: [
-    "Full Stack Developer",
+    "Software Developer",
+    "Frontend Developer",
+    "BCA Student",
     "Next.js",
     "React",
     "TypeScript",
-    "Video Editor",
-    "Content Creator",
     "Portfolio",
+    "Pokhara",
+    "Nepal",
+    "Prasid Gautam",
   ],
-  authors: [{ name: "Alex Poudel" }],
-  creator: "Alex Poudel",
+  authors: [{ name: "Prasid Gautam", url: "https://prasidgautam.com.np" }],
+  creator: "Prasid Gautam",
+  metadataBase: new URL("https://prasidgautam.com.np"),
+  alternates: {
+    canonical: "/",
+  },
+  icons: {
+    icon: "/logo.png.png",
+    apple: "/logo.png.png",
+    shortcut: "/logo.png.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Alex Poudel — Full Stack Developer & Content Creator",
+    url: "https://prasidgautam.com.np/",
+    title: "Prasid Gautam | Software & Frontend Developer",
     description:
-      "Personal portfolio of Alex Poudel — Full Stack Developer, Video Editor, and Content Creator.",
-    siteName: "Alex Poudel Portfolio",
+      "Personal portfolio of Prasid Gautam, a BCA student, software and frontend developer from Pokhara, Nepal.",
+    siteName: "Prasid Gautam Portfolio",
+    images: [
+      {
+        url: "https://prasidgautam.com.np/logo.png.png",
+        width: 400,
+        height: 400,
+        alt: "Prasid Gautam",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Alex Poudel — Full Stack Developer & Content Creator",
+    title: "Prasid Gautam | Software & Frontend Developer",
     description:
-      "Personal portfolio of Alex Poudel — Full Stack Developer, Video Editor, and Content Creator.",
+      "Personal portfolio of Prasid Gautam, a BCA student, software and frontend developer from Pokhara, Nepal.",
+    images: ["https://prasidgautam.com.np/logo.png.png"],
   },
   robots: {
     index: true,

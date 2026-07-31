@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Youtube, Download, Eye } from "lucide-react";
+import { ArrowDown, Download, Eye } from "lucide-react";
+import { FaGithub, FaLinkedin, FaYoutube } from "react-icons/fa6";
 
 const ROLES = ["Full Stack Developer", "Video Editor", "Content Creator", "UI/UX Enthusiast"];
 
@@ -16,9 +17,9 @@ const fadeUp = {
 };
 
 const SOCIAL_LINKS = [
-  { icon: Github, href: "https://github.com/alexpoudel", label: "GitHub" },
-  { icon: Linkedin, href: "https://linkedin.com/in/alexpoudel", label: "LinkedIn" },
-  { icon: Youtube, href: "https://youtube.com/@alexpoudel", label: "YouTube" },
+  { icon: FaGithub, href: "https://github.com/alexpoudel", label: "GitHub" },
+  { icon: FaLinkedin, href: "https://linkedin.com/in/alexpoudel", label: "LinkedIn" },
+  { icon: FaYoutube, href: "https://youtube.com/@alexpoudel", label: "YouTube" },
 ];
 
 export default function Hero() {

@@ -3,7 +3,8 @@
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink, Calendar, Tag } from "lucide-react";
+import { ExternalLink, Calendar, Tag } from "lucide-react";
+import { FaGithub } from "react-icons/fa6";
 import projectsData from "@/data/projects.json";
 
 interface Project {
@@ -185,7 +186,7 @@ export default function Projects() {
                       onClick={(e) => e.stopPropagation()}
                       className="w-9 h-9 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-violet-500/80 transition-colors duration-200"
                     >
-                      <Github className="w-4 h-4" aria-hidden="true" />
+                      <FaGithub className="w-4 h-4" aria-hidden="true" />
                     </a>
                     <a
                       href={project.live}
@@ -255,7 +256,7 @@ export default function Projects() {
                       className="flex items-center gap-1.5 text-xs font-medium text-[#a0a0c0] hover:text-violet-400 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded"
                       aria-label={`View ${project.title} source code on GitHub`}
                     >
-                      <Github className="w-3.5 h-3.5" aria-hidden="true" />
+                      <FaGithub className="w-3.5 h-3.5" aria-hidden="true" />
                       Source
                     </a>
                     <a
