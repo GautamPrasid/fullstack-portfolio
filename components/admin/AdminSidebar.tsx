@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   FolderKanban,
@@ -25,25 +24,24 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-const navItems = [
-  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { label: "Projects", href: "/admin/projects", icon: FolderKanban },
-  { label: "Skills", href: "/admin/skills", icon: Wrench },
-  { label: "About Me", href: "/admin/about", icon: User },
-  { label: "Experience", href: "/admin/experience", icon: Briefcase },
-  { label: "Education", href: "/admin/education", icon: GraduationCap },
-  { label: "Certificates", href: "/admin/certificates", icon: Award },
-  { label: "Social Links", href: "/admin/socials", icon: Share2 },
-  { label: "Content Creator", href: "/admin/content", icon: Video },
-  { label: "Gallery", href: "/admin/gallery", icon: ImageIcon },
-  { label: "Resume CMS", href: "/admin/resume", icon: FileText },
-  { label: "Messages", href: "/admin/messages", icon: Mail },
-  { label: "SEO Panel", href: "/admin/seo", icon: Search },
-  { label: "Site Settings", href: "/admin/settings", icon: Settings },
+const navigationItems = [
+  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { name: "Projects", href: "/admin/projects", icon: FolderKanban },
+  { name: "Skills", href: "/admin/skills", icon: Wrench },
+  { name: "About Me", href: "/admin/about", icon: User },
+  { name: "Experience", href: "/admin/experience", icon: Briefcase },
+  { name: "Education", href: "/admin/education", icon: GraduationCap },
+  { name: "Certificates", href: "/admin/certificates", icon: Award },
+  { name: "Social Links", href: "/admin/socials", icon: Share2 },
+  { name: "Content Creator", href: "/admin/content", icon: Video },
+  { name: "Gallery", href: "/admin/gallery", icon: ImageIcon },
+  { name: "Resume CMS", href: "/admin/resume", icon: FileText },
+  { name: "Messages", href: "/admin/messages", icon: Mail },
+  { name: "SEO Panel", href: "/admin/seo", icon: Search },
+  { name: "Site Settings", href: "/admin/settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {
-  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -61,77 +59,70 @@ export default function AdminSidebar() {
 
   return (
     <>
-      {/* Mobile Menu Trigger */}
+      {/* Mobile Drawer Trigger */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white shadow-lg"
+          className="p-2 rounded-xl bg-slate-900 border border-white/10 text-white shadow-lg"
         >
           <Menu className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Desktop & Mobile Sidebar Wrapper */}
-      <motion.aside
-        animate={{ width: collapsed ? 80 : 260 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 h-screen bg-slate-950/95 border-r border-white/10 backdrop-blur-xl z-40 flex flex-col justify-between transition-transform duration-300 ${
+      {/* Fixed Sidebar */}
+      <aside
+        className={`w-64 h-screen fixed left-0 top-0 z-40 bg-slate-950/80 border-r border-white/10 backdrop-blur-xl flex flex-col justify-between transition-transform duration-300 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
+        {/* Top Header */}
         <div>
-          {/* Header Branding */}
-          <div className="h-16 flex items-center justify-between px-5 border-b border-white/5">
-            {!collapsed && (
-              <span className="text-sm font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                Prasid.CMS
-              </span>
-            )}
-            <button
-              onClick={() => setCollapsed(!collapsed)}
-              className="hidden lg:flex p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
-            >
-              <ChevronLeft className={`w-4 h-4 transition-transform ${collapsed ? "rotate-180" : ""}`} />
+          <div className="h-16 px-6 flex items-center justify-between border-b border-white/10">
+            <Link href="/admin" className="flex items-center gap-2 font-bold text-lg text-white">
+              <span className="text-purple-400">Prasid</span>.CMS
+            </Link>
+            <button className="p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-900 border border-white/10 transition-colors">
+              <ChevronLeft className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="p-3 space-y-1 max-h-[calc(100vh-140px)] overflow-y-auto custom-scrollbar">
-            {navItems.map((item) => {
+          {/* Scrollable Navigation Menu */}
+          <nav className="p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
+            {navigationItems.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;
 
               return (
                 <Link
-                  key={item.href}
+                  key={item.name}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 ${
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
                     isActive
-                      ? "bg-purple-600 text-white shadow-lg shadow-purple-600/20 font-semibold"
-                      : "text-slate-400 hover:bg-slate-900 hover:text-white"
+                      ? "bg-purple-600 text-white shadow-lg shadow-purple-500/25 border border-purple-400/30"
+                      : "text-slate-400 hover:text-white hover:bg-white/5"
                   }`}
-                  title={collapsed ? item.label : undefined}
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  {!collapsed && <span>{item.label}</span>}
+                  <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-slate-400"}`} />
+                  {item.name}
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        {/* User Footer & Logout */}
-        <div className="p-3 border-t border-white/5">
+        {/* Bottom Sign Out Area */}
+        <div className="p-4 border-t border-white/10 bg-slate-950/50">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-rose-400 hover:bg-rose-500/10 transition-colors"
+            type="button"
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors border border-red-500/20"
           >
-            <LogOut className="w-4 h-4 shrink-0" />
-            {!collapsed && <span>Sign Out</span>}
+            <LogOut className="w-4 h-4" />
+            Sign Out
           </button>
         </div>
-      </motion.aside>
+      </aside>
     </>
   );
 }

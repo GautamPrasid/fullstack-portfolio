@@ -5,23 +5,56 @@ import Image from "next/image";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
 
-const roles = [
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface HeroProps {
+  profile?: any;
+  socialLinks?: any[];
+  activeResume?: any;
+}
+
+const DEFAULT_ROLES = [
   "Full-Stack Developer",
   "BCA Student @ LA GRANDEE",
   "Java & Next.js Creator",
   "UI/UX Enthusiast",
 ];
 
-export default function Hero() {
+export default function Hero({ profile, socialLinks, activeResume }: HeroProps) {
+  const roles = profile?.typing_roles?.length ? profile.typing_roles : DEFAULT_ROLES;
   const [roleIndex, setRoleIndex] = useState(0);
 
-  // Rotating role text animation
   useEffect(() => {
     const interval = setInterval(() => {
       setRoleIndex((prev) => (prev + 1) % roles.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [roles.length]);
+
+  // Dynamic data with fallbacks
+  const fullName = profile?.full_name || "Prasid Gautam";
+  const bio = profile?.bio || "I build responsive web applications, desktop software, and modern user interfaces using Java, React, Next.js, and TypeScript.";
+  const location = profile?.location || "Pokhara, Nepal";
+  const availability = profile?.availability || "Available for work";
+  const profileImage = profile?.profile_image_url || "/profile.JPG";
+  const resumeUrl = activeResume?.file_url || "/Prasid_Gautam_Resume.pdf";
+  const ctaPrimaryText = profile?.cta_primary_text || "View My Work";
+  const ctaPrimaryUrl = profile?.cta_primary_url || "#projects";
+  const ctaSecondaryText = profile?.cta_secondary_text || "Download Resume";
+  const yearsExp = profile?.years_experience ?? 2;
+  const projectsCompleted = profile?.projects_completed ?? 10;
+  const monthlyViews = profile?.monthly_views ?? 5000;
+  const subtitle = profile?.subtitle || "Next.js & JavaFX Developer";
+  const profession = profile?.profession || "Full-Stack Tech Stack";
+
+  // Social links from database
+  const githubLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "github");
+  const linkedinLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "linkedin");
+  const youtubeLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "youtube");
+
+  const formatStat = (value: number) => {
+    if (value >= 1000) return `${(value / 1000).toFixed(0)}K+`;
+    return `${value}+`;
+  };
 
   return (
     <Section
@@ -43,14 +76,14 @@ export default function Hero() {
             {/* Status Pill */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Available for work
+              {availability}
             </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.15]">
-              Hi, I'm{" "}
+              Hi, I&apos;m{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
-                Prasid Gautam
+                {fullName}
               </span>
             </h1>
 
@@ -61,30 +94,30 @@ export default function Hero() {
                 {roles[roleIndex]}
               </span>
               <span className="inline-flex items-center gap-1.5 text-xs font-normal text-slate-400 bg-slate-900/80 px-3 py-1.5 rounded-full border border-white/10">
-                📍 Pokhara, Nepal
+                📍 {location}
               </span>
             </div>
 
             {/* Bio Paragraph */}
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
-              I build responsive web applications, desktop software, and modern user interfaces using Java, React, Next.js, and TypeScript.
+              {bio}
             </p>
 
             {/* CTA Action Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
               <a
-                href="#projects"
+                href={ctaPrimaryUrl}
                 className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm sm:text-base shadow-[0_0_25px_rgba(168,85,247,0.4)] transition-all duration-300 focus-ring active:scale-[0.98]"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
-                View My Work
+                {ctaPrimaryText}
               </a>
 
               <a
-                href="/Prasid_Gautam_Resume.pdf"
+                href={resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-slate-900/80 border border-white/15 hover:border-purple-400/50 text-slate-200 hover:text-white font-medium text-sm sm:text-base transition-all duration-300 focus-ring active:scale-[0.98]"
@@ -92,7 +125,7 @@ export default function Hero() {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Download Resume
+                {ctaSecondaryText}
               </a>
             </div>
 
@@ -102,7 +135,7 @@ export default function Hero() {
               {/* Social Icons Group */}
               <div className="flex items-center gap-3">
                 <a
-                  href="https://github.com/GautamPrasid"
+                  href={githubLink?.url || "https://github.com/GautamPrasid"}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub"
@@ -113,7 +146,7 @@ export default function Hero() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/prasid-gautam/"
+                  href={linkedinLink?.url || "https://www.linkedin.com/in/prasid-gautam/"}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
@@ -124,7 +157,7 @@ export default function Hero() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.youtube.com/@deeeznotfound"
+                  href={youtubeLink?.url || "https://www.youtube.com/@deeeznotfound"}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube"
@@ -141,15 +174,15 @@ export default function Hero() {
               {/* Stats Numbers */}
               <div className="grid grid-cols-3 gap-6 sm:gap-8">
                 <div>
-                  <p className="text-xl sm:text-2xl font-extrabold text-white">2+</p>
+                  <p className="text-xl sm:text-2xl font-extrabold text-white">{formatStat(yearsExp)}</p>
                   <p className="text-[11px] text-slate-400 uppercase tracking-wider font-medium">Years Coding</p>
                 </div>
                 <div>
-                  <p className="text-xl sm:text-2xl font-extrabold text-white">10+</p>
+                  <p className="text-xl sm:text-2xl font-extrabold text-white">{formatStat(projectsCompleted)}</p>
                   <p className="text-[11px] text-slate-400 uppercase tracking-wider font-medium">Projects Built</p>
                 </div>
                 <div>
-                  <p className="text-xl sm:text-2xl font-extrabold text-white">5K+</p>
+                  <p className="text-xl sm:text-2xl font-extrabold text-white">{formatStat(monthlyViews)}</p>
                   <p className="text-[11px] text-slate-400 uppercase tracking-wider font-medium">Views</p>
                 </div>
               </div>
@@ -165,8 +198,8 @@ export default function Hero() {
               {/* Profile Image Frame */}
               <div className="relative w-full h-full rounded-2xl overflow-hidden bg-slate-800">
                 <Image
-                  src="/profile.JPG"
-                  alt="Prasid Gautam"
+                  src={profileImage}
+                  alt={fullName}
                   fill
                   priority
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
@@ -182,8 +215,8 @@ export default function Hero() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-white leading-tight">Next.js &amp; JavaFX Developer</p>
-                  <p className="text-[10px] font-medium text-purple-300">Full-Stack Tech Stack</p>
+                  <p className="text-xs font-bold text-white leading-tight">{subtitle}</p>
+                  <p className="text-[10px] font-medium text-purple-300">{profession}</p>
                 </div>
               </div>
 
@@ -208,4 +241,3 @@ export default function Hero() {
     </Section>
   );
 }
-

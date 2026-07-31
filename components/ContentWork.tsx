@@ -8,6 +8,12 @@ import Section from "@/components/ui/Section";
 import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface ContentWorkProps {
+  contentItems?: any[];
+  socialLinks?: any[];
+}
+
 const containerVariants: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
@@ -22,10 +28,7 @@ const itemVariants: Variants = {
   },
 };
 
-// YouTube Video Embed ID
-const YOUTUBE_VIDEO_ID = "dQw4w9WgXcQ";
-
-export default function ContentWork() {
+export default function ContentWork({ contentItems, socialLinks }: ContentWorkProps) {
   const [socialStats, setSocialStats] = useState<{
     youtube?: { views: string; subscribers: string };
     instagram?: { followers: string };
@@ -38,14 +41,23 @@ export default function ContentWork() {
       .catch((err) => console.error("Failed to load social stats:", err));
   }, []);
 
+  // Get dynamic links from database
+  const ytLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "youtube");
+  const fbLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "facebook");
+  const igLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "instagram");
+
+  // Get featured video from content items
+  const featuredVideo = contentItems?.find((c: any) => c.is_featured && c.platform === "youtube");
+  const videoId = featuredVideo?.embed_url || featuredVideo?.video_id || "dQw4w9WgXcQ";
+
   const platforms = [
     {
       name: "YouTube",
-      handle: "@deeeznotfound",
-      description: "Tutorials on web development, productivity, and tech career advice.",
-      stat: socialStats.youtube?.views ? `${socialStats.youtube.views} Views` : "5K+ Views",
+      handle: ytLink?.handle || "@deeeznotfound",
+      description: ytLink?.description || "Tutorials on web development, productivity, and tech career advice.",
+      stat: socialStats.youtube?.views ? `${socialStats.youtube.views} Views` : `${ytLink?.follower_count || "5K+"} Views`,
       statIcon: Play,
-      href: "https://www.youtube.com/@deeeznotfound",
+      href: ytLink?.url || "https://www.youtube.com/@deeeznotfound",
       icon: FaYoutube,
       iconBg: "bg-red-500/15",
       iconColor: "text-red-400",
@@ -53,11 +65,11 @@ export default function ContentWork() {
     },
     {
       name: "Facebook",
-      handle: "Prasid Gautam",
-      description: "Sharing tech insights, project updates, and coding tips with the community.",
-      stat: "500+ Followers",
+      handle: fbLink?.handle || "Prasid Gautam",
+      description: fbLink?.description || "Sharing tech insights, project updates, and coding tips with the community.",
+      stat: `${fbLink?.follower_count || "500+"}  Followers`,
       statIcon: Users,
-      href: "https://www.facebook.com/prashidgautam/",
+      href: fbLink?.url || "https://www.facebook.com/prashidgautam/",
       icon: FaFacebook,
       iconBg: "bg-blue-500/15",
       iconColor: "text-blue-400",
@@ -65,17 +77,23 @@ export default function ContentWork() {
     },
     {
       name: "Instagram",
-      handle: "@user_on_break__",
-      description: "Behind-the-scenes of my dev journey — setups, travels, and creative process.",
-      stat: socialStats.instagram?.followers ? `${socialStats.instagram.followers} Followers` : "500+ Followers",
+      handle: igLink?.handle || "@user_on_break__",
+      description: igLink?.description || "Behind-the-scenes of my dev journey — setups, travels, and creative process.",
+      stat: socialStats.instagram?.followers ? `${socialStats.instagram.followers} Followers` : `${igLink?.follower_count || "500+"} Followers`,
       statIcon: Users,
-      href: "https://www.instagram.com/user_on_break__/",
+      href: igLink?.url || "https://www.instagram.com/user_on_break__/",
       icon: FaInstagram,
       iconBg: "bg-pink-500/15",
       iconColor: "text-pink-400",
       buttonColor: "bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-500 hover:to-orange-500 shadow-pink-600/20",
     },
   ];
+
+  // Content tags from database or defaults
+  const contentTags = contentItems?.length
+    ? [...new Set(contentItems.map((c: any) => c.category).filter(Boolean))].slice(0, 4)
+    : ["Web Dev Tutorials", "Career Tips", "Code Reviews", "Tech Vlogs"];
+
   return (
     <Section id="content" watermark="CREATIVE MEDIA" ariaLabel="Content creation work">
       <Container>
@@ -114,15 +132,15 @@ export default function ContentWork() {
             >
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_VIDEO_ID}?rel=0&modestbranding=1`}
-                title="Featured YouTube video by Prasid Gautam"
+                src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`}
+                title="Featured YouTube video"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 loading="lazy"
               />
             </div>
             <p className="text-xs text-center text-slate-400 mt-3 font-mono">
-              Featured video — @deeeznotfound
+              Featured video — {ytLink?.handle || "@deeeznotfound"}
             </p>
           </motion.div>
 
@@ -154,7 +172,7 @@ export default function ContentWork() {
                 variants={itemVariants}
                 className="flex flex-wrap gap-2.5 pt-2"
               >
-                {["Web Dev Tutorials", "Career Tips", "Code Reviews", "Tech Vlogs"].map((tag) => (
+                {contentTags.map((tag: string) => (
                   <span
                     key={tag}
                     className="px-3.5 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-200 text-xs font-semibold"

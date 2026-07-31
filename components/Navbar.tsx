@@ -6,6 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Button from "@/components/ui/Button";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface NavbarProps {
+  settings?: any;
+}
+
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
@@ -18,10 +23,14 @@ const NAV_LINKS = [
   { label: "Contact", href: "#contact" },
 ] as const;
 
-export default function Navbar() {
+export default function Navbar({ settings }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+
+  // Dynamic branding from CMS
+  const logoUrl = settings?.logo_url || "/logo.png";
+  const siteName = settings?.site_name || "Prasid";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,7 +50,6 @@ export default function Navbar() {
 
   useEffect(() => {
     const sectionIds = NAV_LINKS.map((l) => l.href.replace("#", ""));
-    const observers: IntersectionObserver[] = [];
 
     const handleObserver = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
@@ -102,8 +110,8 @@ export default function Navbar() {
           >
             <div className="relative w-9 h-9 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(168,85,247,0.4)] border border-purple-500/30 group-hover:border-purple-400 transition-colors">
               <Image
-                src="/logo.png"
-                alt="Prasid Gautam Logo"
+                src={logoUrl}
+                alt={`${siteName} Logo`}
                 fill
                 sizes="36px"
                 className="object-contain"
@@ -111,7 +119,7 @@ export default function Navbar() {
               />
             </div>
             <span className="font-bold text-xl text-white group-hover:text-purple-300 transition-colors">
-              Prasid<span className="text-purple-400">.dev</span>
+              {siteName}<span className="text-purple-400">.dev</span>
             </span>
           </button>
 

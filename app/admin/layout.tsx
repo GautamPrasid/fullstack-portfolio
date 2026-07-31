@@ -1,18 +1,21 @@
-import React from "react";
-import AdminSidebar from "@/components/admin/AdminSidebar";
+import Sidebar from "@/components/admin/Sidebar";
 
-export const metadata = {
-  title: "Admin CMS Studio | Prasid Gautam Portfolio",
-  description: "Protected Admin CMS Dashboard for Prasid Gautam Portfolio",
-};
-
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="min-h-screen bg-[#090a0f] text-slate-100 flex overflow-x-hidden">
-      <AdminSidebar />
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-        {children}
-      </div>
+    <div className="min-h-screen bg-[#050508] text-[#f0f0ff] flex flex-row relative overflow-x-hidden">
+      {/* Fixed Desktop Sidebar */}
+      <Sidebar />
+
+      {/* Main Content Workspace */}
+      <main className="flex-1 pl-64 min-w-0 transition-all duration-300">
+        <div className="p-8 max-w-7xl mx-auto space-y-8">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }

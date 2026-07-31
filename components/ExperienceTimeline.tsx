@@ -1,12 +1,21 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { GraduationCap, Code2, Cpu, Sparkles, Database, Layers } from "lucide-react";
+import { GraduationCap, Code2, Cpu, Sparkles, Database, Layers, Briefcase } from "lucide-react";
 import Section from "@/components/ui/Section";
 import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
 
-interface TimelineItem {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface ExperienceTimelineProps {
+  experiences?: any[];
+}
+
+const ICON_MAP: Record<string, typeof Code2> = {
+  GraduationCap, Code2, Cpu, Sparkles, Database, Layers, Briefcase,
+};
+
+interface TimelineItemDefault {
   period: string;
   role: string;
   institution: string;
@@ -16,7 +25,7 @@ interface TimelineItem {
   highlight?: boolean;
 }
 
-const TIMELINE_EVENTS: TimelineItem[] = [
+const DEFAULT_TIMELINE: TimelineItemDefault[] = [
   {
     period: "2026 — Present",
     role: "Full-Stack Web & Next.js Architecture",
@@ -71,7 +80,19 @@ const itemVariants: Variants = {
   },
 };
 
-export default function ExperienceTimeline() {
+export default function ExperienceTimeline({ experiences }: ExperienceTimelineProps) {
+  const timelineEvents = experiences && experiences.length > 0
+    ? experiences.map((exp) => ({
+        period: exp.period || `${exp.start_date || ""} — ${exp.end_date || "Present"}`,
+        role: exp.role || exp.position || "",
+        institution: exp.institution || exp.company || "",
+        description: exp.description || "",
+        skills: exp.technologies || exp.skills || [],
+        icon: ICON_MAP[exp.icon_name] || Briefcase,
+        highlight: Boolean(exp.is_highlight ?? exp.highlight),
+      }))
+    : DEFAULT_TIMELINE;
+
   return (
     <Section id="timeline" watermark="JOURNEY" ariaLabel="Experience & academic timeline">
       <Container>
@@ -112,7 +133,7 @@ export default function ExperienceTimeline() {
             variants={containerVariants}
             className="space-y-8 md:space-y-12"
           >
-            {TIMELINE_EVENTS.map((event, index) => {
+            {timelineEvents.map((event, index) => {
               const Icon = event.icon;
               const isEven = index % 2 === 0;
 
@@ -161,7 +182,7 @@ export default function ExperienceTimeline() {
                       </p>
 
                       <div className="flex flex-wrap gap-1.5 pt-1 border-t border-white/5">
-                        {event.skills.map((skill) => (
+                        {event.skills.map((skill: string) => (
                           <span
                             key={skill}
                             className="px-2.5 py-0.5 rounded-full bg-slate-800/80 border border-white/10 text-slate-300 text-[11px] font-medium"

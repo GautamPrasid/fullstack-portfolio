@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import projectsData from "@/data/projects.json";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
-import { createClient } from "@/lib/supabase/client";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface ProjectsProps {
+  projects?: any[];
+}
 
 type CategoryFilter =
   | "featured"
@@ -15,45 +18,27 @@ type CategoryFilter =
   | "c-systems"
   | "media-legacy";
 
-export default function Projects() {
+export default function Projects({ projects }: ProjectsProps) {
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("featured");
   const [showAllExpanded, setShowAllExpanded] = useState(false);
-  const [projectsList, setProjectsList] = useState(projectsData);
 
-  useEffect(() => {
-    async function loadLiveProjects() {
-      try {
-        const supabase = createClient();
-        const { data, error } = await supabase
-          .from("projects")
-          .select("*")
-          .eq("is_published", true)
-          .order("sort_order", { ascending: true });
-
-        if (!error && data && data.length > 0) {
-          const mapped = data.map((p) => ({
-            id: p.id,
-            title: p.title,
-            description: p.description,
-            category: p.category,
-            tech: p.tech || [],
-            highlights: p.highlights || [],
-            date: p.created_at ? new Date(p.created_at).getFullYear().toString() : "2026",
-            isFeatured: Boolean(p.is_featured),
-            github: p.github_url || "",
-            demo: p.demo_url || "",
-            badge: p.badge || "",
-            image: p.image_url || "",
-          }));
-          setProjectsList(mapped as any);
-        }
-      } catch (err) {
-        console.error("Failed to fetch live Supabase projects:", err);
-      }
-    }
-
-    loadLiveProjects();
-  }, []);
+  // Map Supabase projects to display format
+  const projectsList = (projects && projects.length > 0)
+    ? projects.map((p) => ({
+        id: p.id,
+        title: p.title,
+        description: p.description,
+        category: p.category,
+        tech: p.tech || p.technologies || [],
+        highlights: p.highlights || [],
+        date: p.created_at ? new Date(p.created_at).getFullYear().toString() : "2026",
+        isFeatured: Boolean(p.is_featured),
+        github: p.github_url || "",
+        demo: p.demo_url || "",
+        badge: p.badge || "",
+        image: p.image_url || "",
+      }))
+    : [];
 
   const filterTabs: { id: CategoryFilter; label: string }[] = [
     { id: "all", label: "All" },
@@ -76,6 +61,8 @@ export default function Projects() {
     !showAllExpanded && (activeFilter === "featured" || activeFilter === "all")
       ? filteredProjects.slice(0, 6)
       : filteredProjects;
+
+  if (projectsList.length === 0) return null;
 
   return (
     <Section id="projects" watermark="FEATURED WORK" ariaLabel="My projects catalog">
@@ -152,7 +139,7 @@ export default function Projects() {
                     <div className="pt-2">
                       <p className="text-[11px] font-semibold text-slate-300 mb-1">Key Features:</p>
                       <ul className="grid grid-cols-2 gap-1 text-[10px] text-slate-400">
-                        {project.highlights.map((hl) => (
+                        {project.highlights.map((hl: string) => (
                           <li key={hl} className="flex items-center gap-1">
                             <span className="text-purple-400">•</span> {hl}
                           </li>
@@ -164,7 +151,7 @@ export default function Projects() {
 
                 <div className="pt-6 mt-4 border-t border-white/5 flex items-center justify-between">
                   <div className="flex flex-wrap gap-1">
-                    {project.tech.map((t) => (
+                    {project.tech.map((t: string) => (
                       <span key={t} className="text-[10px] text-slate-300 bg-white/5 px-2 py-0.5 rounded border border-white/10">
                         {t}
                       </span>
@@ -201,8 +188,8 @@ export default function Projects() {
           </AnimatePresence>
         </motion.div>
 
-        {/* "Show All Projects (10)" Toggle Button */}
-        {(activeFilter === "featured" || activeFilter === "all") && (
+        {/* "Show All Projects" Toggle Button */}
+        {(activeFilter === "featured" || activeFilter === "all") && filteredProjects.length > 6 && (
           <div className="flex justify-center mt-10">
             <button
               onClick={() => {
@@ -218,7 +205,7 @@ export default function Projects() {
             >
               {showAllExpanded
                 ? "Show Featured Only"
-                : `Show All Projects (${projectsData.length})`}
+                : `Show All Projects (${projectsList.length})`}
             </button>
           </div>
         )}

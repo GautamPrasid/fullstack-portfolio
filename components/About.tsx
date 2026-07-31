@@ -15,6 +15,11 @@ import Section from "@/components/ui/Section";
 import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface AboutProps {
+  profile?: any;
+}
+
 const containerVariants: Variants = {
   hidden: {},
   visible: {
@@ -30,13 +35,6 @@ const itemVariants: Variants = {
     transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
   },
 };
-
-const STATS = [
-  { value: "2+", label: "Years of Experience", icon: Coffee },
-  { value: "10+", label: "Projects Shipped", icon: Rocket },
-  { value: "8+", label: "Tech Stack", icon: Layers },
-  { value: "5K+", label: "Content Views", icon: Globe },
-];
 
 const TRAITS = [
   {
@@ -65,7 +63,56 @@ const TRAITS = [
   },
 ];
 
-export default function About() {
+const DEFAULT_STATS = [
+  { value: "2+", label: "Years of Experience", icon: Coffee },
+  { value: "10+", label: "Projects Shipped", icon: Rocket },
+  { value: "8+", label: "Tech Stack", icon: Layers },
+  { value: "5K+", label: "Content Views", icon: Globe },
+];
+
+const DEFAULT_ABOUT_DESC = [
+  { key: "intro", text: `I'm <strong class="text-white font-semibold">Prasid Gautam</strong>, a Full-Stack Software Developer &amp; <strong class="text-purple-300 font-semibold">BCA Student at LA GRANDEE International College in Pokhara, Nepal 🇳🇵</strong>.` },
+  { key: "growth", text: `My engineering growth spans from low-level <strong class="text-cyan-300 font-medium">C systems programming</strong> and desktop application development with <strong class="text-purple-300 font-medium">Java &amp; JavaFX</strong> (StudyBuddy) to modern full-stack web platforms built with <strong class="text-pink-300 font-medium">Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS v4</strong>.` },
+  { key: "values", text: `I prioritize clean architecture, performance, accessibility, and visual elegance across desktop and web mediums.` },
+];
+
+const DEFAULT_FOCUS = [
+  "Next.js 16 & React Ecosystem",
+  "TypeScript & Full-Stack Architecture",
+  "REST APIs & Authentication",
+  "Performance Optimization & UI/UX",
+];
+
+const DEFAULT_MILESTONES = [
+  { year: "2025", event: "Enrolled in BCA at LA GRANDEE International College; built C CLI projects" },
+  { year: "2025 Late", event: "Developed object-oriented systems & relational database integrations (SQL)" },
+  { year: "2026 Early", event: "Architected StudyBuddy desktop application (JavaFX, MSSQL, JDBC)" },
+  { year: "2026 Present", event: "Engineering full-stack Next.js 16 web applications & Resend API integrations" },
+];
+
+export default function About({ profile }: AboutProps) {
+  // Build stats from profile data if available
+  const formatStat = (value: number) => {
+    if (value >= 1000) return `${(value / 1000).toFixed(0)}K+`;
+    return `${value}+`;
+  };
+
+  const stats = profile
+    ? [
+        { value: formatStat(profile.years_experience ?? 2), label: "Years of Experience", icon: Coffee },
+        { value: formatStat(profile.projects_completed ?? 10), label: "Projects Shipped", icon: Rocket },
+        { value: `${profile.tech_stack_count ?? 8}+`, label: "Tech Stack", icon: Layers },
+        { value: formatStat(profile.monthly_views ?? 5000), label: "Content Views", icon: Globe },
+      ]
+    : DEFAULT_STATS;
+
+  const aboutParagraphs = profile?.about_description
+    ? [{ key: "custom", text: profile.about_description }]
+    : DEFAULT_ABOUT_DESC;
+
+  const focusItems: string[] = profile?.technical_focus?.length ? profile.technical_focus : DEFAULT_FOCUS;
+  const milestones = profile?.milestones?.length ? profile.milestones : DEFAULT_MILESTONES;
+
   return (
     <Section id="about" watermark="ABOUT ME" ariaLabel="About me">
       <Container>
@@ -87,12 +134,11 @@ export default function About() {
             </span>
           </motion.h2>
           <motion.p variants={itemVariants} className="text-slate-400 text-xs sm:text-sm md:text-base text-center max-w-2xl mx-auto leading-relaxed">
-            A software developer from Pokhara, Nepal who blends technical
-            precision with minimalist user experience design.
+            {profile?.hero_subheadline || "A software developer from Pokhara, Nepal who blends technical precision with minimalist user experience design."}
           </motion.p>
         </motion.div>
 
-        {/* Stats Grid: grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 */}
+        {/* Stats Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -100,7 +146,7 @@ export default function About() {
           viewport={{ once: true, amount: 0.2 }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
         >
-          {STATS.map(({ value, label, icon: Icon }) => (
+          {stats.map(({ value, label, icon: Icon }) => (
             <motion.div key={label} variants={itemVariants}>
               <Card className="flex flex-col items-center justify-center text-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
@@ -117,7 +163,7 @@ export default function About() {
           ))}
         </motion.div>
 
-        {/* About Split: grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 */}
+        {/* About Split */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
           <motion.div
             variants={containerVariants}
@@ -127,15 +173,14 @@ export default function About() {
             className="lg:col-span-7"
           >
             <Card className="space-y-6">
-              <motion.p variants={itemVariants} className="text-slate-300 text-sm md:text-base leading-relaxed">
-                I&apos;m <strong className="text-white font-semibold">Prasid Gautam</strong>, a Full-Stack Software Developer &amp; <strong className="text-purple-300 font-semibold">BCA Student at LA GRANDEE International College in Pokhara, Nepal 🇳🇵</strong>.
-              </motion.p>
-              <motion.p variants={itemVariants} className="text-slate-300 text-sm md:text-base leading-relaxed">
-                My engineering growth spans from low-level <strong className="text-cyan-300 font-medium">C systems programming</strong> and desktop application development with <strong className="text-purple-300 font-medium">Java &amp; JavaFX</strong> (StudyBuddy) to modern full-stack web platforms built with <strong className="text-pink-300 font-medium">Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS v4</strong>.
-              </motion.p>
-              <motion.p variants={itemVariants} className="text-slate-300 text-sm md:text-base leading-relaxed">
-                I prioritize clean architecture, performance, accessibility, and visual elegance across desktop and web mediums.
-              </motion.p>
+              {aboutParagraphs.map((para) => (
+                <motion.p
+                  key={para.key}
+                  variants={itemVariants}
+                  className="text-slate-300 text-sm md:text-base leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: para.text }}
+                />
+              ))}
             </Card>
           </motion.div>
 
@@ -149,12 +194,7 @@ export default function About() {
             <Card className="space-y-4">
               <h3 className="text-lg font-bold text-white mb-3">Current Technical Focus</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {[
-                  "Next.js 16 & React Ecosystem",
-                  "TypeScript & Full-Stack Architecture",
-                  "REST APIs & Authentication",
-                  "Performance Optimization & UI/UX",
-                ].map((focus) => (
+                {focusItems.map((focus: string) => (
                   <div
                     key={focus}
                     className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-200 text-xs font-semibold flex items-center gap-2"
@@ -166,24 +206,19 @@ export default function About() {
               </div>
 
               <h3 className="text-lg font-bold text-white pt-3 mb-2 border-t border-white/5">Milestones &amp; Education</h3>
-              {[
-                { year: "2025", event: "Enrolled in BCA at LA GRANDEE International College; built C CLI projects" },
-                { year: "2025 Late", event: "Developed object-oriented systems & relational database integrations (SQL)" },
-                { year: "2026 Early", event: "Architected StudyBuddy desktop application (JavaFX, MSSQL, JDBC)" },
-                { year: "2026 Present", event: "Engineering full-stack Next.js 16 web applications & Resend API integrations" },
-              ].map(({ year, event }) => (
-                <div key={year} className="flex gap-3 items-center border-b border-white/5 pb-2.5 last:border-none last:pb-0">
+              {milestones.map((m: { year: string; event: string }) => (
+                <div key={m.year} className="flex gap-3 items-center border-b border-white/5 pb-2.5 last:border-none last:pb-0">
                   <span className="text-xs font-bold text-purple-300 bg-purple-500/15 border border-purple-500/30 rounded-lg px-2.5 py-1 font-mono shrink-0">
-                    {year}
+                    {m.year}
                   </span>
-                  <p className="text-slate-300 text-xs leading-snug">{event}</p>
+                  <p className="text-slate-300 text-xs leading-snug">{m.event}</p>
                 </div>
               ))}
             </Card>
           </motion.div>
         </div>
 
-        {/* Values Grid: grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 */}
+        {/* Values Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"

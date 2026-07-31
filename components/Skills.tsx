@@ -5,7 +5,12 @@ import { motion } from "framer-motion";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
 
-const skillProgress = [
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface SkillsProps {
+  skills?: any[];
+}
+
+const DEFAULT_SKILLS = [
   { name: "HTML5 / CSS3", level: 95 },
   { name: "Tailwind CSS", level: 90 },
   { name: "Responsive Design & UI/UX", level: 90 },
@@ -19,7 +24,11 @@ const skillProgress = [
   { name: "SQL (MSSQL / MySQL)", level: 82 },
 ];
 
-export default function Skills() {
+export default function Skills({ skills }: SkillsProps) {
+  const skillData = skills && skills.length > 0
+    ? skills.map((s) => ({ name: s.name, level: s.percentage ?? s.level ?? 50 }))
+    : DEFAULT_SKILLS;
+
   return (
     <Section id="skills" watermark="MY SKILLS" ariaLabel="Technical skills proficiency">
       <Container>
@@ -34,7 +43,7 @@ export default function Skills() {
 
         {/* Skill Progress Bars Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 max-w-5xl mx-auto w-full">
-          {skillProgress.map((skill, idx) => (
+          {skillData.map((skill, idx) => (
             <motion.div
               key={skill.name}
               initial={{ opacity: 0, x: -20 }}

@@ -7,15 +7,30 @@ import {
   Monitor,
   Cpu,
   Palette,
-  Database,
   Camera,
   ArrowRight,
+  Code,
+  Database,
+  Smartphone,
+  Server,
+  Layout,
 } from "lucide-react";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
 import Card from "./ui/Card";
 
-interface ServiceItem {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface ServicesProps {
+  services?: any[];
+}
+
+// Map icon name strings to Lucide components
+const ICON_MAP: Record<string, typeof Globe> = {
+  Globe, Monitor, Cpu, Palette, Camera, Code, Database,
+  Smartphone, Server, Layout,
+};
+
+interface ServiceItemDefault {
   icon: typeof Globe;
   title: string;
   category: string;
@@ -26,7 +41,7 @@ interface ServiceItem {
   iconColor: string;
 }
 
-const SERVICES: ServiceItem[] = [
+const DEFAULT_SERVICES: ServiceItemDefault[] = [
   {
     icon: Globe,
     title: "Frontend Development",
@@ -95,6 +110,15 @@ const SERVICES: ServiceItem[] = [
   },
 ];
 
+const GRADIENTS = [
+  { gradient: "from-purple-500/20 via-pink-500/10 to-transparent", iconBg: "bg-purple-500/15 border-purple-500/30", iconColor: "text-purple-400" },
+  { gradient: "from-pink-500/20 via-purple-500/10 to-transparent", iconBg: "bg-pink-500/15 border-pink-500/30", iconColor: "text-pink-400" },
+  { gradient: "from-amber-500/20 via-orange-500/10 to-transparent", iconBg: "bg-amber-500/15 border-amber-500/30", iconColor: "text-amber-400" },
+  { gradient: "from-cyan-500/20 via-blue-500/10 to-transparent", iconBg: "bg-cyan-500/15 border-cyan-500/30", iconColor: "text-cyan-400" },
+  { gradient: "from-emerald-500/20 via-teal-500/10 to-transparent", iconBg: "bg-emerald-500/15 border-emerald-500/30", iconColor: "text-emerald-400" },
+  { gradient: "from-rose-500/20 via-pink-500/10 to-transparent", iconBg: "bg-rose-500/15 border-rose-500/30", iconColor: "text-rose-400" },
+];
+
 const containerVariants: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
@@ -109,7 +133,22 @@ const cardVariants: Variants = {
   },
 };
 
-export default function Services() {
+export default function Services({ services }: ServicesProps) {
+  const serviceItems = services && services.length > 0
+    ? services.map((s, idx) => {
+        const style = GRADIENTS[idx % GRADIENTS.length];
+        const IconComponent = ICON_MAP[s.icon_name] || Globe;
+        return {
+          icon: IconComponent,
+          title: s.title,
+          category: s.category || "",
+          description: s.description || "",
+          features: s.features || [],
+          ...style,
+        };
+      })
+    : DEFAULT_SERVICES;
+
   return (
     <Section id="services" watermark="SERVICES" ariaLabel="Core services offered">
       <Container>
@@ -135,7 +174,7 @@ export default function Services() {
           </motion.p>
         </motion.div>
 
-        {/* 6 Services Grid: 3 columns on lg breakpoint */}
+        {/* Services Grid */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -143,7 +182,7 @@ export default function Services() {
           variants={containerVariants}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
         >
-          {SERVICES.map((service) => {
+          {serviceItems.map((service) => {
             const Icon = service.icon;
 
             return (
@@ -176,7 +215,7 @@ export default function Services() {
 
                     {/* Features List */}
                     <div className="pt-2 space-y-1.5">
-                      {service.features.map((feat) => (
+                      {service.features.map((feat: string) => (
                         <div key={feat} className="flex items-center gap-2 text-xs text-slate-300">
                           <span className="text-purple-400 text-sm">✓</span>
                           <span>{feat}</span>
