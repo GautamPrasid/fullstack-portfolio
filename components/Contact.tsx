@@ -100,10 +100,21 @@ export default function Contact() {
     e.preventDefault();
     if (!validate()) return;
     setStatus("loading");
-    // Simulate network request — replace with real API call
-    await new Promise((res) => setTimeout(res, 1400));
-    setStatus("success");
-    setForm(INITIAL_FORM);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (response.ok) {
+        setStatus("success");
+        setForm(INITIAL_FORM);
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (

@@ -59,13 +59,20 @@ export default function Navbar() {
     []
   );
 
-  // Close mobile menu on resize to desktop
+  // Close mobile menu on resize to desktop or Escape key press
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 768) setIsMobileOpen(false);
     };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMobileOpen(false);
+    };
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("keydown", onKeyDown);
+    };
   }, []);
 
   return (

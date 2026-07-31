@@ -1,6 +1,24 @@
 [
   {
     "id": "1",
+    "title": "Fullstack Portfolio — Personal Website",
+    "description": "Personal developer portfolio built with Next.js App Router, React 19, TypeScript, Tailwind CSS v4, and Framer Motion. Featuring rich glassmorphism design, fluid animations, dynamic SEO infrastructure, and responsive layouts.",
+    "image": "https://placehold.co/800x450/0d0d1a/7c3aed?text=Portfolio",
+    "technologies": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion"
+    ],
+    "category": "Frontend",
+    "github": "https://github.com/GautamPrasid/fullstack-portfolio",
+    "live": "https://prasidgautam.com.np",
+    "date": "2025-01-10",
+    "featured": true
+  },
+  {
+    "id": "2",
     "title": "ShopNest — E-Commerce Platform",
     "description": "A full-featured e-commerce platform with product management, cart, checkout, Stripe payments, order tracking, and admin dashboard. Built with Next.js App Router and MongoDB.",
     "image": "https://placehold.co/800x450/0d0d1a/8b5cf6?text=ShopNest",
@@ -13,13 +31,13 @@
       "Node.js"
     ],
     "category": "Full Stack",
-    "github": "https://github.com/GautamPrasid",
+    "github": "https://github.com/GautamPrasid/shopnest",
     "live": "https://prasidgautam.com.np",
     "date": "2024-11-15",
     "featured": true
   },
   {
-    "id": "2",
+    "id": "3",
     "title": "DevCollab — Real-time Code Editor",
     "description": "A collaborative real-time code editor with syntax highlighting, multi-user cursors, room-based sessions, and live execution for 15+ programming languages via Judge0 API.",
     "image": "https://placehold.co/800x450/0d0d1a/a855f7?text=DevCollab",
@@ -32,13 +50,13 @@
       "Redis"
     ],
     "category": "Full Stack",
-    "github": "https://github.com/GautamPrasid",
+    "github": "https://github.com/GautamPrasid/devcollab",
     "live": "https://prasidgautam.com.np",
     "date": "2024-08-20",
     "featured": true
   },
   {
-    "id": "3",
+    "id": "4",
     "title": "TaskFlow — Project Management App",
     "description": "A Trello-inspired project management app with drag-and-drop boards, task assignments, due dates, notifications, and team collaboration features.",
     "image": "https://placehold.co/800x450/0d0d1a/6366f1?text=TaskFlow",
@@ -51,13 +69,13 @@
       "JWT"
     ],
     "category": "Full Stack",
-    "github": "https://github.com/GautamPrasid",
+    "github": "https://github.com/GautamPrasid/taskflow",
     "live": "https://prasidgautam.com.np",
     "date": "2024-05-10",
     "featured": false
   },
   {
-    "id": "4",
+    "id": "5",
     "title": "NepalWeather — Weather Dashboard",
     "description": "A beautiful weather dashboard focused on Nepal featuring 7-day forecasts, hourly charts, air quality index, and interactive maps powered by OpenWeatherMap API.",
     "image": "https://placehold.co/800x450/0d0d1a/06b6d4?text=NepalWeather",
@@ -69,13 +87,13 @@
       "OpenWeatherMap API"
     ],
     "category": "Frontend",
-    "github": "https://github.com/GautamPrasid",
+    "github": "https://github.com/GautamPrasid/nepal-weather",
     "live": "https://prasidgautam.com.np",
     "date": "2024-02-28",
     "featured": false
   },
   {
-    "id": "5",
+    "id": "6",
     "title": "CodeBlog — Developer Blog Platform",
     "description": "A developer-focused blogging platform with MDX support, syntax highlighting, full-text search, newsletter subscription, and SEO-optimized static generation.",
     "image": "https://placehold.co/800x450/0d0d1a/10b981?text=CodeBlog",
@@ -88,7 +106,7 @@
       "Algolia"
     ],
     "category": "Frontend",
-    "github": "https://github.com/GautamPrasid",
+    "github": "https://github.com/GautamPrasid/codeblog",
     "live": "https://prasidgautam.com.np",
     "date": "2023-12-05",
     "featured": false

@@ -1,7 +1,13 @@
 {
-  "name": "my-portfolio",
+  "name": "fullstack-portfolio",
   "version": "0.1.0",
   "private": true,
+  "author": "Prasid Gautam",
+  "homepage": "https://prasidgautam.com.np",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GautamPrasid/fullstack-portfolio.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
