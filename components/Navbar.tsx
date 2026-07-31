@@ -80,7 +80,7 @@ export default function Navbar() {
       <motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
             ? "glass-strong shadow-[0_1px_0_rgba(139,92,246,0.15)]"
@@ -203,7 +203,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -16, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.98 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] as const }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             className="fixed top-16 left-4 right-4 z-40 glass-strong rounded-2xl p-4 shadow-[0_8px_64px_rgba(0,0,0,0.6)] border border-violet-500/20"
             role="dialog"
             aria-label="Mobile navigation"

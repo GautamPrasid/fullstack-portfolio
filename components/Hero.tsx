@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { ArrowDown, Download, Eye } from "lucide-react";
 import { FaGithub, FaLinkedin, FaYoutube } from "react-icons/fa6";
 
@@ -13,12 +13,12 @@ const ROLES = [
   "Content Creator",
 ];
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
-  visible: (delay = 0) => ({
+  visible: (delay: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
   }),
 };
 
