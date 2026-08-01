@@ -71,8 +71,8 @@ const DEFAULT_STATS = [
 ];
 
 const DEFAULT_ABOUT_DESC = [
-  { key: "intro", text: `I'm <strong class="text-white font-semibold">Prasid Gautam</strong>, a Full-Stack Software Developer &amp; <strong class="text-purple-300 font-semibold">BCA Student at LA GRANDEE International College in Pokhara, Nepal 🇳🇵</strong>.` },
-  { key: "growth", text: `My engineering growth spans from low-level <strong class="text-cyan-300 font-medium">C systems programming</strong> and desktop application development with <strong class="text-purple-300 font-medium">Java &amp; JavaFX</strong> (StudyBuddy) to modern full-stack web platforms built with <strong class="text-pink-300 font-medium">Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS v4</strong>.` },
+  { key: "intro", text: `I'm <strong class="text-white font-semibold">Prasid Gautam</strong>, a Full-Stack Software Developer & <strong class="text-purple-300 font-semibold">BCA Student at LA GRANDEE International College in Pokhara, Nepal 🇳🇵</strong>.` },
+  { key: "growth", text: `My engineering growth spans from low-level <strong class="text-cyan-300 font-medium">C systems programming</strong> and desktop application development with <strong class="text-purple-300 font-medium">Java & JavaFX</strong> (StudyBuddy) to modern full-stack web platforms built with <strong class="text-pink-300 font-medium">Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS v4</strong>.` },
   { key: "values", text: `I prioritize clean architecture, performance, accessibility, and visual elegance across desktop and web mediums.` },
 ];
 

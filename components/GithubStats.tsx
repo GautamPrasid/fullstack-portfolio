@@ -5,41 +5,54 @@ import { motion } from "framer-motion";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
 
-const githubStats = [
-  { label: "Public Repositories", value: "10+", icon: "📦" },
-  { label: "Core Languages", value: "5", detail: "Java, TS, JS, C, Python", icon: "💻" },
-  { label: "Years Coding", value: "2+", detail: "2025 – Present", icon: "⚡" },
-  { label: "Primary Focus", value: "Full-Stack", detail: "Next.js 16 & JavaFX", icon: "🚀" },
-];
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface GithubStatsProps {
+  profile?: any;
+  socialLinks?: any[];
+}
 
-const languageDistribution = [
-  { name: "Java & JavaFX", percentage: 35, color: "bg-amber-500" },
-  { name: "TypeScript & Next.js", percentage: 30, color: "bg-blue-500" },
-  { name: "JavaScript & HTML/CSS", percentage: 20, color: "bg-yellow-400" },
-  { name: "C Language", percentage: 10, color: "bg-slate-400" },
-  { name: "Python", percentage: 5, color: "bg-emerald-400" },
-];
+export default function GithubStats({ profile, socialLinks }: GithubStatsProps) {
+  const githubLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "github");
+  const githubUrl = githubLink?.url || "https://github.com/GautamPrasid";
+  const githubHandle = githubLink?.handle || "github.com/GautamPrasid";
 
-const openSourceHighlights = [
-  {
-    name: "StudyBuddy",
-    role: "Maintainer / Creator",
-    description: "Open-source JavaFX desktop application for peer-to-peer academic resource sharing and study tracking.",
-    stars: "⭐ Featured",
-    tech: ["Java", "JavaFX", "MSSQL", "JDBC"],
-    link: "https://github.com/GautamPrasid/StudyBuddy",
-  },
-  {
-    name: "fullstack-portfolio",
-    role: "Maintainer / Creator",
-    description: "Production Next.js portfolio architecture built in public featuring dynamic JSON project routing and Resend API.",
-    stars: "⭐ Featured",
-    tech: ["Next.js", "TypeScript", "Tailwind CSS"],
-    link: "https://github.com/GautamPrasid/fullstack-portfolio",
-  },
-];
+  const yearsExp = profile?.years_experience ?? 2;
+  const projectsCount = profile?.projects_completed ?? 10;
 
-export default function GithubStats() {
+  const githubStats = [
+    { label: "Public Repositories", value: `${projectsCount}+`, icon: "📦" },
+    { label: "Core Languages", value: "5", detail: "Java, TS, JS, C, Python", icon: "💻" },
+    { label: "Years Coding", value: `${yearsExp}+`, detail: "2025 – Present", icon: "⚡" },
+    { label: "Primary Focus", value: "Full-Stack", detail: profile?.subtitle || "Next.js 16 & JavaFX", icon: "🚀" },
+  ];
+
+  const languageDistribution = [
+    { name: "Java & JavaFX", percentage: 35, color: "bg-amber-500" },
+    { name: "TypeScript & Next.js", percentage: 30, color: "bg-blue-500" },
+    { name: "JavaScript & HTML/CSS", percentage: 20, color: "bg-yellow-400" },
+    { name: "C Language", percentage: 10, color: "bg-slate-400" },
+    { name: "Python", percentage: 5, color: "bg-emerald-400" },
+  ];
+
+  const openSourceHighlights = [
+    {
+      name: "StudyBuddy",
+      role: "Maintainer / Creator",
+      description: "Open-source JavaFX desktop application for peer-to-peer academic resource sharing and study tracking.",
+      stars: "⭐ Featured",
+      tech: ["Java", "JavaFX", "MSSQL", "JDBC"],
+      link: "https://github.com/GautamPrasid/StudyBuddy",
+    },
+    {
+      name: "fullstack-portfolio",
+      role: "Maintainer / Creator",
+      description: "Production Next.js portfolio architecture built in public featuring dynamic JSON project routing and Resend API.",
+      stars: "⭐ Featured",
+      tech: ["Next.js", "TypeScript", "Tailwind CSS"],
+      link: githubUrl,
+    },
+  ];
+
   return (
     <Section id="github" watermark="OPEN SOURCE" ariaLabel="GitHub statistics and activity">
       {/* Subtle Background Glow */}
@@ -55,7 +68,7 @@ export default function GithubStats() {
           className="flex flex-col items-center text-center space-y-4 mb-14"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-mono">
-            <span>🐙</span> github.com/GautamPrasid
+            <span>🐙</span> {githubHandle}
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -186,12 +199,12 @@ export default function GithubStats() {
         {/* GitHub Call to Action */}
         <div className="mt-12 text-center">
           <a
-            href="https://github.com/GautamPrasid"
+            href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 border border-white/10 hover:border-purple-500/50 text-slate-200 hover:text-white font-medium text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] focus-ring"
           >
-            <span>🐙</span> Follow @GautamPrasid on GitHub
+            <span>🐙</span> Follow on GitHub
           </a>
         </div>
       </Container>

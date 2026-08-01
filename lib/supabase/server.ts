@@ -1,28 +1,29 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://oppyergocafcybxsneey.supabase.co";
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  "sb_publishable_dQ32al8DrCFMKNOl4_5YnA_NE1cp9Mh";
+export async function createClient() {
+  const cookieStore = await cookies();
 
-export async function createClient(cookieStoreParam?: Awaited<ReturnType<typeof cookies>>) {
-  const cookieStore = cookieStoreParam || (await cookies());
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    "https://oppyergocafcybxsneey.supabase.co";
+  const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wcHllcmdvY2FmY3lieHNuZWV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1MTc3MjcsImV4cCI6MjEwMTA5MzcyN30.3haQuSQhM2iatPHy_MF4ScrK_pfgq_biefryrpsEV04";
 
-  return createServerClient(supabaseUrl, supabaseKey, {
+  return createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
       },
-      setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
+      setAll(cookiesToSet) {
         try {
           cookiesToSet.forEach(({ name, value, options }) =>
             cookieStore.set(name, value, options)
           );
         } catch {
           // The `setAll` method was called from a Server Component.
-          // This can be ignored if you have middleware refreshing user sessions.
+          // This can be ignored if middleware is handling session refreshes.
         }
       },
     },

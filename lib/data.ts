@@ -101,12 +101,14 @@ export async function getSocialLinks() {
 export async function getActiveResume() {
   try {
     const supabase = await createClient();
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("resume")
       .select("*")
-      .eq("is_active", true)
-      .single();
-    return data;
+      .order("created_at", { ascending: false });
+
+    if (error || !data || data.length === 0) return null;
+    const active = data.find((r: any) => r.is_active) || data[0];
+    return active || null;
   } catch {
     return null;
   }

@@ -4,10 +4,9 @@ import React, { useState } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import ImageUploader from "@/components/admin/ImageUploader";
 import { Plus, Edit2, Trash2, Tag, Calendar, ExternalLink, Search } from "lucide-react";
-import initialProjects from "@/data/projects.json";
 
 export default function AdminProjectsPage() {
-  const [projects, setProjects] = useState(initialProjects);
+  const [projects, setProjects] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [editingProject, setEditingProject] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

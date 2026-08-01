@@ -17,6 +17,12 @@ import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface ContactProps {
+  profile?: any;
+  socialLinks?: any[];
+}
+
 interface FormState {
   name: string;
   email: string;
@@ -43,37 +49,40 @@ const itemVariants: Variants = {
   },
 };
 
-const CONTACT_INFO = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "gprasid10@gmail.com",
-    href: "mailto:gprasid10@gmail.com",
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "Pokhara, Nepal",
-    href: null,
-  },
-  {
-    icon: FaGithub,
-    label: "GitHub",
-    value: "github.com/GautamPrasid",
-    href: "https://github.com/GautamPrasid",
-  },
-  {
-    icon: FaLinkedin,
-    label: "LinkedIn",
-    value: "linkedin.com/in/prasid-gautam",
-    href: "https://www.linkedin.com/in/prasid-gautam/",
-  },
-];
-
-export default function Contact() {
+export default function Contact({ profile, socialLinks }: ContactProps) {
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const [status, setStatus] = useState<SubmitStatus>("idle");
   const [errors, setErrors] = useState<Partial<FormState>>({});
+
+  const gh = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "github");
+  const li = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "linkedin");
+
+  const contactInfo = [
+    {
+      icon: Mail,
+      label: "Email",
+      value: profile?.email || "gprasid10@gmail.com",
+      href: `mailto:${profile?.email || "gprasid10@gmail.com"}`,
+    },
+    {
+      icon: MapPin,
+      label: "Location",
+      value: profile?.location || "Pokhara, Nepal",
+      href: null,
+    },
+    {
+      icon: FaGithub,
+      label: "GitHub",
+      value: gh?.handle || "github.com/GautamPrasid",
+      href: gh?.url || "https://github.com/GautamPrasid",
+    },
+    {
+      icon: FaLinkedin,
+      label: "LinkedIn",
+      value: li?.handle || "linkedin.com/in/prasid-gautam",
+      href: li?.url || "https://www.linkedin.com/in/prasid-gautam/",
+    },
+  ];
 
   const validate = (): boolean => {
     const next: Partial<FormState> = {};
@@ -155,7 +164,7 @@ export default function Contact() {
             viewport={{ once: true, amount: 0.2 }}
             className="lg:col-span-5 space-y-4"
           >
-            {CONTACT_INFO.map(({ icon: Icon, label, value, href }) => (
+            {contactInfo.map(({ icon: Icon, label, value, href }) => (
               <motion.div key={label} variants={itemVariants}>
                 <Card className="p-5 flex items-center gap-4 group">
                   <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0 text-purple-400">
@@ -191,7 +200,7 @@ export default function Contact() {
                 />
                 <div>
                   <p className="text-sm font-bold text-emerald-400">
-                    Available for work
+                    {profile?.availability || "Available for work"}
                   </p>
                   <p className="text-xs text-slate-400 mt-0.5 font-medium">
                     Open to freelance &amp; full-time opportunities
@@ -264,7 +273,7 @@ export default function Contact() {
                         type="text"
                         value={form.name}
                         onChange={handleChange}
-                        placeholder="Prasid Gautam"
+                        placeholder="Your Name"
                         autoComplete="name"
                         className={`w-full bg-[#090a0f]/80 border rounded-xl pl-11 pr-4 h-12 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 ${
                           errors.name
@@ -352,7 +361,7 @@ export default function Contact() {
                         rows={5}
                         value={form.message}
                         onChange={handleChange}
-                        placeholder="Tell me about your project or just say hi..."
+                        placeholder="Tell me about your project..."
                         className={`w-full bg-[#090a0f]/80 border rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 resize-none ${
                           errors.message
                             ? "border-rose-500/50"

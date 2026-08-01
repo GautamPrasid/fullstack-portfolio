@@ -31,7 +31,7 @@ export default function Projects({ projects }: ProjectsProps) {
         category: p.category,
         tech: p.tech || p.technologies || [],
         highlights: p.highlights || [],
-        date: p.created_at ? new Date(p.created_at).getFullYear().toString() : "2026",
+        date: p.created_at ? p.created_at.slice(0, 4) : "2026",
         isFeatured: Boolean(p.is_featured),
         github: p.github_url || "",
         demo: p.demo_url || "",

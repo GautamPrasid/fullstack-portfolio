@@ -5,6 +5,11 @@ import { motion } from "framer-motion";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface SocialStatsProps {
+  socialLinks?: any[];
+}
+
 interface SocialMetrics {
   youtube: number;
   instagram: number;
@@ -12,7 +17,7 @@ interface SocialMetrics {
   tiktok: number;
 }
 
-export default function SocialStats() {
+export default function SocialStats({ socialLinks }: SocialStatsProps) {
   const [metrics, setMetrics] = useState<SocialMetrics>({
     youtube: 5000,
     instagram: 2500,
@@ -41,50 +46,62 @@ export default function SocialStats() {
     fetchStats();
   }, []);
 
+  const yt = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "youtube");
+  const ig = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "instagram");
+  const fb = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "facebook");
+  const tt = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "tiktok");
+
+  const formatFollowers = (val: number | string) => {
+    if (typeof val === "number") {
+      return val.toLocaleString("en-US");
+    }
+    return val;
+  };
+
   const socialPlatforms = [
     {
       name: "YouTube",
-      handle: "@deeeznotfound",
-      followers: metrics.youtube,
+      handle: yt?.handle || "@deeeznotfound",
+      followers: yt?.follower_count || metrics.youtube,
       unit: "Subscribers",
       color: "from-red-500/20 to-rose-600/10",
       borderColor: "border-red-500/30",
       badgeColor: "bg-red-500/10 text-red-400 border-red-500/20",
       icon: "🎥",
-      link: "https://www.youtube.com/@deeeznotfound",
+      link: yt?.url || "https://www.youtube.com/@deeeznotfound",
     },
     {
       name: "Instagram",
-      handle: "@user_on_break__",
-      followers: metrics.instagram,
+      handle: ig?.handle || "@user_on_break__",
+      followers: ig?.follower_count || metrics.instagram,
       unit: "Followers",
       color: "from-pink-500/20 to-purple-600/10",
       borderColor: "border-pink-500/30",
       badgeColor: "bg-pink-500/10 text-pink-400 border-pink-500/20",
       icon: "📸",
-      link: "https://www.instagram.com/user_on_break__/",
+      link: ig?.url || "https://www.instagram.com/user_on_break__/",
     },
     {
       name: "TikTok",
-      handle: "@prasid_gautam",
-      followers: metrics.tiktok,
+      handle: tt?.handle || "@prasid_gautam",
+      followers: tt?.follower_count || metrics.tiktok,
       unit: "Followers",
       color: "from-cyan-500/20 to-slate-900/40",
       borderColor: "border-cyan-500/30",
       badgeColor: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
       icon: "🎵",
-      link: "https://tiktok.com",
+      link: tt?.url || "https://tiktok.com",
     },
     {
       name: "Facebook",
-      handle: "Prasid Gautam",
-      followers: metrics.facebook,
+      handle: fb?.handle || "Prasid Gautam",
+      followers: fb?.follower_count || metrics.facebook,
       unit: "Followers / Likes",
       color: "from-blue-600/20 to-indigo-600/10",
       borderColor: "border-blue-500/30",
       badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
       icon: "📘",
-      link: "https://www.facebook.com/prashidgautam/",
+      link: fb?.url || "https://www.facebook.com/prashidgautam/",
     },
   ];
 
@@ -131,7 +148,7 @@ export default function SocialStats() {
 
               <div className="space-y-1">
                 <p className="text-3xl font-extrabold text-white font-mono tracking-tight">
-                  {loading ? "..." : platform.followers.toLocaleString()}
+                  {loading && !socialLinks?.length ? "..." : formatFollowers(platform.followers)}
                 </p>
                 <p className="text-xs text-slate-300 font-medium">{platform.unit}</p>
               </div>
