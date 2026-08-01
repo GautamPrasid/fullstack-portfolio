@@ -76,9 +76,10 @@ export async function createOrUpdateProject(project: ProjectRecord): Promise<{ s
     revalidatePath("/");
     revalidatePath("/admin/projects");
     return { success: true, message: `Project ${project.title} saved successfully!` };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Failed to save project.";
     console.error("Error saving project:", error);
-    return { success: false, message: error?.message || "Failed to save project." };
+    return { success: false, message: msg };
   }
 }
 
@@ -91,8 +92,9 @@ export async function deleteProject(id: string): Promise<{ success: boolean; mes
     revalidatePath("/");
     revalidatePath("/admin/projects");
     return { success: true, message: `Project ${id} deleted successfully!` };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Failed to delete project.";
     console.error("Error deleting project:", error);
-    return { success: false, message: error?.message || "Failed to delete project." };
+    return { success: false, message: msg };
   }
 }

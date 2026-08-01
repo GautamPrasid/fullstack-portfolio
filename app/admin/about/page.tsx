@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
-import { Save, Check, User } from "lucide-react";
+import { Save, Check } from "lucide-react";
 
 export default function AdminAboutPage() {
   const [bio, setBio] = useState(

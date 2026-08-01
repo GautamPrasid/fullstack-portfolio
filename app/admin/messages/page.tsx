@@ -1,163 +1,182 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
-import { Inbox, Mail, CheckCircle2, Trash2, Calendar, User } from "lucide-react";
-
-interface MessageItem {
-  id: string;
-  name: string;
-  email: string;
-  message: string;
-  date: string;
-  isRead: boolean;
-}
-
-const initialMessages: MessageItem[] = [
-  {
-    id: "m1",
-    name: "Subash Sharma",
-    email: "subash@example.com",
-    message: "Hi Prasid, loved your StudyBuddy desktop project! Would love to collaborate on a JavaFX project.",
-    date: "2026-07-30 14:20",
-    isRead: false,
-  },
-  {
-    id: "m2",
-    name: "Anita Adhikari",
-    email: "anita@example.com",
-    message: "Impressed by your Next.js 16 portfolio performance. Are you available for freelance full-stack work?",
-    date: "2026-07-29 09:45",
-    isRead: false,
-  },
-  {
-    id: "m3",
-    name: "Rohan Gurung",
-    email: "rohan@example.com",
-    message: "Great work on the Bank Management C program. Keep building in public!",
-    date: "2026-07-25 18:10",
-    isRead: true,
-  },
-];
+import { Mail, Check, Trash2, Loader2, Eye, EyeOff, Reply } from "lucide-react";
+import { fetchAdminMessages, toggleMessageRead, deleteMessage } from "./actions";
+import type { ContactMessageRecord } from "./actions";
 
 export default function AdminMessagesPage() {
-  const [messages, setMessages] = useState<MessageItem[]>(initialMessages);
-  const [selectedMessage, setSelectedMessage] = useState<MessageItem | null>(initialMessages[0]);
+  const [messages, setMessages] = useState<ContactMessageRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isPending, startTransition] = useTransition();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const toggleReadStatus = (id: string) => {
-    setMessages(
-      messages.map((m) => (m.id === id ? { ...m, isRead: !m.isRead } : m))
-    );
+  const loadData = async () => {
+    setLoading(true);
+    const data = await fetchAdminMessages();
+    setMessages(data ?? []);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      loadData();
+    });
+  }, []);
+
+  const handleToggleRead = (id: string, current: boolean) => {
+    startTransition(async () => {
+      const res = await toggleMessageRead(id, !current);
+      if (res.success) loadData();
+    });
   };
 
   const handleDelete = (id: string) => {
-    setMessages(messages.filter((m) => m.id !== id));
-    if (selectedMessage?.id === id) {
-      setSelectedMessage(null);
-    }
+    startTransition(async () => {
+      const res = await deleteMessage(id);
+      if (res.success) {
+        if (selectedId === id) setSelectedId(null);
+        loadData();
+      }
+    });
   };
+
+  const unreadCount = messages.filter((m) => m.status !== "read").length;
+
+  const isRead = (m: ContactMessageRecord) => m.status === "read";
+
+  const selectedMsg = messages.find((m) => m.id === selectedId);
 
   return (
     <div className="flex-1 flex flex-col min-w-0">
       <AdminHeader
         title="Contact Messages Inbox"
-        subtitle="View and manage form submissions sent via /api/contact"
+        subtitle={
+          unreadCount > 0
+            ? `${unreadCount} unread · ${messages.length} total messages received`
+            : `${messages.length} total messages received`
+        }
       />
 
-      <main className="flex-1 p-6 md:p-8 space-y-6 overflow-y-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Messages List Column */}
-          <div className="lg:col-span-5 space-y-3">
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                onClick={() => {
-                  setSelectedMessage(msg);
-                  if (!msg.isRead) toggleReadStatus(msg.id);
-                }}
-                className={`p-4 rounded-2xl border transition-all cursor-pointer ${
-                  selectedMessage?.id === msg.id
-                    ? "bg-purple-600/15 border-purple-500/40"
-                    : msg.isRead
-                    ? "bg-slate-900/40 border-white/5 opacity-70"
-                    : "bg-slate-900/80 border-purple-500/30"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                    {!msg.isRead && <span className="w-2 h-2 rounded-full bg-purple-400" />}
-                    {msg.name}
-                  </span>
-                  <span className="text-[10px] font-mono text-slate-400">{msg.date}</span>
-                </div>
-                <p className="text-xs text-purple-300 font-mono mb-2">{msg.email}</p>
-                <p className="text-xs text-slate-400 line-clamp-2 leading-snug">{msg.message}</p>
-              </div>
-            ))}
+      <main className="flex-1 p-6 md:p-8 overflow-hidden flex flex-col md:flex-row gap-6">
+        <div className="md:w-80 lg:w-96 shrink-0 rounded-2xl bg-slate-900/40 border border-white/10 flex flex-col max-h-[70vh] md:max-h-[unset] overflow-hidden">
+          <div className="p-4 border-b border-white/10 flex items-center justify-between">
+            <h3 className="text-sm font-bold text-white">Inbox</h3>
+            <span className="text-[10px] font-mono text-slate-500">{messages.length} messages</span>
           </div>
 
-          {/* Message Content Detail Column */}
-          <div className="lg:col-span-7 p-6 rounded-2xl bg-slate-900/40 border border-white/10 space-y-6">
-            {selectedMessage ? (
-              <>
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                      <User className="w-4 h-4 text-purple-400" />
-                      <span>{selectedMessage.name}</span>
-                    </h3>
-                    <a
-                      href={`mailto:${selectedMessage.email}`}
-                      className="text-xs font-mono text-purple-300 hover:underline"
-                    >
-                      {selectedMessage.email}
-                    </a>
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            {loading ? (
+              <div className="p-8 text-center text-slate-400 text-xs flex items-center justify-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Loading messages...
+              </div>
+            ) : messages.length === 0 ? (
+              <div className="p-8 text-center text-slate-400 text-xs">
+                No messages yet. Messages sent from the contact form will appear here.
+              </div>
+            ) : (
+              messages.map((message) => (
+                <button
+                  key={message.id}
+                  onClick={() => setSelectedId(message.id)}
+                  className={`w-full text-left p-4 border-b border-white/5 space-y-1 transition-colors ${
+                    selectedId === message.id
+                      ? "bg-purple-500/10 border-l-2 border-l-purple-500"
+                      : "hover:bg-white/5"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      {!isRead(message) && <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" />}
+                      <span className={`text-xs font-semibold truncate ${!isRead(message) ? "text-white" : "text-slate-300"}`}>
+                        {message.name}
+                      </span>
+                    </div>
+                    <span className="text-[9px] font-mono text-slate-500 shrink-0">
+                      {message.created_at
+                        ? new Date(message.created_at).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                          })
+                        : ""}
+                    </span>
                   </div>
+                  <span className="block text-[10px] text-purple-400 font-mono truncate">{message.email}</span>
+                  <span className="block text-[11px] text-slate-400 truncate">{message.message.slice(0, 80)}{message.message.length > 80 ? "…" : ""}</span>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
 
+        <div className="flex-1 rounded-2xl bg-slate-900/40 border border-white/10 flex flex-col min-h-[60vh]">
+          {selectedMsg ? (
+            <>
+              <div className="p-6 border-b border-white/10 space-y-2">
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                  <div>
+                    <h2 className="text-lg font-bold text-white">Message from {selectedMsg.name}</h2>
+                    <p className="text-xs text-slate-400 font-mono pt-0.5">
+                      From <span className="text-purple-300">{selectedMsg.name}</span> — {selectedMsg.email}
+                    </p>
+                  </div>
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => toggleReadStatus(selectedMessage.id)}
-                      className="p-2 rounded-xl bg-slate-900 border border-white/10 text-slate-300 hover:text-white"
-                      title={selectedMessage.isRead ? "Mark as unread" : "Mark as read"}
+                      onClick={() => handleToggleRead(selectedMsg.id, isRead(selectedMsg))}
+                      disabled={isPending}
+                      className="p-2 rounded-xl bg-slate-900 border border-white/10 text-slate-400 hover:text-purple-300 hover:border-purple-500/30 transition-colors disabled:opacity-50"
+                      title={isRead(selectedMsg) ? "Mark as unread" : "Mark as read"}
                     >
-                      <CheckCircle2 className={`w-4 h-4 ${selectedMessage.isRead ? "text-emerald-400" : ""}`} />
+                      {isRead(selectedMsg) ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
+                    <a
+                      href={`mailto:${selectedMsg.email}`}
+                      className="p-2 rounded-xl bg-slate-900 border border-white/10 text-slate-400 hover:text-emerald-300 hover:border-emerald-500/30 transition-colors"
+                      title="Reply via email"
+                    >
+                      <Reply className="w-4 h-4" />
+                    </a>
                     <button
-                      onClick={() => handleDelete(selectedMessage.id)}
-                      className="p-2 rounded-xl bg-slate-900 border border-white/10 text-slate-400 hover:text-rose-400"
+                      onClick={() => handleDelete(selectedMsg.id)}
+                      disabled={isPending}
+                      className="p-2 rounded-xl bg-slate-900 border border-white/10 text-slate-400 hover:text-rose-400 hover:border-rose-500/30 transition-colors disabled:opacity-50"
                       title="Delete message"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
-
-                <div className="space-y-2">
-                  <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    Submitted: {selectedMessage.date}
-                  </span>
-                  <div className="p-4 rounded-xl bg-slate-900/80 border border-white/5 text-xs text-slate-200 leading-relaxed whitespace-pre-wrap font-sans">
-                    {selectedMessage.message}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-white/5 flex justify-end">
-                  <a
-                    href={`mailto:${selectedMessage.email}?subject=Re:%20Portfolio%20Inquiry`}
-                    className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center gap-2 shadow-[0_0_15px_rgba(168,85,247,0.3)]"
-                  >
-                    <Mail className="w-4 h-4" />
-                    <span>Reply via Email</span>
-                  </a>
-                </div>
-              </>
-            ) : (
-              <div className="text-center py-12 text-slate-500 text-xs">
-                Select a message to view full text
               </div>
-            )}
-          </div>
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="whitespace-pre-wrap text-xs leading-7 text-slate-300 max-w-none font-sans">
+                  {selectedMsg.message}
+                </div>
+              </div>
+              <div className="p-4 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <span>
+                  Received{" "}
+                  {selectedMsg.created_at ? new Date(selectedMsg.created_at).toLocaleString() : "—"}
+                </span>
+                {isRead(selectedMsg) ? (
+                  <span className="flex items-center gap-1 text-emerald-400">
+                    <Check className="w-3 h-3" /> Read
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1 text-purple-400">Unread</span>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center p-12 text-center space-y-3">
+              <Mail className="w-10 h-10 text-slate-600" />
+              <h3 className="text-sm font-semibold text-slate-400">No Message Selected</h3>
+              <p className="text-xs text-slate-500 max-w-xs">
+                Select a message from the inbox to read its full contents and manage it.
+              </p>
+            </div>
+          )}
         </div>
       </main>
     </div>

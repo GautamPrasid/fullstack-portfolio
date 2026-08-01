@@ -3,12 +3,21 @@
 import React, { useState } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import ImageUploader from "@/components/admin/ImageUploader";
-import { Plus, Edit2, Trash2, Tag, Calendar, ExternalLink, Search } from "lucide-react";
+import { Plus, Edit2, Trash2, Search } from "lucide-react";
+import type { ProjectRecord } from "./actions";
+
+type ProjectDraft = ProjectRecord & {
+  isFeatured?: boolean;
+  featured?: boolean;
+  github?: string;
+  demo?: string;
+  image?: string;
+};
 
 export default function AdminProjectsPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [editingProject, setEditingProject] = useState<any | null>(null);
+  const [editingProject, setEditingProject] = useState<ProjectDraft | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filtered = projects.filter(
@@ -113,7 +122,7 @@ export default function AdminProjectsPage() {
                       </span>
                     </td>
                     <td className="p-3.5">
-                      {project.isFeatured || project.featured ? (
+                      {project.isFeatured || project.is_featured ? (
                         <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] font-mono">
                           ⭐ Featured
                         </span>
@@ -143,7 +152,7 @@ export default function AdminProjectsPage() {
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
                       <button
-                        onClick={() => handleDelete(project.id)}
+                        onClick={() => handleDelete(project.id ?? "")}
                         className="p-2 rounded-lg bg-slate-900 border border-white/10 text-slate-300 hover:text-rose-400 hover:border-rose-500/40 transition-colors"
                         title="Delete Project"
                       >

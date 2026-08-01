@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
-import { Tv, Check, Save } from "lucide-react";
+import { Check, Save } from "lucide-react";
 
 export default function AdminContentPage() {
   const [content, setContent] = useState({

@@ -38,14 +38,15 @@ export default function ResumeAdminPage() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const loadData = async () => {
-    setIsLoading(true);
     const data = await fetchAdminResumes();
     setResumes(data);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    loadData();
+    queueMicrotask(() => {
+      loadData();
+    });
   }, []);
 
   const handleOpenModal = (resume?: ResumeRecord) => {

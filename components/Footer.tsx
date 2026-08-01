@@ -3,12 +3,20 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Container from "./ui/Container";
+import type { Database } from "@/lib/supabase/database.types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type SiteSettingsRow = Database["public"]["Tables"]["site_settings"]["Row"] & {
+  logo_url?: string | null;
+};
+type ProfileRow = Database["public"]["Tables"]["profile"]["Row"];
+type SocialLinksRow = Database["public"]["Tables"]["social_links"]["Row"];
+
+type ProfileExtra = ProfileRow & { email?: string | null };
+
 interface FooterProps {
-  settings?: any;
-  profile?: any;
-  socialLinks?: any[];
+  settings?: Partial<SiteSettingsRow> | null;
+  profile?: Partial<ProfileExtra> | null;
+  socialLinks?: SocialLinksRow[] | null;
 }
 
 const quickLinks = [
@@ -27,7 +35,9 @@ export default function Footer({ settings, profile, socialLinks }: FooterProps) 
   const [year, setYear] = useState(2026);
 
   useEffect(() => {
-    setYear(new Date().getFullYear());
+    queueMicrotask(() => {
+      setYear(new Date().getFullYear());
+    });
   }, []);
 
   const scrollToTop = () => {
@@ -41,11 +51,11 @@ export default function Footer({ settings, profile, socialLinks }: FooterProps) 
   const location = profile?.location || "Pokhara, Nepal";
   const availability = profile?.availability || "Available for hire";
 
-  const gh = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "github");
-  const li = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "linkedin");
-  const yt = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "youtube");
-  const ig = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "instagram");
-  const fb = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "facebook");
+  const gh = socialLinks?.find((s) => s.platform?.toLowerCase() === "github");
+  const li = socialLinks?.find((s) => s.platform?.toLowerCase() === "linkedin");
+  const yt = socialLinks?.find((s) => s.platform?.toLowerCase() === "youtube");
+  const ig = socialLinks?.find((s) => s.platform?.toLowerCase() === "instagram");
+  const fb = socialLinks?.find((s) => s.platform?.toLowerCase() === "facebook");
 
   const links = [
     {
