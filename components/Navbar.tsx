@@ -93,7 +93,7 @@ export default function Navbar({ settings }: NavbarProps) {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 bg-[#090a0f]/80 backdrop-blur-md border-b border-white/10 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-white/10 transition-all duration-300 ${
           isScrolled ? "shadow-[0_4px_30px_rgba(0,0,0,0.5)]" : ""
         }`}
         role="banner"
@@ -215,7 +215,7 @@ export default function Navbar({ settings }: NavbarProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.98 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-16 left-4 right-4 z-40 bg-[#090a0f]/95 backdrop-blur-2xl rounded-2xl p-5 shadow-[0_12px_48px_rgba(0,0,0,0.8)] border border-white/15"
+            className="fixed top-16 left-4 right-4 z-40 bg-background/95 backdrop-blur-2xl rounded-2xl p-5 shadow-[0_12px_48px_rgba(0,0,0,0.8)] border border-white/15"
             role="dialog"
             aria-label="Mobile navigation"
           >

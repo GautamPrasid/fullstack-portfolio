@@ -18,7 +18,9 @@ import {
   createOrUpdateResume,
   deleteResume,
 } from "./actions";
-import type { ResumeRecord } from "@/lib/validations/resume";
+import type { ResumeRecord, ResumeFormData } from "@/lib/validations/resume";
+
+type ResumeFormState = Partial<ResumeFormData>;
 
 export default function ResumeAdminPage() {
   const [resumes, setResumes] = useState<ResumeRecord[]>([]);
@@ -26,19 +28,19 @@ export default function ResumeAdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  // Form State
-  const [formData, setFormData] = useState<Partial<ResumeRecord>>({
-    title: "",
-    file_url: "",
+  const [formData, setFormData] = useState<ResumeFormState>({
+    pdf_url: "",
+    cv_image_url: "",
     version: "v1.0",
     is_active: true,
   });
+  const [editingId, setEditingId] = useState<string | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState("");
 
   const loadData = async () => {
     setIsLoading(true);
     const data = await fetchAdminResumes();
-    setResumes(data || []);
+    setResumes(data);
     setIsLoading(false);
   };
 
@@ -49,13 +51,23 @@ export default function ResumeAdminPage() {
   const handleOpenModal = (resume?: ResumeRecord) => {
     setErrorMessage("");
     if (resume) {
-      setFormData(resume);
-    } else {
+      setEditingId(resume.id);
       setFormData({
-        title: "Software Engineer CV",
-        file_url: "",
+        id: resume.id,
+        version: resume.version ?? "v1.0",
+        pdf_url: resume.pdf_url,
+        cv_image_url: resume.cv_image_url ?? "",
+        is_active: resume.is_active ?? true,
+        download_count: resume.download_count ?? 0,
+      });
+    } else {
+      setEditingId(undefined);
+      setFormData({
+        pdf_url: "",
+        cv_image_url: "",
         version: `v${new Date().getFullYear()}.${new Date().getMonth() + 1}`,
         is_active: resumes.length === 0,
+        download_count: 0,
       });
     }
     setIsModalOpen(true);
@@ -66,14 +78,15 @@ export default function ResumeAdminPage() {
     setErrorMessage("");
 
     startTransition(async () => {
-      const res = await createOrUpdateResume({
-        id: formData.id,
-        title: formData.title || "",
-        file_url: formData.file_url || "",
-        version: formData.version || "v1.0",
+      const submission: ResumeFormData = {
+        id: editingId,
+        version: formData.version ?? "v1.0",
+        pdf_url: formData.pdf_url ?? "",
+        cv_image_url: formData.cv_image_url ?? "",
         is_active: formData.is_active ?? true,
-        download_count: formData.download_count || 0,
-      });
+        download_count: formData.download_count ?? 0,
+      };
+      const res = await createOrUpdateResume(submission);
 
       if (res.success) {
         setIsModalOpen(false);
@@ -97,7 +110,10 @@ export default function ResumeAdminPage() {
     });
   };
 
-  const totalDownloads = resumes.reduce((acc, r) => acc + (r.download_count || 0), 0);
+  const totalDownloads = resumes.reduce(
+    (acc, r) => acc + (r.download_count ?? 0),
+    0
+  );
   const activeResume = resumes.find((r) => r.is_active);
 
   return (
@@ -128,11 +144,15 @@ export default function ResumeAdminPage() {
           <div className="mt-2 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-purple-400" />
             <span className="text-xl font-bold text-white">
-              {activeResume ? activeResume.version : "None"}
+              {activeResume ? activeResume.version ?? "Untitled" : "None"}
             </span>
           </div>
           <p className="text-slate-500 text-xs mt-1 truncate">
-            {activeResume ? activeResume.title : "No active resume set"}
+            {activeResume
+              ? activeResume.cv_image_url
+                ? "CV preview image attached"
+                : "Resume record active"
+              : "No active resume set"}
           </p>
         </div>
 
@@ -173,10 +193,10 @@ export default function ResumeAdminPage() {
             <table className="w-full text-left text-sm text-slate-300">
               <thead className="bg-slate-800/50 text-slate-400 border-b border-white/10 text-xs uppercase font-medium">
                 <tr>
-                  <th className="px-6 py-4">Title &amp; Version</th>
+                  <th className="px-6 py-4">Version</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4">Downloads</th>
-                  <th className="px-6 py-4">File Link</th>
+                  <th className="px-6 py-4">PDF Link</th>
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
@@ -185,9 +205,9 @@ export default function ResumeAdminPage() {
                   <tr key={resume.id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-semibold text-white flex items-center gap-2">
-                        {resume.title}
+                        <FileText className="w-4 h-4 text-slate-400" />
                         <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">
-                          {resume.version}
+                          {resume.version ?? "Untitled"}
                         </span>
                       </div>
                     </td>
@@ -203,17 +223,29 @@ export default function ResumeAdminPage() {
                       )}
                     </td>
                     <td className="px-6 py-4 font-mono text-slate-300">
-                      {resume.download_count || 0}
+                      {resume.download_count ?? 0}
                     </td>
                     <td className="px-6 py-4">
                       <a
-                        href={resume.file_url}
+                        href={resume.pdf_url}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-1.5 text-purple-400 hover:text-purple-300 transition-colors text-xs"
                       >
-                        View Document <ExternalLink className="w-3 h-3" />
+                        View PDF <ExternalLink className="w-3 h-3" />
                       </a>
+                      {resume.cv_image_url && (
+                        <div className="mt-1">
+                          <a
+                            href={resume.cv_image_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-slate-500 hover:text-slate-300 transition-colors text-[10px]"
+                          >
+                            CV image <ExternalLink className="w-2.5 h-2.5" />
+                          </a>
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-right space-x-2">
                       <button
@@ -245,7 +277,7 @@ export default function ResumeAdminPage() {
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                 <Upload className="w-5 h-5 text-purple-400" />
-                {formData.id ? "Edit Resume Record" : "Add Resume Record"}
+                {editingId ? "Edit Resume Record" : "Add Resume Record"}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -263,23 +295,11 @@ export default function ResumeAdminPage() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Resume Title</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.title || ""}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.g. Software Engineer CV - 2026"
-                  className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500"
-                />
-              </div>
-
-              <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">Version Identifier</label>
                 <input
                   type="text"
                   required
-                  value={formData.version || ""}
+                  value={formData.version ?? ""}
                   onChange={(e) => setFormData({ ...formData, version: e.target.value })}
                   placeholder="e.g. v2.4 or 2026-Q3"
                   className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500"
@@ -288,14 +308,27 @@ export default function ResumeAdminPage() {
 
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">
-                  File URL (Supabase Bucket or CDN)
+                  PDF URL (Supabase Bucket or CDN)
                 </label>
                 <input
                   type="url"
                   required
-                  value={formData.file_url || ""}
-                  onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
+                  value={formData.pdf_url ?? ""}
+                  onChange={(e) => setFormData({ ...formData, pdf_url: e.target.value })}
                   placeholder="https://...supabase.co/storage/v1/object/public/portfolio-media/resume.pdf"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500 font-mono text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  CV Preview Image URL (optional)
+                </label>
+                <input
+                  type="url"
+                  value={formData.cv_image_url ?? ""}
+                  onChange={(e) => setFormData({ ...formData, cv_image_url: e.target.value })}
+                  placeholder="https://...supabase.co/storage/v1/object/public/portfolio-media/cv.png"
                   className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500 font-mono text-xs"
                 />
               </div>
@@ -327,7 +360,7 @@ export default function ResumeAdminPage() {
                   className="flex items-center gap-2 px-5 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-purple-500/20 disabled:opacity-50"
                 >
                   {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {formData.id ? "Save Changes" : "Create Record"}
+                  {editingId ? "Save Changes" : "Create Record"}
                 </button>
               </div>
             </form>

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { Database } from "@/lib/supabase/database.types";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
@@ -30,16 +31,14 @@ export async function POST(request: Request) {
     // 1. Save message directly into Supabase contact_messages table
     try {
       const supabase = await createClient();
-      await supabase.from("contact_messages").insert([
-        {
-          name: name.trim(),
-          email: email.trim(),
-          subject: subject ? subject.trim() : `Portfolio Message from ${name.trim()}`,
-          message: message.trim(),
-          is_read: false,
-          replied: false,
-        },
-      ]);
+      const payload: Database["public"]["Tables"]["contact_messages"]["Insert"] = {
+        name: name.trim(),
+        email: email.trim(),
+        message: message.trim(),
+        status: "new",
+      };
+
+      await supabase.from("contact_messages").insert([payload as never]);
     } catch (dbErr) {
       console.error("Failed to insert message into Supabase contact_messages:", dbErr);
     }

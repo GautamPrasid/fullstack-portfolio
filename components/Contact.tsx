@@ -145,7 +145,7 @@ export default function Contact({ profile, socialLinks }: ContactProps) {
             ✦ Contact
           </motion.span>
           <motion.h2 variants={itemVariants} className="text-2xl sm:text-4xl lg:text-5xl font-bold text-center text-white tracking-tight mb-3">
-            Let&apos;s Work <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Together</span>
+            Let&apos;s Work <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400">Together</span>
           </motion.h2>
           <motion.p
             variants={itemVariants}
@@ -275,7 +275,7 @@ export default function Contact({ profile, socialLinks }: ContactProps) {
                         onChange={handleChange}
                         placeholder="Your Name"
                         autoComplete="name"
-                        className={`w-full bg-[#090a0f]/80 border rounded-xl pl-11 pr-4 h-12 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 ${
+                        className={`w-full bg-background/80 border rounded-xl pl-11 pr-4 h-12 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 ${
                           errors.name
                             ? "border-rose-500/50"
                             : "border-white/10 hover:border-white/20"
@@ -319,7 +319,7 @@ export default function Contact({ profile, socialLinks }: ContactProps) {
                         onChange={handleChange}
                         placeholder="you@example.com"
                         autoComplete="email"
-                        className={`w-full bg-[#090a0f]/80 border rounded-xl pl-11 pr-4 h-12 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 ${
+                        className={`w-full bg-background/80 border rounded-xl pl-11 pr-4 h-12 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 ${
                           errors.email
                             ? "border-rose-500/50"
                             : "border-white/10 hover:border-white/20"
@@ -362,7 +362,7 @@ export default function Contact({ profile, socialLinks }: ContactProps) {
                         value={form.message}
                         onChange={handleChange}
                         placeholder="Tell me about your project..."
-                        className={`w-full bg-[#090a0f]/80 border rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 resize-none ${
+                        className={`w-full bg-background/80 border rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus-ring transition-colors duration-200 resize-none ${
                           errors.message
                             ? "border-rose-500/50"
                             : "border-white/10 hover:border-white/20"

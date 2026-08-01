@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
+import type { Database } from "@/lib/supabase/database.types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
+
 interface ProjectsProps {
-  projects?: any[];
+  projects?: ProjectRow[];
 }
 
 type CategoryFilter =
@@ -29,14 +31,14 @@ export default function Projects({ projects }: ProjectsProps) {
         title: p.title,
         description: p.description,
         category: p.category,
-        tech: p.tech || p.technologies || [],
-        highlights: p.highlights || [],
+        tech: p.tech ?? [],
+        highlights: p.highlights ?? [],
         date: p.created_at ? p.created_at.slice(0, 4) : "2026",
         isFeatured: Boolean(p.is_featured),
-        github: p.github_url || "",
-        demo: p.demo_url || "",
-        badge: p.badge || "",
-        image: p.image_url || "",
+        github: p.github_url ?? "",
+        demo: p.demo_url ?? "",
+        badge: p.badge ?? "",
+        image: p.image_url ?? "",
       }))
     : [];
 

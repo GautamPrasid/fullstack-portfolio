@@ -12,7 +12,7 @@ interface AdminHeaderProps {
 
 export default function AdminHeader({ title, subtitle, onRefresh }: AdminHeaderProps) {
   return (
-    <header className="sticky top-0 z-20 bg-[#090a0f]/90 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between">
+    <header className="sticky top-0 z-20 bg-background/90 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between">
       <div>
         <h1 className="text-xl font-bold text-white tracking-tight">{title}</h1>
         {subtitle && <p className="text-xs text-slate-400 mt-0.5">{subtitle}</p>}
@@ -38,7 +38,7 @@ export default function AdminHeader({ title, subtitle, onRefresh }: AdminHeaderP
           <ExternalLink className="w-3.5 h-3.5" />
         </Link>
 
-        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white text-xs font-bold shadow-lg">
+        <div className="w-8 h-8 rounded-full bg-linear-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white text-xs font-bold shadow-lg">
           PG
         </div>
       </div>

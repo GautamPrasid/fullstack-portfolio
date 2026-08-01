@@ -96,9 +96,9 @@ export default function Footer({ settings, profile, socialLinks }: FooterProps) 
   ];
 
   return (
-    <footer className="relative w-full bg-[#090a0f] border-t border-white/10 pt-16 pb-12 overflow-hidden">
+    <footer className="relative w-full bg-background border-t border-white/10 pt-16 pb-12 overflow-hidden">
       {/* Top Ambient Glow Line */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-[1px] bg-linear-to-r from-transparent via-purple-500/40 to-transparent" />
 
       <Container className="space-y-12">
         {/* Main Footer Content Grid */}

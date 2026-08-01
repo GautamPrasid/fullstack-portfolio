@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 min-h-screen w-full bg-[#090a0f] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 min-h-screen w-full bg-background flex items-center justify-center p-4">
       {/* Background Glows */}
       <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
 
@@ -106,7 +106,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-xs transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.3)] focus-ring"
+            className="w-full py-3 rounded-xl bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-xs transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.3)] focus-ring"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
             <span>{loading ? "Authenticating..." : "Sign In to CMS Dashboard"}</span>

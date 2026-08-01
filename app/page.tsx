@@ -41,7 +41,7 @@ export default async function Home() {
   return (
     <>
       <Navbar settings={settings} />
-      <main className="w-full min-h-screen bg-[#090a0f] text-slate-100 overflow-x-hidden">
+      <main className="w-full min-h-screen bg-background text-slate-100 overflow-x-hidden">
         <Hero profile={profile} socialLinks={socialLinks} activeResume={activeResume} />
         <About profile={profile} />
         <Services services={services} />

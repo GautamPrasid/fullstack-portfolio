@@ -6,7 +6,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#050508] text-[#f0f0ff] flex flex-row relative overflow-x-hidden">
+    <div className="min-h-screen bg-background text-[#f0f0ff] flex flex-row relative overflow-x-hidden">
       {/* Fixed Desktop Sidebar */}
       <Sidebar />
 

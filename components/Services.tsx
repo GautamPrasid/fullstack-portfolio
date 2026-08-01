@@ -165,7 +165,7 @@ export default function Services({ services }: ServicesProps) {
           </motion.span>
           <motion.h2 variants={cardVariants} className="text-2xl sm:text-4xl lg:text-5xl font-bold text-center text-white tracking-tight mb-3">
             Services &amp;{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400">
               Solutions
             </span>
           </motion.h2>

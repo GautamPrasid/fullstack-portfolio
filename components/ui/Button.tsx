@@ -17,7 +17,7 @@ export default function Button({
 
   const variants = {
     primary:
-      "text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.25)] hover:shadow-[0_0_30px_rgba(168,85,247,0.45)]",
+      "text-white bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.25)] hover:shadow-[0_0_30px_rgba(168,85,247,0.45)]",
     secondary:
       "text-slate-200 bg-slate-900/40 hover:bg-slate-800/60 border border-white/10 hover:border-purple-500/30",
     outline:

@@ -75,7 +75,7 @@ export default function AdminProjectsPage() {
               });
               setIsModalOpen(true);
             }}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.3)] focus-ring"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.3)] focus-ring"
           >
             <Plus className="w-4 h-4" />
             <span>Create New Project</span>
@@ -123,7 +123,7 @@ export default function AdminProjectsPage() {
                     </td>
                     <td className="p-3.5">
                       <div className="flex flex-wrap gap-1 max-w-xs">
-                        {project.tech.slice(0, 3).map((t) => (
+                        {project.tech.slice(0, 3).map((t: string) => (
                           <span key={t} className="px-2 py-0.5 rounded bg-white/5 text-[10px] font-mono text-slate-300">
                             {t}
                           </span>
@@ -160,7 +160,7 @@ export default function AdminProjectsPage() {
         {/* Modal Form */}
         {isModalOpen && editingProject && (
           <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-            <div className="w-full max-w-2xl p-6 sm:p-8 rounded-3xl bg-[#090a0f] border border-white/15 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div className="w-full max-w-2xl p-6 sm:p-8 rounded-3xl bg-background border border-white/15 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto custom-scrollbar">
               <h2 className="text-xl font-bold text-white">
                 {editingProject.id ? "Edit Project" : "Create New Project"}
               </h2>

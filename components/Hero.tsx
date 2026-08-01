@@ -4,12 +4,16 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
+import type { Database } from "@/lib/supabase/database.types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type ProfileRow = Database["public"]["Tables"]["profile"]["Row"];
+type SocialLinkRow = Database["public"]["Tables"]["social_links"]["Row"];
+type ResumeRow = Database["public"]["Tables"]["resume"]["Row"];
+
 interface HeroProps {
-  profile?: any;
-  socialLinks?: any[];
-  activeResume?: any;
+  profile?: ProfileRow | null;
+  socialLinks?: SocialLinkRow[];
+  activeResume?: ResumeRow | null;
 }
 
 const DEFAULT_ROLES = [
@@ -36,7 +40,7 @@ export default function Hero({ profile, socialLinks, activeResume }: HeroProps) 
   const location = profile?.location || "Pokhara, Nepal";
   const availability = profile?.availability || "Available for work";
   const profileImage = profile?.profile_image_url || "/profile.JPG";
-  const resumeUrl = activeResume?.file_url || "/Prasid_Gautam_Resume.pdf";
+  const resumeUrl = activeResume?.pdf_url || "/Prasid_Gautam_Resume.pdf";
   const ctaPrimaryText = profile?.cta_primary_text || "View My Work";
   const ctaPrimaryUrl = profile?.cta_primary_url || "#projects";
   const ctaSecondaryText = profile?.cta_secondary_text || "Download Resume";
@@ -47,9 +51,9 @@ export default function Hero({ profile, socialLinks, activeResume }: HeroProps) 
   const profession = profile?.profession || "Full-Stack Tech Stack";
 
   // Social links from database
-  const githubLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "github");
-  const linkedinLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "linkedin");
-  const youtubeLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "youtube");
+  const githubLink = socialLinks?.find((s) => s.platform.toLowerCase() === "github");
+  const linkedinLink = socialLinks?.find((s) => s.platform.toLowerCase() === "linkedin");
+  const youtubeLink = socialLinks?.find((s) => s.platform.toLowerCase() === "youtube");
 
   const formatStat = (value: number) => {
     if (value >= 1000) return `${(value / 1000).toFixed(0)}K+`;
@@ -60,7 +64,7 @@ export default function Hero({ profile, socialLinks, activeResume }: HeroProps) 
     <Section
       id="home"
       watermark="SOFTWARE DEV"
-      className="min-h-screen flex flex-col justify-between pt-32 pb-12 lg:pt-40 lg:pb-16 bg-[#090a0f]"
+      className="min-h-screen flex flex-col justify-between pt-32 pb-12 lg:pt-40 lg:pb-16 bg-background"
     >
 
       {/* Background Ambient Glows */}
@@ -82,7 +86,7 @@ export default function Hero({ profile, socialLinks, activeResume }: HeroProps) 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.15]">
               Hi, I&apos;m{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+              <span className="bg-clip-text text-transparent bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400">
                 {fullName}
               </span>
             </h1>
@@ -90,7 +94,7 @@ export default function Hero({ profile, socialLinks, activeResume }: HeroProps) 
             {/* Sub-headline / Role Badge Line */}
             <div className="flex flex-wrap items-center gap-3 text-lg sm:text-xl font-medium text-slate-300">
               <span>I am a</span>
-              <span className="px-3 py-1 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-300 font-semibold min-w-[140px] text-center transition-all duration-500">
+              <span className="px-3 py-1 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-300 font-semibold min-w-35 text-center transition-all duration-500">
                 {roles[roleIndex]}
               </span>
               <span className="inline-flex items-center gap-1.5 text-xs font-normal text-slate-400 bg-slate-900/80 px-3 py-1.5 rounded-full border border-white/10">
@@ -107,7 +111,7 @@ export default function Hero({ profile, socialLinks, activeResume }: HeroProps) 
             <div className="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
               <a
                 href={ctaPrimaryUrl}
-                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm sm:text-base shadow-[0_0_25px_rgba(168,85,247,0.4)] transition-all duration-300 focus-ring active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm sm:text-base shadow-[0_0_25px_rgba(168,85,247,0.4)] transition-all duration-300 focus-ring active:scale-[0.98]"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -169,7 +173,7 @@ export default function Hero({ profile, socialLinks, activeResume }: HeroProps) 
                 </a>
               </div>
 
-              <div className="hidden sm:block h-8 w-[1px] bg-white/10" />
+              <div className="hidden sm:block h-8 w-px bg-white/10" />
 
               {/* Stats Numbers */}
               <div className="grid grid-cols-3 gap-6 sm:gap-8">
@@ -193,7 +197,7 @@ export default function Hero({ profile, socialLinks, activeResume }: HeroProps) 
 
           {/* RIGHT COLUMN: PROFILE CARD WITH FLOATING BADGE (lg:col-span-5) */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-sm aspect-[4/5] sm:aspect-square rounded-3xl bg-slate-900/50 border border-white/15 p-3 backdrop-blur-xl shadow-2xl">
+            <div className="relative w-full max-w-sm aspect-4/5 sm:aspect-square rounded-3xl bg-slate-900/50 border border-white/15 p-3 backdrop-blur-xl shadow-2xl">
               
               {/* Profile Image Frame */}
               <div className="relative w-full h-full rounded-2xl overflow-hidden bg-slate-800">
@@ -208,7 +212,7 @@ export default function Hero({ profile, socialLinks, activeResume }: HeroProps) 
               </div>
 
               {/* Floating Tech Badge (Bottom-Left Overlap) */}
-              <div className="absolute -bottom-4 -left-3 sm:-left-6 bg-[#090a0f]/90 backdrop-blur-md border border-white/15 p-3 rounded-2xl shadow-xl flex items-center gap-3">
+              <div className="absolute -bottom-4 -left-3 sm:-left-6 bg-background/90 backdrop-blur-md border border-white/15 p-3 rounded-2xl shadow-xl flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />

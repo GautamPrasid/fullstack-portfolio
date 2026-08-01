@@ -56,7 +56,7 @@ export default function GithubStats({ profile, socialLinks }: GithubStatsProps) 
   return (
     <Section id="github" watermark="OPEN SOURCE" ariaLabel="GitHub statistics and activity">
       {/* Subtle Background Glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-purple-600/5 rounded-full blur-[150px] pointer-events-none -z-10" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-150 h-75 bg-purple-600/5 rounded-full blur-[150px] pointer-events-none -z-10" />
 
       <Container>
         {/* Section Header */}

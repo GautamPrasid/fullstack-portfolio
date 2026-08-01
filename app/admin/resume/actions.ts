@@ -1,26 +1,29 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { resumeSchema, type ResumeFormData } from "@/lib/validations/resume";
+import type { Database } from "@/lib/supabase/database.types";
+import { resumeSchema, type ResumeFormData, type ResumeRecord } from "@/lib/validations/resume";
 import { revalidatePath } from "next/cache";
+
+type ResumeTable = Database["public"]["Tables"]["resume"];
 
 /**
  * Fetch all resume records sorted by creation date
  */
-export async function fetchAdminResumes() {
+export async function fetchAdminResumes(): Promise<ResumeRecord[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("resume")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("updated_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching resumes:", error.message);
     return [];
   }
 
-  return data;
+  return data ?? [];
 }
 
 /**
@@ -39,24 +42,28 @@ export async function createOrUpdateResume(formData: ResumeFormData) {
   const supabase = await createClient();
   const record = validated.data;
 
-  // If this record is being set to active, deactivate all other resume records first
   if (record.is_active) {
+    const deactivateUpdate: ResumeTable["Update"] = { is_active: false };
     await supabase
       .from("resume")
-      .update({ is_active: false })
+      .update(deactivateUpdate as never)
       .neq("id", record.id || "00000000-0000-0000-0000-000000000000");
   }
 
-  const payload = {
+  const cvImageValue: string | null =
+    record.cv_image_url && record.cv_image_url.length > 0 ? record.cv_image_url : null;
+
+  const payload: ResumeTable["Insert"] = {
     ...(record.id ? { id: record.id } : {}),
-    title: record.title,
-    file_url: record.file_url,
+    pdf_url: record.pdf_url,
+    cv_image_url: cvImageValue,
     version: record.version,
     is_active: record.is_active,
+    download_count: record.download_count,
     updated_at: new Date().toISOString(),
   };
 
-  const { error } = await supabase.from("resume").upsert(payload);
+  const { error } = await supabase.from("resume").upsert(payload as never);
 
   if (error) {
     console.error("Error saving resume record:", error.message);
@@ -94,14 +101,25 @@ export async function deleteResume(id: string) {
 export async function incrementResumeDownload(id: string) {
   const supabase = await createClient();
 
-  const { data } = await supabase.from("resume").select("download_count").eq("id", id).single();
+  const { data: resumeRow } = await supabase
+    .from("resume")
+    .select("download_count")
+    .eq("id", id)
+    .maybeSingle();
 
-  if (data) {
+  const typedRow = resumeRow as
+    | { download_count: number | null; id: string }
+    | null;
+  const currentCount: number = typedRow?.download_count ?? 0;
+
+  if (resumeRow) {
+    const incrementUpdate: ResumeTable["Update"] = {
+      download_count: currentCount + 1,
+    };
     await supabase
       .from("resume")
-      .update({ download_count: (data.download_count || 0) + 1 })
+      .update(incrementUpdate as never)
       .eq("id", id);
-
     revalidatePath("/admin/resume");
   }
 }

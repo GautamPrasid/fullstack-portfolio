@@ -129,7 +129,7 @@ export default function About({ profile }: AboutProps) {
           </motion.span>
           <motion.h2 variants={itemVariants} className="text-2xl sm:text-4xl lg:text-5xl font-bold text-center text-white tracking-tight mb-3">
             The Person Behind the{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400">
               Code
             </span>
           </motion.h2>
@@ -153,7 +153,7 @@ export default function About({ profile }: AboutProps) {
                   <Icon className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 leading-tight">
+                  <p className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-pink-400 leading-tight">
                     {value}
                   </p>
                   <p className="text-xs text-slate-400 mt-1 font-medium">{label}</p>

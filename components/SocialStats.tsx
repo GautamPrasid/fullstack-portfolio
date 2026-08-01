@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
+import type { Database } from "@/lib/supabase/database.types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type SocialLinkRow = Database["public"]["Tables"]["social_links"]["Row"];
+
 interface SocialStatsProps {
-  socialLinks?: any[];
+  socialLinks?: SocialLinkRow[];
 }
 
 interface SocialMetrics {
@@ -46,10 +48,10 @@ export default function SocialStats({ socialLinks }: SocialStatsProps) {
     fetchStats();
   }, []);
 
-  const yt = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "youtube");
-  const ig = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "instagram");
-  const fb = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "facebook");
-  const tt = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "tiktok");
+  const yt = socialLinks?.find((s) => s.platform.toLowerCase() === "youtube");
+  const ig = socialLinks?.find((s) => s.platform.toLowerCase() === "instagram");
+  const fb = socialLinks?.find((s) => s.platform.toLowerCase() === "facebook");
+  const tt = socialLinks?.find((s) => s.platform.toLowerCase() === "tiktok");
 
   const formatFollowers = (val: number | string) => {
     if (typeof val === "number") {

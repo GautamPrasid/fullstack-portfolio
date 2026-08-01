@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -40,9 +41,14 @@ export async function updateProfile(formData: ProfileFormValues) {
   const supabase = await createClient();
   const payload = validated.data;
 
+  const profilePayload: Database["public"]["Tables"]["profile"]["Insert"] = {
+    ...payload,
+    updated_at: new Date().toISOString(),
+  };
+
   const { error } = await supabase
     .from("profile")
-    .upsert({ ...payload, updated_at: new Date().toISOString() });
+    .upsert(profilePayload as never);
 
   if (error) {
     console.error("Profile update failed:", error.message);

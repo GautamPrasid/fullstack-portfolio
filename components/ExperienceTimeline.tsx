@@ -109,7 +109,7 @@ export default function ExperienceTimeline({ experiences }: ExperienceTimelinePr
           </motion.span>
           <motion.h2 variants={itemVariants} className="text-2xl sm:text-4xl lg:text-5xl font-bold text-center text-white tracking-tight mb-3">
             Academic &amp; Technical{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400">
               Progression
             </span>
           </motion.h2>
@@ -146,7 +146,7 @@ export default function ExperienceTimeline({ experiences }: ExperienceTimelinePr
                   } gap-6 md:gap-12`}
                 >
                   {/* Timeline Dot Icon */}
-                  <div className="absolute left-4 md:left-1/2 -translate-x-1/2 z-20 flex items-center justify-center w-9 h-9 rounded-xl bg-[#090a0f] border border-purple-500/40 text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.3)] shrink-0">
+                  <div className="absolute left-4 md:left-1/2 -translate-x-1/2 z-20 flex items-center justify-center w-9 h-9 rounded-xl bg-background border border-purple-500/40 text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.3)] shrink-0">
                     <Icon className="w-4 h-4" aria-hidden="true" />
                   </div>
 

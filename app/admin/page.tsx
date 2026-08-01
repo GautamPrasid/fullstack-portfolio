@@ -5,6 +5,7 @@ import Link from "next/link";
 import AdminHeader from "@/components/admin/AdminHeader";
 import StatCard from "@/components/admin/StatCard";
 import { createClient } from "@/lib/supabase/client";
+import type { Database } from "@/lib/supabase/database.types";
 import {
   FolderKanban,
   Wrench,
@@ -12,14 +13,15 @@ import {
   Eye,
   Plus,
   ArrowRight,
-  TrendingUp,
   Clock,
   Sparkles,
 } from "lucide-react";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
+type ProfileRow = Database["public"]["Tables"]["profile"]["Row"];
+
 export default function AdminDashboardPage() {
-  const [projectsList, setProjectsList] = useState<any[]>([]);
+  const [projectsList, setProjectsList] = useState<ProjectRow[]>([]);
   const [stats, setStats] = useState({
     projectsCount: 0,
     featuredCount: 0,
@@ -39,14 +41,15 @@ export default function AdminDashboardPage() {
           supabase.from("profile").select("monthly_views").single(),
         ]);
 
-        const projectsData = projRes.data || [];
+        const projectsData = (projRes.data ?? []) as ProjectRow[];
+        const profileData = (profileRes.data ?? null) as ProfileRow | null;
         setProjectsList(projectsData);
         setStats({
           projectsCount: projectsData.length,
           featuredCount: projectsData.filter((p) => p.is_featured).length,
           skillsCount: skillsRes.count || 0,
           messagesCount: msgsRes.count || 0,
-          viewsCount: profileRes.data?.monthly_views ? profileRes.data.monthly_views.toLocaleString("en-US") : "5,420",
+          viewsCount: profileData?.monthly_views ? profileData.monthly_views.toLocaleString("en-US") : "5,420",
         });
       } catch (err) {
         console.error("Dashboard fetch error:", err);

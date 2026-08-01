@@ -4,10 +4,12 @@ import React from "react";
 import { motion } from "framer-motion";
 import Section from "./ui/Section";
 import Container from "./ui/Container";
+import type { Database } from "@/lib/supabase/database.types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type SkillRow = Database["public"]["Tables"]["skills"]["Row"];
+
 interface SkillsProps {
-  skills?: any[];
+  skills?: SkillRow[];
 }
 
 const DEFAULT_SKILLS = [
@@ -26,7 +28,7 @@ const DEFAULT_SKILLS = [
 
 export default function Skills({ skills }: SkillsProps) {
   const skillData = skills && skills.length > 0
-    ? skills.map((s) => ({ name: s.name, level: s.percentage ?? s.level ?? 50 }))
+    ? skills.map((s) => ({ name: s.name, level: s.percentage ?? 50 }))
     : DEFAULT_SKILLS;
 
   return (
@@ -62,7 +64,7 @@ export default function Skills({ skills }: SkillsProps) {
                   whileInView={{ width: `${skill.level}%` }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, ease: "easeOut", delay: idx * 0.05 }}
-                  className="h-full bg-gradient-to-r from-purple-600 to-pink-500 rounded-full"
+                  className="h-full bg-linear-to-r from-purple-600 to-pink-500 rounded-full"
                 />
               </div>
             </motion.div>

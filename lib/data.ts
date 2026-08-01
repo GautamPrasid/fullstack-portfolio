@@ -1,13 +1,28 @@
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
+
+type SiteSettingsRow = Database["public"]["Tables"]["site_settings"]["Row"];
+type ProfileRow = Database["public"]["Tables"]["profile"]["Row"];
+type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
+type SkillRow = Database["public"]["Tables"]["skills"]["Row"];
+type ServiceRow = Database["public"]["Tables"]["services"]["Row"];
+type SocialLinkRow = Database["public"]["Tables"]["social_links"]["Row"];
+type ResumeRow = Database["public"]["Tables"]["resume"]["Row"];
+type ExperienceRow = Database["public"]["Tables"]["experiences"]["Row"];
+type EducationRow = Database["public"]["Tables"]["education"]["Row"];
+type ContentCreatorRow = Database["public"]["Tables"]["content_creator"]["Row"];
+type CertificateRow = Database["public"]["Tables"]["certificates"]["Row"];
+type GalleryRow = Database["public"]["Tables"]["gallery"]["Row"];
+type ContactMessageRow = Database["public"]["Tables"]["contact_messages"]["Row"];
 
 // ============================================================
 // SITE SETTINGS
 // ============================================================
-export async function getSiteSettings() {
+export async function getSiteSettings(): Promise<SiteSettingsRow | null> {
   try {
     const supabase = await createClient();
-    const { data } = await supabase.from("site_settings").select("*").single();
-    return data;
+    const { data } = await supabase.from("site_settings").select("*").maybeSingle();
+    return (data ?? null) as SiteSettingsRow | null;
   } catch {
     return null;
   }
@@ -16,11 +31,11 @@ export async function getSiteSettings() {
 // ============================================================
 // PROFILE & HERO
 // ============================================================
-export async function getProfileData() {
+export async function getProfileData(): Promise<ProfileRow | null> {
   try {
     const supabase = await createClient();
-    const { data } = await supabase.from("profile").select("*").single();
-    return data;
+    const { data } = await supabase.from("profile").select("*").maybeSingle();
+    return (data ?? null) as ProfileRow | null;
   } catch {
     return null;
   }
@@ -29,7 +44,7 @@ export async function getProfileData() {
 // ============================================================
 // PROJECTS
 // ============================================================
-export async function getPublishedProjects() {
+export async function getPublishedProjects(): Promise<ProjectRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
@@ -38,7 +53,7 @@ export async function getPublishedProjects() {
       .eq("is_published", true)
       .eq("is_archived", false)
       .order("sort_order", { ascending: true });
-    return data || [];
+    return (data ?? []) as ProjectRow[];
   } catch {
     return [];
   }
@@ -47,7 +62,7 @@ export async function getPublishedProjects() {
 // ============================================================
 // SKILLS
 // ============================================================
-export async function getActiveSkills() {
+export async function getActiveSkills(): Promise<SkillRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
@@ -55,7 +70,7 @@ export async function getActiveSkills() {
       .select("*")
       .eq("is_visible", true)
       .order("sort_order", { ascending: true });
-    return data || [];
+    return (data ?? []) as SkillRow[];
   } catch {
     return [];
   }
@@ -64,7 +79,7 @@ export async function getActiveSkills() {
 // ============================================================
 // SERVICES
 // ============================================================
-export async function getServices() {
+export async function getServices(): Promise<ServiceRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
@@ -72,7 +87,7 @@ export async function getServices() {
       .select("*")
       .eq("is_visible", true)
       .order("sort_order", { ascending: true });
-    return data || [];
+    return (data ?? []) as ServiceRow[];
   } catch {
     return [];
   }
@@ -81,7 +96,7 @@ export async function getServices() {
 // ============================================================
 // SOCIAL LINKS
 // ============================================================
-export async function getSocialLinks() {
+export async function getSocialLinks(): Promise<SocialLinkRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
@@ -89,7 +104,7 @@ export async function getSocialLinks() {
       .select("*")
       .eq("is_visible", true)
       .order("sort_order", { ascending: true });
-    return data || [];
+    return (data ?? []) as SocialLinkRow[];
   } catch {
     return [];
   }
@@ -98,17 +113,20 @@ export async function getSocialLinks() {
 // ============================================================
 // RESUME
 // ============================================================
-export async function getActiveResume() {
+export async function getActiveResume(): Promise<ResumeRow | null> {
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("resume")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("updated_at", { ascending: false });
 
     if (error || !data || data.length === 0) return null;
-    const active = data.find((r: any) => r.is_active) || data[0];
-    return active || null;
+    const rows: ResumeRow[] = data;
+    const active: ResumeRow | undefined = rows.find(
+      (r: ResumeRow) => r.is_active === true
+    );
+    return active ?? rows[0] ?? null;
   } catch {
     return null;
   }
@@ -117,14 +135,14 @@ export async function getActiveResume() {
 // ============================================================
 // EXPERIENCES
 // ============================================================
-export async function getExperiences() {
+export async function getExperiences(): Promise<ExperienceRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from("experiences")
       .select("*")
       .order("sort_order", { ascending: true });
-    return data || [];
+    return (data ?? []) as ExperienceRow[];
   } catch {
     return [];
   }
@@ -133,14 +151,14 @@ export async function getExperiences() {
 // ============================================================
 // EDUCATION
 // ============================================================
-export async function getEducation() {
+export async function getEducation(): Promise<EducationRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from("education")
       .select("*")
       .order("sort_order", { ascending: true });
-    return data || [];
+    return (data ?? []) as EducationRow[];
   } catch {
     return [];
   }
@@ -149,14 +167,14 @@ export async function getEducation() {
 // ============================================================
 // CONTENT CREATOR
 // ============================================================
-export async function getContentCreator() {
+export async function getContentCreator(): Promise<ContentCreatorRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from("content_creator")
       .select("*")
-      .order("published_at", { ascending: false });
-    return data || [];
+      .order("created_at", { ascending: false });
+    return (data ?? []) as ContentCreatorRow[];
   } catch {
     return [];
   }
@@ -165,14 +183,14 @@ export async function getContentCreator() {
 // ============================================================
 // CERTIFICATES
 // ============================================================
-export async function getCertificates() {
+export async function getCertificates(): Promise<CertificateRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from("certificates")
       .select("*")
       .order("issue_date", { ascending: false });
-    return data || [];
+    return (data ?? []) as CertificateRow[];
   } catch {
     return [];
   }
@@ -181,14 +199,14 @@ export async function getCertificates() {
 // ============================================================
 // GALLERY
 // ============================================================
-export async function getGallery() {
+export async function getGallery(): Promise<GalleryRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from("gallery")
       .select("*")
       .order("sort_order", { ascending: true });
-    return data || [];
+    return (data ?? []) as GalleryRow[];
   } catch {
     return [];
   }
@@ -197,14 +215,14 @@ export async function getGallery() {
 // ============================================================
 // CONTACT MESSAGES (Admin)
 // ============================================================
-export async function getContactMessages() {
+export async function getContactMessages(): Promise<ContactMessageRow[]> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from("contact_messages")
       .select("*")
       .order("created_at", { ascending: false });
-    return data || [];
+    return (data ?? []) as ContactMessageRow[];
   } catch {
     return [];
   }

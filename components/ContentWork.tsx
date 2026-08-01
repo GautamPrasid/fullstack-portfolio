@@ -7,11 +7,14 @@ import { FaYoutube, FaFacebook, FaInstagram } from "react-icons/fa6";
 import Section from "@/components/ui/Section";
 import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
+import type { Database } from "@/lib/supabase/database.types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type ContentCreatorRow = Database["public"]["Tables"]["content_creator"]["Row"];
+type SocialLinkRow = Database["public"]["Tables"]["social_links"]["Row"];
+
 interface ContentWorkProps {
-  contentItems?: any[];
-  socialLinks?: any[];
+  contentItems?: ContentCreatorRow[];
+  socialLinks?: SocialLinkRow[];
 }
 
 const containerVariants: Variants = {
@@ -42,13 +45,25 @@ export default function ContentWork({ contentItems, socialLinks }: ContentWorkPr
   }, []);
 
   // Get dynamic links from database
-  const ytLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "youtube");
-  const fbLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "facebook");
-  const igLink = socialLinks?.find((s: any) => s.platform?.toLowerCase() === "instagram");
+  const ytLink = socialLinks?.find((s) => s.platform.toLowerCase() === "youtube");
+  const fbLink = socialLinks?.find((s) => s.platform.toLowerCase() === "facebook");
+  const igLink = socialLinks?.find((s) => s.platform.toLowerCase() === "instagram");
 
   // Get featured video from content items
-  const featuredVideo = contentItems?.find((c: any) => c.is_featured && c.platform === "youtube");
-  const videoId = featuredVideo?.embed_url || featuredVideo?.video_id || "dQw4w9WgXcQ";
+  const featuredVideo = contentItems?.find((c) => c.is_featured && c.platform === "youtube");
+  const videoId = (() => {
+    if (!featuredVideo?.url) return "dQw4w9WgXcQ";
+
+    try {
+      const url = new URL(featuredVideo.url);
+      if (url.hostname.includes("youtu.be")) return url.pathname.replace("/", "") || "dQw4w9WgXcQ";
+      if (url.searchParams.get("v")) return url.searchParams.get("v") || "dQw4w9WgXcQ";
+    } catch {
+      // ignore malformed URL values and fall back to default ID
+    }
+
+    return "dQw4w9WgXcQ";
+  })();
 
   const platforms = [
     {
@@ -85,13 +100,13 @@ export default function ContentWork({ contentItems, socialLinks }: ContentWorkPr
       icon: FaInstagram,
       iconBg: "bg-pink-500/15",
       iconColor: "text-pink-400",
-      buttonColor: "bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-500 hover:to-orange-500 shadow-pink-600/20",
+      buttonColor: "bg-linear-to-r from-pink-600 to-orange-600 hover:from-pink-500 hover:to-orange-500 shadow-pink-600/20",
     },
   ];
 
   // Content tags from database or defaults
   const contentTags = contentItems?.length
-    ? [...new Set(contentItems.map((c: any) => c.category).filter(Boolean))].slice(0, 4)
+    ? [...new Set(contentItems.map((c) => c.category).filter((value): value is string => Boolean(value)))].slice(0, 4)
     : ["Web Dev Tutorials", "Career Tips", "Code Reviews", "Tech Vlogs"];
 
   return (
@@ -109,7 +124,7 @@ export default function ContentWork({ contentItems, socialLinks }: ContentWorkPr
             ✦ Content Creation
           </motion.span>
           <motion.h2 variants={itemVariants} className="text-2xl sm:text-4xl lg:text-5xl font-bold text-center text-white tracking-tight mb-3">
-            Beyond the <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Code</span>
+            Beyond the <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400">Code</span>
           </motion.h2>
           <motion.p variants={itemVariants} className="text-slate-400 text-xs sm:text-sm md:text-base text-center max-w-2xl mx-auto leading-relaxed">
             Creating educational and inspirational content for developers across YouTube and social platforms.
@@ -127,7 +142,7 @@ export default function ContentWork({ contentItems, socialLinks }: ContentWorkPr
             className="lg:col-span-6"
           >
             <div
-              className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-[#090a0f]"
+              className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-background"
               style={{ paddingBottom: "56.25%" }}
             >
               <iframe
@@ -158,7 +173,7 @@ export default function ContentWork({ contentItems, socialLinks }: ContentWorkPr
                 className="text-2xl sm:text-3xl font-bold text-white leading-snug"
               >
                 Developer by day.{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 block sm:inline">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-pink-400 block sm:inline">
                   Creator by passion.
                 </span>
               </motion.h3>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
-import { Plus, Edit2, Trash2, Save, Wrench } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 interface SkillItem {
   id: string;
@@ -103,7 +103,7 @@ export default function AdminSkillsPage() {
                 <div className="w-full h-2 rounded-full bg-slate-900 border border-white/10 overflow-hidden">
                   <div
                     style={{ width: `${skill.level}%` }}
-                    className="h-full bg-gradient-to-r from-purple-600 to-pink-500 rounded-full"
+                    className="h-full bg-linear-to-r from-purple-600 to-pink-500 rounded-full"
                   />
                 </div>
               </div>

@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
 import { revalidatePath } from "next/cache";
 
 export interface ProjectRecord {
@@ -44,7 +45,7 @@ export async function fetchAdminProjects(): Promise<ProjectRecord[]> {
 export async function createOrUpdateProject(project: ProjectRecord): Promise<{ success: boolean; message: string }> {
   try {
     const supabase = await createClient();
-    const payload = {
+    const payload: Database["public"]["Tables"]["projects"]["Insert"] = {
       title: project.title,
       slug: project.slug || project.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
       description: project.description,
@@ -60,10 +61,15 @@ export async function createOrUpdateProject(project: ProjectRecord): Promise<{ s
     };
 
     if (project.id && !project.id.startsWith("project-")) {
-      const { error } = await supabase.from("projects").update(payload).eq("id", project.id);
+      const { error } = await supabase
+        .from("projects")
+        .update(payload as never)
+        .eq("id", project.id);
       if (error) throw error;
     } else {
-      const { error } = await supabase.from("projects").insert([payload]);
+      const { error } = await supabase
+        .from("projects")
+        .insert([payload as never]);
       if (error) throw error;
     }
 
